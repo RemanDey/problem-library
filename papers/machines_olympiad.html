@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Machines — Olympiad Problem Set</title>
+  <meta name="description" content="12 rigorous olympiad problems on machines, mechanical advantage, velocity ratio, efficiency, levers, pulleys and inclined planes.">
+  <style>
+    :root{--ink:#111;--paper:#fff;--muted:#555;--hair:#ccc;
+      --serif:"Latin Modern Roman","Computer Modern","CMU Serif","STIX Two Text","Times New Roman",serif;
+      --sans:system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+    *,*::before,*::after{box-sizing:border-box}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:1.06rem;line-height:1.65}
+    a{color:var(--ink)}a:focus-visible{outline:2px solid #000;outline-offset:2px}
+    .topnav{font-family:var(--sans);font-size:.82rem;max-width:44rem;margin:0 auto;padding:.9rem 1.25rem;border-bottom:1px solid var(--hair);display:flex;justify-content:space-between;gap:1rem}
+    .sheet{max-width:44rem;margin:0 auto;padding:2rem 1.25rem 4rem}
+    .paper-head{text-align:center;border-bottom:3px double #111;padding-bottom:1.5rem;margin-bottom:1.5rem}
+    .paper-head h1{margin:.2rem 0;font-size:clamp(1.5rem,4vw,2.1rem);letter-spacing:.05em;text-transform:uppercase;line-height:1.25}
+    .paper-head .sub{font-style:italic;color:var(--muted);margin:.3rem 0}
+    .id-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem 1.5rem;text-align:left;max-width:26rem;margin:1.2rem auto 0;font-size:.95rem}
+    .id-grid span{border-bottom:1px solid var(--hair);min-height:1.6em;display:block}
+    h2.section{font-size:1.1rem;letter-spacing:.14em;text-transform:uppercase;border-top:1px solid #111;border-bottom:1px solid var(--hair);padding:.5rem 0;margin:2rem 0 1rem}
+    .problem{margin:1.5rem 0}
+    .problem h3{font-size:1.05rem;margin:0 0 .4rem;text-transform:uppercase;letter-spacing:.06em}
+    .parts{list-style:none;margin:.6rem 0;padding:0}
+    .parts li{margin:.4rem 0;padding-left:2.2rem;position:relative}
+    .parts li::before{position:absolute;left:0;color:var(--muted)}
+    .parts li:nth-child(1)::before{content:"(a)"}.parts li:nth-child(2)::before{content:"(b)"}
+    .parts li:nth-child(3)::before{content:"(c)"}.parts li:nth-child(4)::before{content:"(d)"}
+    .solution{border-left:3px solid #111;padding:.2rem 0 .2rem 1rem;margin:1rem 0}
+    .solution strong{font-family:var(--sans);font-size:.85rem;letter-spacing:.06em;text-transform:uppercase}
+    .mark{font-family:var(--sans);font-size:.78rem;color:var(--muted)}
+    .formula{background:#f7f7f7;border:1px solid var(--hair);padding:.7rem 1rem;margin:.8rem 0;font-size:.95rem}
+    footer{border-top:3px double #111;margin-top:2.5rem;padding-top:1rem;text-align:center;font-size:.9rem;color:var(--muted)}
+    mjx-container[jax="CHTML"][display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
+    @media(max-width:560px){body{font-size:1rem}.id-grid{grid-template-columns:1fr}}
+    @media print{.topnav,.backtop{display:none}}
+  </style>
+  <script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]}};</script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body id="top">
+  <nav class="topnav" aria-label="Paper navigation">
+    <a href="../index.html">&larr; Back to Archive</a>
+    <a href="#solutions">Solutions</a>
+  </nav>
+  <main class="sheet">
+    <header class="paper-head">
+      <p class="sub">Physics &middot; Class 10 &middot; Olympiad</p>
+      <h1>Machines<br>Olympiad Problem Set</h1>
+      <p class="sub">12 problems &middot; Advanced &middot; 90 minutes</p>
+      <div class="id-grid" aria-label="Candidate details">
+        <div>Name: <span></span></div><div>Date: <span></span></div>
+        <div>Class: <span></span></div><div>Score: <span></span></div>
+      </div>
+    </header>
+
+    <section aria-labelledby="instr">
+      <h2 class="section" id="instr">Instructions &amp; Formulae</h2>
+      <ol>
+        <li>Attempt all questions. Show all reasoning; unsupported answers score zero.</li>
+        <li>Take $g = 10\,\mathrm{m\,s^{-2}}$ unless stated.</li>
+        <li>Calculators are not permitted.</li>
+      </ol>
+      <div class="formula">
+        Mechanical advantage $\mathrm{MA} = \dfrac{\text{load}}{\text{effort}}$; velocity ratio
+        $\mathrm{VR} = \dfrac{\text{effort displacement}}{\text{load displacement}}$;
+        efficiency $\eta = \dfrac{\mathrm{MA}}{\mathrm{VR}} \times 100\%$.
+      </div>
+    </section>
+
+    <section aria-labelledby="problems">
+      <h2 class="section" id="problems">Problems</h2>
+
+      <article class="problem"><h3>Problem 1 <span class="mark">[5]</span></h3>
+        <p>Define mechanical advantage, velocity ratio and efficiency of a machine. Prove that for any real machine $\eta = \mathrm{MA}/\mathrm{VR}$.</p></article>
+
+      <article class="problem"><h3>Problem 2 <span class="mark">[6]</span></h3>
+        <p>A lever has effort arm $1.2\,\mathrm m$ and load arm $0.2\,\mathrm m$. A load of $600\,\mathrm N$ is raised.</p>
+        <ol class="parts"><li>Find the ideal effort and the velocity ratio.</li>
+        <li>If the actual effort is $140\,\mathrm N$, find MA and $\eta$.</li></ol></article>
+
+      <article class="problem"><h3>Problem 3 <span class="mark">[6]</span></h3>
+        <p>A single fixed pulley lifts a $50\,\mathrm{kg}$ bucket from a well $8\,\mathrm m$ deep.</p>
+        <ol class="parts"><li>What is its VR? What effort is needed ideally?</li>
+        <li>Explain why its efficiency is always below $100\%$ although $\mathrm{VR}=1$.</li></ol></article>
+
+      <article class="problem"><h3>Problem 4 <span class="mark">[7]</span></h3>
+        <p>A gun-metal pulley system has $4$ strands supporting the movable block. A load of $800\,\mathrm N$ is lifted.</p>
+        <ol class="parts"><li>Find VR and the ideal effort.</li>
+        <li>If $\eta = 75\%$, find the actual effort and the energy wasted in lifting the load $2\,\mathrm m$.</li></ol></article>
+
+      <article class="problem"><h3>Problem 5 <span class="mark">[7]</span></h3>
+        <p>An inclined plane of length $5\,\mathrm m$ rises $1\,\mathrm m$. A $200\,\mathrm N$ crate is pushed up at constant speed.</p>
+        <ol class="parts"><li>Find VR of the plane.</li>
+        <li>If friction requires an effort of $60\,\mathrm N$, find MA and efficiency.</li></ol></article>
+
+      <article class="problem"><h3>Problem 6 <span class="mark">[6]</span></h3>
+        <p>A screw jack has a lever of length $R = 40\,\mathrm{cm}$ and pitch $p = 5\,\mathrm{mm}$. Derive $\mathrm{VR} = 2\pi R/p$ and compute its value.</p></article>
+
+      <article class="problem"><h3>Problem 7 <span class="mark">[8]</span></h3>
+        <p>Two pulley systems $A$ ($3$ movable pulleys) and $B$ (gun tackle, $n=3$) each lift $900\,\mathrm N$.</p>
+        <ol class="parts"><li>Find the VR of each system.</li>
+        <li>Which needs the smaller ideal effort? Which is more affected by friction in practice? Justify qualitatively.</li></ol></article>
+
+      <article class="problem"><h3>Problem 8 <span class="mark">[7]</span></h3>
+        <p>A wheel and axle has wheel radius $30\,\mathrm{cm}$ and axle radius $5\,\mathrm{cm}$. An effort of $40\,\mathrm N$ lifts a load $M$.</p>
+        <ol class="parts"><li>Find the ideal load.</li>
+        <li>If the machine is $80\%$ efficient, find $M$ and the work done by the effort in one revolution.</li></ol></article>
+
+      <article class="problem"><h3>Problem 9 <span class="mark">[8]</span></h3>
+        <p>A block of mass $m$ is pulled up a rough incline (angle $\theta$, coefficient $\mu$) by an effort $E$ parallel to the plane. Show that $$\eta = \frac{\sin\theta}{\sin\theta + \mu\cos\theta}$$ for quasi-static motion, and discuss the limits $\mu \to 0$ and $\theta \to 90^\circ$.</p></article>
+
+      <article class="problem"><h3>Problem 10 <span class="mark">[8]</span></h3>
+        <p>A differential axle (Chinese capstan) has axle radii $r_1 = 8\,\mathrm{cm}$, $r_2 = 6\,\mathrm{cm}$ and wheel radius $R = 48\,\mathrm{cm}$.</p>
+        <ol class="parts"><li>Derive and evaluate the velocity ratio.</li>
+        <li>Why is such a machine prized for lifting heavy loads despite moving them slowly?</li></ol></article>
+
+      <article class="problem"><h3>Problem 11 <span class="mark">[7]</span></h3>
+        <p>The efficiency of a machine is observed to fall as the load decreases. Using $\eta = \dfrac{L}{E\cdot \mathrm{VR}}$, explain this in terms of a constant "overhead" effort $e_0$ needed to overcome friction at no load.</p></article>
+
+      <article class="problem"><h3>Problem 12 <span class="mark">[10]</span></h3>
+        <p><em>Design problem.</em> You must raise a $2000\,\mathrm N$ engine $1.5\,\mathrm m$ using a maximum sustained effort of $250\,\mathrm N$.</p>
+        <ol class="parts"><li>What minimum VR is required if $\eta = 80\%$?</li>
+        <li>Propose a compound machine (lever + pulleys or jack + plane) achieving this, sketch the force path, and estimate the effort displacement.</li></ol></article>
+    </section>
+
+    <section aria-labelledby="solutions">
+      <h2 class="section" id="solutions">Solutions (Outlines)</h2>
+      <div class="solution"><p><strong>Solution 1.</strong> MA $=L/E$; VR $=d_E/d_L$; $\eta = Ld_L/(Ed_E)=\mathrm{MA}/\mathrm{VR}$.</p></div>
+      <div class="solution"><p><strong>Solution 2.</strong> VR $=6$; ideal $E=100\,\mathrm N$; MA $=600/140\approx 4.29$; $\eta \approx 71.4\%$.</p></div>
+      <div class="solution"><p><strong>Solution 3.</strong> VR $=1$; ideal $E = 500\,\mathrm N$; axle friction and rope weight require extra effort.</p></div>
+      <div class="solution"><p><strong>Solution 4.</strong> VR $=4$, ideal $E=200\,\mathrm N$; actual $E = 200/0.75 \approx 267\,\mathrm N$; wasted $\approx 533\,\mathrm J$ over $2\,\mathrm m$.</p></div>
+      <div class="solution"><p><strong>Solution 5.</strong> VR $=5$; MA $=200/60\approx 3.33$; $\eta \approx 66.7\%$.</p></div>
+      <div class="solution"><p><strong>Solution 6.</strong> One turn: effort moves $2\pi R$, load rises $p$; VR $=2\pi(400)/5 = 160\pi \approx 503$.</p></div>
+      <div class="solution"><p><strong>Solution 7.</strong> (a) VR$_A = 2^3 = 8$; VR$_B = 3$. Smaller ideal effort: $A$ ($112.5\,\mathrm N$ vs $300\,\mathrm N$); $A$ suffers more friction (more moving parts).</p></div>
+      <div class="solution"><p><strong>Solution 8.</strong> VR $=6$, ideal load $240\,\mathrm N$; actual $M = 0.8\times 240/10 = 19.2\,\mathrm{kg}$-equivalent ($192\,\mathrm N$); work $= 40\times 2\pi(0.3)\approx 75.4\,\mathrm J$.</p></div>
+      <div class="solution"><p><strong>Solution 9.</strong> $E = mg(\sin\theta+\mu\cos\theta)$, $E_{\rm ideal} = mg\sin\theta$; ratio gives $\eta$. As $\mu\to 0$, $\eta\to 1$; as $\theta\to 90^\circ$, $\eta \to 1/(1+0)=1$ for a vertical lift with no wedge advantage.</p></div>
+      <div class="solution"><p><strong>Solution 10.</strong> VR $= 2\pi R/(\pi(r_1-r_2)\cdot 2)\times 2 = 2R/(r_1-r_2) = 48$; huge VR gives fine control of heavy loads.</p></div>
+      <div class="solution"><p><strong>Solution 11.</strong> With $E = L/\mathrm{VR} + e_0$, $\eta = L/(L + e_0\mathrm{VR})$, decreasing as $L\to 0$.</p></div>
+      <div class="solution"><p><strong>Solution 12.</strong> Need MA $\ge 8$, so VR $\ge$ MA$/\eta = 10$; e.g. 4-strand tackle (VR 4) after a 3:1 lever gives VR 12; effort displacement $\approx 12\times 1.5 = 18\,\mathrm m$.</p></div>
+    </section>
+
+    <footer>
+      <p><a href="../index.html">&larr; Back to Archive</a> &middot; <a class="backtop" href="#top">&uarr; Back to Top</a></p>
+      <p>End of paper.</p>
+    </footer>
+  </main>
+</body>
+</html>

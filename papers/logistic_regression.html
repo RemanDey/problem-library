@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Logistic Regression — Olympiad Problem Set</title>
+  <meta name="description" content="8 rigorous problems on logistic regression, log-odds, sigmoid, cross-entropy and decision boundaries.">
+  <style>
+    :root{--ink:#111;--paper:#fff;--muted:#555;--hair:#ccc;
+      --serif:"Latin Modern Roman","Computer Modern","CMU Serif","STIX Two Text","Times New Roman",serif;
+      --sans:system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+    *,*::before,*::after{box-sizing:border-box}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:1.06rem;line-height:1.65}
+    a{color:var(--ink)}a:focus-visible{outline:2px solid #000;outline-offset:2px}
+    .topnav{font-family:var(--sans);font-size:.82rem;max-width:44rem;margin:0 auto;padding:.9rem 1.25rem;border-bottom:1px solid var(--hair);display:flex;justify-content:space-between;gap:1rem}
+    .sheet{max-width:44rem;margin:0 auto;padding:2rem 1.25rem 4rem}
+    .paper-head{text-align:center;border-bottom:3px double #111;padding-bottom:1.5rem;margin-bottom:1.5rem}
+    .paper-head h1{margin:.2rem 0;font-size:clamp(1.4rem,4vw,2rem);letter-spacing:.05em;text-transform:uppercase;line-height:1.25}
+    .paper-head .sub{font-style:italic;color:var(--muted);margin:.3rem 0}
+    .id-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem 1.5rem;text-align:left;max-width:26rem;margin:1.2rem auto 0;font-size:.95rem}
+    .id-grid span{border-bottom:1px solid var(--hair);min-height:1.6em;display:block}
+    h2.section{font-size:1.1rem;letter-spacing:.14em;text-transform:uppercase;border-top:1px solid #111;border-bottom:1px solid var(--hair);padding:.5rem 0;margin:2rem 0 1rem}
+    .problem{margin:1.5rem 0}
+    .problem h3{font-size:1.05rem;margin:0 0 .4rem;text-transform:uppercase;letter-spacing:.06em}
+    .parts{list-style:none;margin:.6rem 0;padding:0}
+    .parts li{margin:.4rem 0;padding-left:2.2rem;position:relative}
+    .parts li::before{position:absolute;left:0;color:var(--muted)}
+    .parts li:nth-child(1)::before{content:"(a)"}.parts li:nth-child(2)::before{content:"(b)"}
+    .parts li:nth-child(3)::before{content:"(c)"}.parts li:nth-child(4)::before{content:"(d)"}
+    .solution{border-left:3px solid #111;padding:.2rem 0 .2rem 1rem;margin:1rem 0}
+    .solution strong{font-family:var(--sans);font-size:.85rem;letter-spacing:.06em;text-transform:uppercase}
+    .mark{font-family:var(--sans);font-size:.78rem;color:var(--muted)}
+    footer{border-top:3px double #111;margin-top:2.5rem;padding-top:1rem;text-align:center;font-size:.9rem;color:var(--muted)}
+    mjx-container[jax="CHTML"][display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
+    @media(max-width:560px){body{font-size:1rem}.id-grid{grid-template-columns:1fr}}
+    @media print{.topnav,.backtop{display:none}}
+  </style>
+  <script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]}};</script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body id="top">
+  <nav class="topnav" aria-label="Paper navigation">
+    <a href="../index.html">&larr; Back to Archive</a>
+    <a href="#solutions">Solutions</a>
+  </nav>
+  <main class="sheet">
+    <header class="paper-head">
+      <p class="sub">Mathematics / Machine Learning &middot; Advanced</p>
+      <h1>Logistic Regression<br>Olympiad Problem Set</h1>
+      <p class="sub">8 problems &middot; Advanced &middot; 90 minutes</p>
+      <div class="id-grid" aria-label="Candidate details">
+        <div>Name: <span></span></div><div>Date: <span></span></div>
+        <div>Class: <span></span></div><div>Score: <span></span></div>
+      </div>
+    </header>
+
+    <section aria-labelledby="instr">
+      <h2 class="section" id="instr">Instructions &amp; Notation</h2>
+      <ol>
+        <li>Attempt all questions. Justify every step.</li>
+        <li>Logistic model: $\sigma(z) = 1/(1+e^{-z})$, $z = \mathbf w^\top \mathbf x + b$, labels $y \in \{0,1\}$.</li>
+        <li>Log-loss for one example: $\ell = -\big[y\log p + (1-y)\log(1-p)\big]$, $p = \sigma(z)$.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="problems">
+      <h2 class="section" id="problems">Problems</h2>
+      <article class="problem"><h3>Problem 1 <span class="mark">[6]</span></h3>
+        <p>Prove the sigmoid identities: $\sigma(-z) = 1-\sigma(z)$ and $\sigma'(z) = \sigma(z)(1-\sigma(z))$. Sketch $\sigma$ and mark $\sigma(0)$.</p></article>
+      <article class="problem"><h3>Problem 2 <span class="mark">[7]</span></h3>
+        <p>For $p = \sigma(z)$, the log-odds (logit) is $\log \frac{p}{1-p}$.</p>
+        <ol class="parts"><li>Show the logit of $\sigma(z)$ is exactly $z$.</li>
+        <li>If $z$ increases by $\Delta$, by what factor are the odds multiplied?</li></ol></article>
+      <article class="problem"><h3>Problem 3 <span class="mark">[8]</span></h3>
+        <p>Derive the gradient of the single-example log-loss w.r.t. $z$: show $\partial \ell / \partial z = \sigma(z) - y$. Hence write $\nabla_{\mathbf w}\,\ell$ and $\partial \ell/\partial b$.</p></article>
+      <article class="problem"><h3>Problem 4 <span class="mark">[8]</span></h3>
+        <p>With data $\{(1,1),(2,2),(3,0)\}$ (1-D feature $x$, label $y$) and model $p=\sigma(wx)$, $b=0$:</p>
+        <ol class="parts"><li>Write the total negative log-likelihood $J(w)$.</li>
+        <li>Show $J$ is convex in $w$ by computing $J''(w) \ge 0$.</li></ol></article>
+      <article class="problem"><h3>Problem 5 <span class="mark">[7]</span></h3>
+        <p>The decision boundary of binary logistic regression is $\{\mathbf x : \mathbf w^\top \mathbf x + b = 0\}$.</p>
+        <ol class="parts"><li>Prove this set is a hyperplane and that $p \ge 1/2$ on exactly one closed half-space.</li>
+        <li>Give a 2-D dataset that is not linearly separable, with proof.</li></ol></article>
+      <article class="problem"><h3>Problem 6 <span class="mark">[8]</span></h3>
+        <p>Let classes be Gaussian with shared variance: $x\mid y=1 \sim \mathcal N(\mu_1,\sigma^2)$, $x\mid y=0 \sim \mathcal N(\mu_0,\sigma^2)$, priors $\pi_1,\pi_0$.</p>
+        <ol class="parts"><li>Show the posterior $P(y=1\mid x)$ is logistic in $x$ and identify $w,b$.</li>
+        <li>What changes if the variances differ? Name the resulting classifier form.</li></ol></article>
+      <article class="problem"><h3>Problem 7 <span class="mark">[8]</span></h3>
+        <p>With $L_2$ penalty $J_\lambda = J + \frac{\lambda}{2}\lVert\mathbf w\rVert^2$:</p>
+        <ol class="parts"><li>Write the gradient update (learning rate $\alpha$).</li>
+        <li>Explain, via a $2$-D contour sketch argument, why large $\lambda$ shrinks $\lVert\mathbf w\rVert$ and flattens predicted probabilities toward $1/2$.</li></ol></article>
+      <article class="problem"><h3>Problem 8 <span class="mark">[10]</span></h3>
+        <p><em>Calibration.</em> A model outputs $p_i$ on $n$ examples with outcomes $y_i$.</p>
+        <ol class="parts"><li>Define perfect calibration informally and mathematically ($P(Y=1 \mid \hat P = p) = p$).</li>
+        <li>Construct a small numeric example where accuracy is $100\%$ yet the model is badly miscalibrated, and propose one remedy (e.g. Platt scaling / temperature).</li></ol></article>
+    </section>
+
+    <section aria-labelledby="solutions">
+      <h2 class="section" id="solutions">Solutions (Outlines)</h2>
+      <div class="solution"><p><strong>Solution 1.</strong> Algebra from $1/(1+e^{-z})$; derivative via quotient rule; $\sigma(0)=1/2$.</p></div>
+      <div class="solution"><p><strong>Solution 2.</strong> $\log(\sigma/(1-\sigma)) = \log e^{z} = z$; odds multiply by $e^{\Delta}$.</p></div>
+      <div class="solution"><p><strong>Solution 3.</strong> Chain rule on $-[y\log\sigma+(1-y)\log(1-\sigma)]$ gives $\sigma-y$; $\nabla_{\mathbf w}\ell = (\sigma-y)\mathbf x$.</p></div>
+      <div class="solution"><p><strong>Solution 4.</strong> $J = \sum \log(1+e^{wx_i}) - y_iwx_i$; $J'' = \sum x_i^2\sigma(1-\sigma)\ge 0$.</p></div>
+      <div class="solution"><p><strong>Solution 5.</strong> Linear equation defines hyperplane; e.g. XOR $\{(0,0),(1,1)\}$ vs $\{(0,1),(1,0)\}$ is inseparable by convexity argument.</p></div>
+      <div class="solution"><p><strong>Solution 6.</strong> Log posterior-odds $= wx+b$ with $w=(\mu_1-\mu_0)/\sigma^2$; unequal variances give a quadratic (QDA) boundary.</p></div>
+      <div class="solution"><p><strong>Solution 7.</strong> $\mathbf w \gets \mathbf w - \alpha(\nabla J + \lambda\mathbf w)$; penalty pulls optimum toward origin, shrinking logits.</p></div>
+      <div class="solution"><p><strong>Solution 8.</strong> E.g. always predict $0.51$ on positives and $0.49$ on negatives: $100\%$ accurate at threshold $0.5$ but probabilities uninformative; refit $p=\sigma(a z+b)$ on held-out data.</p></div>
+    </section>
+
+    <footer>
+      <p><a href="../index.html">&larr; Back to Archive</a> &middot; <a class="backtop" href="#top">&uarr; Back to Top</a></p>
+      <p>End of paper.</p>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Logistic Regression — Olympiad Problem Set</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff;
+    --panel:#ffffff;
+    --panel2:#f7f7f7;
+    --accent:#000000;
+    --accent2:#000000;
+    --text:#000000;
+    --muted:#444444;
+    --border:#000000;
+    --good:#000000;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:#fff;
+    color:#000;
+    font-family:'Latin Modern Roman','Computer Modern','CMU Serif','STIX Two Text','Times New Roman',serif;
+    line-height:1.65;
+    padding:0 0 80px;
+  }
+  header{
+    padding:56px 24px 36px;
+    text-align:center;
+    border-bottom:1px solid #000;
+    background:#fff;
+  }
+  header h1{
+    font-family:'Latin Modern Roman','Computer Modern','CMU Serif','STIX Two Text','Times New Roman',serif;
+    font-size:2.1rem;
+    font-weight:700;
+    letter-spacing:0;
+    margin:0 0 8px;
+    color:#000;
+  }
+  header p{
+    color:#222;
+    font-family:'Latin Modern Roman','Computer Modern','CMU Serif','STIX Two Text','Times New Roman',serif;
+    font-size:0.95rem;
+    max-width:640px;
+    margin:0 auto;
+  }
+  .container{
+    max-width:880px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  nav{
+    margin:36px 0;
+    background:#fff;
+    border:1px solid #000;
+    border-radius:0;
+    padding:20px 24px;
+  }
+  nav h2{
+    font-family:'Latin Modern Roman','Computer Modern','CMU Serif','STIX Two Text','Times New Roman',serif;
+    font-size:1rem;
+    color:#000;
+    text-transform:none;
+    letter-spacing:0;
+    margin:0 0 12px;
+  }
+  nav ol{margin:0; padding-left:20px;}
+  nav a{color:#000; text-decoration:none; border-bottom:1px dotted #000;}
+  nav a:hover{color:#000;}
+
+  .problem{
+    background:#fff;
+    border:1px solid #000;
+    border-radius:0;
+    margin:34px 0;
+    overflow:hidden;
+  }
+  .problem-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 24px;
+    background:#f5f5f5;
+    border-bottom:1px solid #000;
+    font-family:'Latin Modern Roman','Computer Modern','CMU Serif','STIX Two Text','Times New Roman',serif;
+  }
+  .problem-header .tag{
+    font-size:0.72rem;
+    color:var(--muted);
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .problem-header .diff{
+    font-size:0.72rem;
+    padding:4px 10px;
+    border-radius:999px;
+    font-weight:bold;
+    letter-spacing:0.5px;
+  }
+  .diff.gold,.diff.silver,.diff.platinum{
+    background:#fff;
+    color:#000;
+    border:1px solid #000;
+    border-radius:0;
+  }
+
+  .problem-body{padding:8px 26px 22px;}
+  .problem-body h3{
+    font-family:'Latin Modern Roman','Computer Modern','CMU Serif','STIX Two Text','Times New Roman',serif;
+    font-size:1.15rem;
+    font-weight:700;
+    margin:14px 0 10px;
+    color:#000;
+  }
+  .problem-body p{margin:10px 0;}
+  .points{color:var(--muted); font-size:0.85rem; font-style:italic;}
+
+  details{
+    margin-top:16px;
+    border-top:1px dashed #000;
+    padding-top:14px;
+  }
+  summary{
+    cursor:pointer;
+    font-family:'Latin Modern Roman','Computer Modern','CMU Serif','STIX Two Text','Times New Roman',serif;
+    color:#000;
+    font-weight:bold;
+    letter-spacing:0;
+    outline:none;
+    padding:6px 0;
+  }
+  summary::marker{color:#000;}
+  .solution{
+    margin-top:14px;
+    padding:16px 20px;
+    background:#fafafa;
+    border-left:2px solid #000;
+    border-radius:0;
+  }
+  .solution p{margin:8px 0;}
+  .solution .step{color:#000; font-weight:bold; font-family:'Latin Modern Roman','Computer Modern','CMU Serif','STIX Two Text','Times New Roman',serif; font-size:0.85rem; text-transform:none; letter-spacing:0;}
+
+  code, .mono{
+    font-family:'Latin Modern Mono','CMU Typewriter Text','Courier New',monospace;
+    background:#f3f3f3;
+    padding:1px 4px;
+    border-radius:0;
+    color:#000;
+    font-size:0.9em;
+  }
+
+  .footer-note{
+    text-align:center;
+    color:#333;
+    font-family:'Latin Modern Roman','Computer Modern','CMU Serif','STIX Two Text','Times New Roman',serif;
+    font-size:0.85rem;
+    margin-top:60px;
+    padding-top:24px;
+    border-top:1px solid #000;
+  }
+  .divider{
+    text-align:center;
+    color:#000;
+    margin:40px 0;
+    letter-spacing:8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Logistic Regression — Olympiad Problem Set</h1>
+  <p>Eight problems spanning convexity theory, information geometry, separability, and asymptotic statistics — built around and beyond Dr. Indu Joshi's lecture on logistic regression (IIT Mandi).</p>
+</header>
+
+<div class="container">
+
+<nav>
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#p1">The Sigmoid's Hidden Symmetry</a> — Silver</li>
+    <li><a href="#p2">Strict Convexity of the Cross-Entropy Loss</a> — Gold</li>
+    <li><a href="#p3">The Separability Catastrophe</a> — Gold</li>
+    <li><a href="#p4">Logistic Regression is the MaxEnt Classifier</a> — Platinum</li>
+    <li><a href="#p5">Fisher Information and the Optimal Decision Boundary</a> — Platinum</li>
+    <li><a href="#p6">Newton's Method as Iteratively Reweighted Least Squares</a> — Gold</li>
+    <li><a href="#p7">Bayes Optimality Under Gaussian Class-Conditionals</a> — Platinum</li>
+    <li><a href="#p8">A Sharp Bound on the Sigmoid's Lipschitz Constant and SGD Step Size</a> — Silver</li>
+  </ol>
+</nav>
+
+<!-- PROBLEM 1 -->
+<div class="problem" id="p1">
+  <div class="problem-header">
+    <span class="tag">Problem 1 · Functional Equations</span>
+    <span class="diff silver">Silver</span>
+  </div>
+  <div class="problem-body">
+    <h3>The Sigmoid's Hidden Symmetry</h3>
+    <p>Let $g(z) = \dfrac{1}{1+e^{-z}}$ be the sigmoid function.</p>
+    <p><strong>(a)</strong> Prove that $g(z) + g(-z) = 1$ for all $z \in \mathbb{R}$, and give a one-line probabilistic interpretation of this identity in the context of binary classification.</p>
+    <p><strong>(b)</strong> Prove that $g$ is the <em>unique</em> continuous, strictly increasing function $g:\mathbb{R}\to(0,1)$ satisfying both
+    $$g(z)+g(-z)=1 \qquad \text{and} \qquad \frac{g(z)}{1-g(z)} = e^{z}.$$
+    <p><strong>(c)</strong> Show that the inflection point of $g$ is the unique point where $g''(z)=0$, and that this point coincides exactly with the decision boundary $P(y=1\mid x)=1/2$.</p>
+    <p class="points">Total: 10 points (3 + 4 + 3)</p>
+
+    <details>
+      <summary>Show full solution</summary>
+      <div class="solution">
+        <p class="step">Part (a)</p>
+        <p>Compute directly:
+        $$g(z) + g(-z) = \frac{1}{1+e^{-z}} + \frac{1}{1+e^{z}} = \frac{1}{1+e^{-z}} + \frac{e^{-z}}{e^{-z}+1} = \frac{1+e^{-z}}{1+e^{-z}} = 1.$$
+        Probabilistically: since $h_\theta(x) = P(y=1\mid x) = g(\theta^Tx)$, this identity is exactly the statement $P(y=1\mid x) + P(y=0\mid x) = 1$ — the sigmoid automatically enforces a valid two-outcome probability distribution for every input $x$, with no extra normalization needed.</p>
+
+        <p class="step">Part (b)</p>
+        <p>From $\frac{g(z)}{1-g(z)} = e^z$, solve for $g$:
+        $$g(z) = e^{z}(1-g(z)) \implies g(z)(1+e^{z}) = e^{z} \implies g(z) = \frac{e^z}{1+e^z} = \frac{1}{1+e^{-z}}.$$
+        This algebraic manipulation is forced — there is no freedom left once the log-odds equation is imposed — so any function satisfying it must equal $g$ pointwise. Continuity and monotonicity were not even needed for uniqueness here; they only confirm $g$ has the qualitative shape we want (strictly increasing follows since $g'(z) = g(z)(1-g(z)) > 0$ for all finite $z$, using the derivative identity proven in Part (c)'s lemma below). Note also that this equation is precisely $\theta^Tx = \log\frac{P(y=1\mid x)}{P(y=0\mid x)}$, i.e. logistic regression models the log-odds as linear in $x$ — this is the defining property of the logit link.</p>
+
+        <p class="step">Part (c)</p>
+        <p>We use the lemma $g'(z) = g(z)(1-g(z))$ from the lecture. Differentiate again:
+        $$g''(z) = g'(z)(1-g(z)) + g(z)(-g'(z)) = g'(z)\big[(1-g(z)) - g(z)\big] = g(z)(1-g(z))(1-2g(z)).$$
+        Since $g(z)(1-g(z)) > 0$ everywhere (as $0<g(z)<1$ strictly), $g''(z)=0$ iff $1-2g(z)=0$, i.e. $g(z) = 1/2$. Since $g$ is strictly increasing (hence injective), this happens at exactly one point, $z=0$ (because $g(0)=\tfrac12$ by direct computation). Now $g(\theta^Tx)=1/2 \iff \theta^Tx = 0$ (again by injectivity), which is precisely the decision boundary $\theta_0 + \sum_j \theta_j x_j = 0$ stated in the lecture. Hence the unique inflection point of the sigmoid, mapped through $\theta^Tx$, is exactly the classifier's decision boundary — geometrically, the boundary sits where the model's confidence curve is changing fastest. $\blacksquare$</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- PROBLEM 2 -->
+<div class="problem" id="p2">
+  <div class="problem-header">
+    <span class="tag">Problem 2 · Convex Analysis</span>
+    <span class="diff gold">Gold</span>
+  </div>
+  <div class="problem-body">
+    <h3>Strict Convexity of the Cross-Entropy Loss</h3>
+    <p>Recall the cross-entropy (negative log-likelihood) loss
+    $$J(\theta) = -\frac{1}{m}\sum_{i=1}^m \Big[y^{(i)}\log h_\theta(x^{(i)}) + (1-y^{(i)})\log(1-h_\theta(x^{(i)}))\Big], \quad h_\theta(x)=g(\theta^Tx).$$</p>
+    <p><strong>(a)</strong> Derive the Hessian $\nabla^2 J(\theta)$ and show it can be written as
+    $$\nabla^2 J(\theta) = \frac{1}{m}X^T S X, \qquad S = \mathrm{diag}\big(h_\theta(x^{(i)})(1-h_\theta(x^{(i)}))\big)_{i=1}^m,$$
+    where $X$ is the $m\times n$ design matrix with rows $x^{(i)T}$.</p>
+    <p><strong>(b)</strong> Prove that $\nabla^2 J(\theta) \succeq 0$ (positive semidefinite) for every $\theta$, hence $J$ is convex.</p>
+    <p><strong>(c)</strong> Prove that $J$ is <em>strictly</em> convex if and only if $X$ has full column rank $n$ (assuming no row of $X$ is such that $\theta^Tx^{(i)}\to\pm\infty$ trivially — i.e. away from the separable case treated in Problem 3). Exhibit an explicit $\theta$-direction along which $J$ is exactly flat (zero curvature) when $X$ is rank-deficient.</p>
+    <p class="points">Total: 12 points (4 + 3 + 5)</p>
+
+    <details>
+      <summary>Show full solution</summary>
+      <div class="solution">
+        <p class="step">Part (a)</p>
+        <p>From the lecture's per-example gradient, $\frac{\partial}{\partial \theta_j}\ell(\theta) = (y-h_\theta(x))x_j$ for the log-likelihood of one example; since $J=-\frac1m\sum_i \ell^{(i)}$, we get
+        $$\nabla_\theta J(\theta) = \frac{1}{m}\sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})\, x^{(i)} = \frac{1}{m}X^T(h_\theta(X)-y).$$
+        Differentiate again with respect to $\theta$. Since $\frac{\partial}{\partial \theta} h_\theta(x^{(i)}) = h_\theta(x^{(i)})(1-h_\theta(x^{(i)}))\,x^{(i)}$ (chain rule through $g'=g(1-g)$), each term contributes a rank-one matrix:
+        $$\nabla^2 J(\theta) = \frac{1}{m}\sum_{i=1}^m h_\theta(x^{(i)})(1-h_\theta(x^{(i)}))\, x^{(i)}x^{(i)T} = \frac{1}{m}X^TSX,$$
+        with $S$ diagonal as claimed, since $\sum_i s_i x^{(i)}x^{(i)T} = X^T \mathrm{diag}(s_i) X$ by direct index expansion.</p>
+
+        <p class="step">Part (b)</p>
+        <p>For any vector $v\in\mathbb{R}^n$,
+        $$v^T \nabla^2 J(\theta)\, v = \frac{1}{m}v^TX^TSXv = \frac{1}{m}(Xv)^TS(Xv) = \frac{1}{m}\sum_{i=1}^m s_i (Xv)_i^2 \ge 0,$$
+        since each $s_i = h_\theta(x^{(i)})(1-h_\theta(x^{(i)})) \ge 0$ (in fact $s_i \in (0, 1/4]$ because $h_\theta \in (0,1)$, with equality $s_i=1/4$ exactly at $h_\theta(x^{(i)})=1/2$). Every term is a nonnegative sum, so $v^T\nabla^2J(\theta)v \ge 0$ for all $v$, i.e. $\nabla^2 J(\theta) \succeq 0$. A symmetric PSD Hessian everywhere implies $J$ is convex.</p>
+
+        <p class="step">Part (c)</p>
+        <p><em>($\Leftarrow$) Full rank implies strict convexity.</em> Suppose $\mathrm{rank}(X)=n$, i.e. $Xv=0 \implies v=0$. If $v\ne0$, then $Xv\ne0$, so at least one coordinate $(Xv)_i\ne 0$. Since $\theta$ is finite (we are away from the separable/degenerate limit), $s_i = h_\theta(x^{(i)})(1-h_\theta(x^{(i)})) > 0$ strictly (as $h_\theta(x^{(i)})\in(0,1)$ strictly for finite $\theta^Tx^{(i)}$). Hence $v^T\nabla^2J(\theta)v = \frac1m\sum_i s_i(Xv)_i^2 > 0$ for every $v \ne 0$: the Hessian is positive definite everywhere, so $J$ is strictly convex.</p>
+        <p><em>($\Rightarrow$) Rank deficiency breaks strict convexity.</em> If $\mathrm{rank}(X) < n$, there exists $v\ne 0$ with $Xv=0$. Then $(Xv)_i = 0$ for every $i$, so
+        $$v^T\nabla^2 J(\theta)\, v = \frac1m\sum_i s_i \cdot 0^2 = 0 \quad \text{for every } \theta.$$
+        This means $J$ has exactly zero curvature along the direction $v$: explicitly, for any $\theta_0$, the function $t \mapsto J(\theta_0 + tv)$ is <em>constant</em> in $t$ (its derivative is $v^T\nabla J(\theta_0+tv)$, and one can check via the chain rule that $\theta^Tx^{(i)}$ is unchanged for all $i$ along this line since $Xv=0$, so $h_\theta(x^{(i)})$ — and hence $J$ itself — never changes). So $J$ is flat, not strictly convex, along $v$; the minimizer $\theta^*$ (if it exists) is non-unique, forming an affine line $\{\theta^* + tv\}$. $\blacksquare$</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- PROBLEM 3 -->
+<div class="problem" id="p3">
+  <div class="problem-header">
+    <span class="tag">Problem 3 · Optimization Pathologies</span>
+    <span class="diff gold">Gold</span>
+  </div>
+  <div class="problem-body">
+    <h3>The Separability Catastrophe</h3>
+    <p>Suppose the training data is <em>linearly separable</em>: there exists $\theta^*$ such that $y^{(i)}(\theta^{*T}x^{(i)}) > 0$ for every $i=1,\dots,m$ (using $y^{(i)}\in\{-1,+1\}$ labels for convenience here).</p>
+    <p><strong>(a)</strong> Prove that for any $c>0$, $J(c\theta^*) < J(c'\theta^*)$ whenever $c > c' > 0$ — i.e. the loss strictly decreases as we scale the separating direction outward.</p>
+    <p><strong>(b)</strong> Prove $\displaystyle\lim_{c\to\infty} J(c\theta^*) = 0$, and conclude that $\inf_\theta J(\theta) = 0$ but this infimum is <em>never attained</em> by any finite $\theta$.</p>
+    <p><strong>(c)</strong> Given part (b), explain precisely why gradient ascent on the log-likelihood (equivalently, gradient descent on $J$) does not converge in the separable case, and state one standard remedy, justifying <em>why</em> it restores a finite, unique optimizer (cite Problem 2 in your justification).</p>
+    <p class="points">Total: 12 points (4 + 4 + 4)</p>
+
+    <details>
+      <summary>Show full solution</summary>
+      <div class="solution">
+        <p class="step">Part (a)</p>
+        <p>Write $z_i(c) = c\,\theta^{*T}x^{(i)}$. By separability, $y^{(i)}\theta^{*T}x^{(i)} > 0$ for each $i$; define $m_i := y^{(i)}\theta^{*T}x^{(i)} > 0$ (the "margin" of example $i$). The per-example loss in $\pm1$ notation is $\log(1+e^{-y^{(i)} c\,\theta^{*T}x^{(i)}}) = \log(1+e^{-cm_i})$ (this is algebraically the same cross-entropy term, rewritten with $y\in\{-1,1\}$). The function $c \mapsto \log(1+e^{-cm_i})$ has derivative $\frac{-m_ie^{-cm_i}}{1+e^{-cm_i}} < 0$ for every $c$, since $m_i>0$. So each term is strictly decreasing in $c$, hence so is their (positive-weighted) average $J(c\theta^*)$. Thus $c>c' \implies J(c\theta^*) < J(c'\theta^*)$.</p>
+
+        <p class="step">Part (b)</p>
+        <p>As $c\to\infty$, $cm_i \to \infty$ for every $i$ (since $m_i>0$ fixed), so $e^{-cm_i}\to 0$ and $\log(1+e^{-cm_i}) \to \log 1 = 0$. Since there are finitely many ($m$) terms, the average also $\to 0$:
+        $$\lim_{c\to\infty} J(c\theta^*) = \frac{1}{m}\sum_{i=1}^m \lim_{c\to\infty}\log(1+e^{-cm_i}) = 0.$$
+        Since $J(\theta) > 0$ strictly for every finite $\theta$ (each $\log(1+e^{-z})>0$ for finite $z$), and we've shown $J(c\theta^*)\to 0$, we get $\inf_\theta J(\theta) = 0$. But no finite $\theta$ achieves $J(\theta)=0$ exactly, since that would require $\log(1+e^{-y^{(i)}\theta^Tx^{(i)}})=0$ for every $i$, i.e. $y^{(i)}\theta^Tx^{(i)} = +\infty$ — impossible for finite $\theta$. So the infimum is approached only "at infinity," never attained.</p>
+
+        <p class="step">Part (c)</p>
+        <p>Gradient descent seeks a stationary point $\nabla J(\theta)=0$. But by Part (a)/(b), $J$ is monotonically decreasing along the ray $\{c\theta^* : c>0\}$ with no minimum on that ray — so $\|\theta_t\|\to\infty$ as the iterates $\theta_t$ march along (an increasingly well-aligned proxy for) $\theta^*$, and $\nabla J(\theta_t)\to 0$ only in the limit, never exactly. The algorithm's parameters diverge in norm while the loss keeps (asymptotically) shrinking; there is no finite optimum to converge to.</p>
+        <p>The standard remedy is <strong>$\ell_2$-regularization</strong: minimize $J_\lambda(\theta) = J(\theta) + \frac{\lambda}{2m}\|\theta\|_2^2$ for some $\lambda>0$. This works because the Hessian becomes $\nabla^2 J_\lambda(\theta) = \frac1m X^TSX + \frac{\lambda}{m}I$. By Problem 2(b), $X^TSX\succeq 0$ always, so adding $\lambda I \succ 0$ makes $\nabla^2J_\lambda(\theta) \succ 0$ strictly for every $\theta$ — regardless of the rank of $X$ or the separability of the data. $J_\lambda$ is therefore strictly convex everywhere, and since the quadratic penalty $\to\infty$ as $\|\theta\|\to\infty$ while $J(\theta)\ge 0$ is bounded below, $J_\lambda(\theta)\to\infty$ as $\|\theta\|\to\infty$ in every direction — so a finite global minimizer exists and is unique. $\blacksquare$</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- PROBLEM 4 -->
+<div class="problem" id="p4">
+  <div class="problem-header">
+    <span class="tag">Problem 4 · Information Theory</span>
+    <span class="diff platinum">Platinum</span>
+  </div>
+  <div class="problem-body">
+    <h3>Logistic Regression is the Maximum-Entropy Classifier</h3>
+    <p>Among all conditional distributions $p(y\mid x)$ on $y\in\{0,1\}$, consider those satisfying the moment-matching constraints
+    $$\mathbb{E}_{\hat p(x)}\big[\mathbb{E}_{p(y\mid x)}[y]\,x_j\big] = \mathbb{E}_{\hat p(x,y)}[y\, x_j] \quad \text{for } j=0,1,\dots,n,$$
+    where $\hat p$ denotes the empirical training distribution (and $x_0\equiv1$). Prove that the distribution $p(y\mid x)$ of <em>maximum conditional entropy</em>
+    $$H(p) = -\sum_x \hat p(x)\sum_{y\in\{0,1\}} p(y\mid x)\log p(y\mid x)$$
+    subject to these constraints is exactly the logistic regression model $p(y=1\mid x) = g(\theta^Tx)$ for some $\theta$.</p>
+    <p class="points">Total: 15 points</p>
+
+    <details>
+      <summary>Show full solution</summary>
+      <div class="solution">
+        <p class="step">Setup: Lagrangian</p>
+        <p>We maximize $H(p)$ subject to (i) the moment constraints for each feature $j$, with multipliers $\theta_j$, and (ii) normalization $\sum_y p(y\mid x)=1$ for each $x$, with multipliers $\mu(x)$. Form the Lagrangian
+        $$\mathcal{L} = -\sum_{x,y}\hat p(x)p(y\mid x)\log p(y\mid x) + \sum_j \theta_j\Big(\sum_{x,y}\hat p(x,y)\,y\,x_j - \sum_{x,y}\hat p(x)p(y\mid x)\,y\,x_j\Big) + \sum_x \mu(x)\Big(1-\sum_y p(y\mid x)\Big).$$</p>
+
+        <p class="step">Stationarity</p>
+        <p>Differentiate with respect to $p(y\mid x)$ for a fixed $(x,y)$ pair and set to zero:
+        $$\frac{\partial \mathcal{L}}{\partial p(y\mid x)} = -\hat p(x)\big(\log p(y\mid x) + 1\big) - \hat p(x)\,y\sum_j\theta_j x_j - \mu(x) = 0.$$
+        Assuming $\hat p(x) > 0$ (the point is observed), divide through by $-\hat p(x)$ and solve:
+        $$\log p(y\mid x) = y\sum_j \theta_j x_j - 1 - \frac{\mu(x)}{\hat p(x)} \implies p(y\mid x) = \frac{1}{Z(x)}\exp\Big(y\,\theta^Tx\Big),$$
+        where $Z(x) = \exp\big(1+\mu(x)/\hat p(x)\big)$ absorbs all $x$-dependent (not $y$-dependent) terms — this is exactly the form of an exponential family with sufficient statistic $y\cdot x$.</p>
+
+        <p class="step">Solving for the normalizer and identifying the sigmoid</p>
+        <p>Since $y\in\{0,1\}$, normalization requires
+        $$Z(x) = \exp(0\cdot\theta^Tx) + \exp(1\cdot\theta^Tx) = 1 + e^{\theta^Tx}.$$
+        Hence
+        $$p(y=1\mid x) = \frac{e^{\theta^Tx}}{1+e^{\theta^Tx}} = \frac{1}{1+e^{-\theta^Tx}} = g(\theta^Tx),$$
+        after multiplying numerator and denominator by $e^{-\theta^Tx}$. This is exactly the logistic regression hypothesis $h_\theta(x)$ from the lecture. Since the Lagrangian's objective (entropy) is concave and the constraint set is a convex polytope (affine equality constraints), this stationary point is the unique global maximizer.</p>
+
+        <p class="step">Conclusion</p>
+        <p>Therefore, logistic regression is not an arbitrary parametric choice — it is <em>forced</em> upon us as the unique maximum-entropy conditional distribution consistent with matching the empirical feature-label correlations, i.e. the "least additional assumption" model given those moment constraints (a discrete-$y$ analogue of the well-known fact that the Gaussian is the max-entropy distribution given fixed mean and variance). $\blacksquare$</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- PROBLEM 5 -->
+<div class="problem" id="p5">
+  <div class="problem-header">
+    <span class="tag">Problem 5 · Asymptotic Statistics</span>
+    <span class="diff platinum">Platinum</span>
+  </div>
+  <div class="problem-body">
+    <h3>Fisher Information and the Precision of the Learned Boundary</h3>
+    <p>Consider logistic regression with a single scalar feature (plus intercept), i.e. $\theta=(\theta_0,\theta_1)$ and $h_\theta(x) = g(\theta_0+\theta_1 x)$, fit by maximum likelihood on i.i.d. data $(x^{(i)},y^{(i)})$.</p>
+    <p><strong>(a)</strong> Show that the Fisher information matrix for one observation is
+    $$I(\theta) = \mathbb{E}\left[h_\theta(x)(1-h_\theta(x))\begin{pmatrix}1 & x\\ x & x^2\end{pmatrix}\right],$$
+    and relate this to the Hessian computed in Problem 2(a).</p>
+    <p><strong>(b)</strong> Using the asymptotic normality of the MLE, $\sqrt{m}(\hat\theta - \theta^*) \xrightarrow{d} \mathcal{N}(0, I(\theta^*)^{-1})$, argue qualitatively (with a one-line justification from the formula in (a)) why training data concentrated near the true decision boundary ($\theta^{*T}x\approx 0$) yields a <em>more</em> precisely estimated $\hat\theta$ than data concentrated in the confident regions ($|\theta^{*T}x|$ large) — the opposite of the usual intuition that "confident, easy examples are more informative."</p>
+    <p class="points">Total: 13 points (7 + 6)</p>
+
+    <details>
+      <summary>Show full solution</summary>
+      <div class="solution">
+        <p class="step">Part (a)</p>
+        <p>The Fisher information for one observation is $I(\theta) = -\mathbb{E}[\nabla^2_\theta \log p(y\mid x;\theta)]$, i.e. the expected value of the negative Hessian of the per-example log-likelihood. From Problem 2(a)'s derivation applied to a single example, the per-example contribution to $-\nabla^2\ell^{(i)}(\theta)$ (before averaging over $i$) is exactly
+        $$h_\theta(x)(1-h_\theta(x))\, xx^T,$$
+        where here $x=(1,x_1)^T$ so $xx^T = \begin{pmatrix}1 & x_1\\ x_1 & x_1^2\end{pmatrix}$. Taking expectation over the data distribution gives
+        $$I(\theta) = \mathbb{E}\left[h_\theta(x)(1-h_\theta(x))\begin{pmatrix}1&x\\x&x^2\end{pmatrix}\right].$$
+        So $I(\theta)$ is precisely the population (expected) version of the empirical Hessian $\nabla^2 J(\theta)$ from Problem 2(a) (up to the sign convention: $\nabla^2 J = \frac1m X^TSX$ estimates $I(\theta)$ by the law of large numbers, since $J$ is the negative average log-likelihood). This is a general MLE fact: the sample Hessian of the negative log-likelihood is a consistent estimator of the Fisher information.</p>
+
+        <p class="step">Part (b)</p>
+        <p>The weight $s(x) := h_\theta(x)(1-h_\theta(x))$ appearing inside the expectation in (a) is maximized exactly at $h_\theta(x)=1/2$ (by the identity $s(x)=\tfrac14 - (h_\theta(x)-\tfrac12)^2$, which is maximized at $s=1/4$ when $h_\theta(x)=1/2$, i.e. exactly when $\theta^Tx=0$ — the decision boundary from Problem 1(c)). As $|\theta^Tx|\to\infty$ (confident predictions), $h_\theta(x)\to 0$ or $1$, so $s(x)\to 0$: such points contribute <em>vanishing</em> weight to $I(\theta)$.</p>
+        <p>Since $\mathrm{Cov}(\hat\theta) \approx \tfrac1m I(\theta^*)^{-1}$, a <em>larger</em> $I(\theta^*)$ (more weight mass) gives a <em>smaller</em> (better) asymptotic covariance. Data points near the boundary ($\theta^{*T}x\approx0$) have $s(x)\approx 1/4$ — the maximum possible weight — and so contribute the most to $I(\theta^*)$, shrinking the estimation error of $\hat\theta$ the most. Confident, "easy" points (far from the boundary, where the model is already near-certain) contribute almost nothing to $I(\theta^*)$, because the model's prediction there is nearly insensitive to small perturbations of $\theta$ — flipping a coefficient slightly does not change $g(\theta^Tx)$ when $|\theta^Tx|$ is already huge. So, counter to the "confident examples are more informative" intuition common in casual reasoning about classifiers, it is precisely the <em>ambiguous, boundary-straddling</em> examples that are statistically most informative for pinning down $\theta$ — this is exactly the principle exploited by active-learning strategies like uncertainty sampling. $\blacksquare$</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- PROBLEM 6 -->
+<div class="problem" id="p6">
+  <div class="problem-header">
+    <span class="tag">Problem 6 · Numerical Optimization</span>
+    <span class="diff gold">Gold</span>
+  </div>
+  <div class="problem-body">
+    <h3>Newton's Method as Iteratively Reweighted Least Squares (IRLS)</h3>
+    <p>The Newton–Raphson update for maximizing $\ell(\theta)$ (equivalently minimizing $J(\theta)$) is $\theta^{new} = \theta^{old} - \big(\nabla^2 J(\theta^{old})\big)^{-1}\nabla J(\theta^{old})$.</p>
+    <p>Using the gradient $\nabla J(\theta) = \frac1m X^T(h_\theta(X)-y)$ and Hessian $\nabla^2J(\theta) = \frac1m X^TSX$ from Problem 2(a), prove that the Newton update can be rewritten exactly as the solution to a <em>weighted least-squares</em> problem:
+    $$\theta^{new} = \arg\min_\theta \, (X\theta - z)^T S (X\theta - z), \qquad z := X\theta^{old} + S^{-1}(y-h_{\theta^{old}}(X)),$$
+    where $z$ is called the vector of "working responses." (Assume $S$ is invertible, i.e. every $h_\theta(x^{(i)}) \in (0,1)$ strictly.)</p>
+    <p class="points">Total: 10 points</p>
+
+    <details>
+      <summary>Show full solution</summary>
+      <div class="solution">
+        <p class="step">Step 1 — Write out the Newton step</p>
+        <p>Dropping the constant $1/m$ factors (they cancel between gradient and Hessian in the update), and writing $\theta^{old}$ as $\theta_0$ for brevity:
+        $$\theta^{new} = \theta_0 - (X^TSX)^{-1}X^T(h_{\theta_0}(X) - y).$$</p>
+
+        <p class="step">Step 2 — Introduce the working response $z$</p>
+        <p>Define $z = X\theta_0 + S^{-1}(y - h_{\theta_0}(X))$ as given. Then
+        $$Sz = SX\theta_0 + (y-h_{\theta_0}(X)).$$
+        Substitute into the normal equations for weighted least squares, $X^TSX\theta = X^TSz$:
+        $$X^TSz = X^TSX\theta_0 + X^T(y-h_{\theta_0}(X)) = X^TSX\theta_0 - X^T(h_{\theta_0}(X)-y).$$</p>
+
+        <p class="step">Step 3 — Solve the normal equations</p>
+        <p>The weighted least-squares solution is $\theta^{new} = (X^TSX)^{-1}X^TSz$ (standard result: minimizing $(X\theta-z)^TS(X\theta-z)$ over $\theta$ gives normal equations $X^TSX\theta = X^TSz$, and $X^TSX$ is invertible whenever $X$ has full column rank, by Problem 2(c)). Substituting the expression for $X^TSz$ from Step 2:
+        $$\theta^{new} = (X^TSX)^{-1}\Big[X^TSX\theta_0 - X^T(h_{\theta_0}(X)-y)\Big] = \theta_0 - (X^TSX)^{-1}X^T(h_{\theta_0}(X)-y),$$
+        which is exactly the Newton update from Step 1. Hence the two expressions for $\theta^{new}$ coincide. $\blacksquare$</p>
+
+        <p class="step">Remark</p>
+        <p>This is why Newton's method for logistic regression is universally called <strong>Iteratively Reweighted Least Squares</strong>: at each iteration one solves an ordinary weighted linear regression against pseudo-targets $z$, with weights $S$ that adaptively down-weight points where the current model is already confident (small $s_i$) — echoing the Fisher-information intuition from Problem 5.</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- PROBLEM 7 -->
+<div class="problem" id="p7">
+  <div class="problem-header">
+    <span class="tag">Problem 7 · Generative vs. Discriminative Models</span>
+    <span class="diff platinum">Platinum</span>
+  </div>
+  <div class="problem-body">
+    <h3>Bayes Optimality Under Gaussian Class-Conditionals</h3>
+    <p>Suppose $x\mid y=1 \sim \mathcal{N}(\mu_1,\Sigma)$ and $x\mid y=0\sim\mathcal{N}(\mu_0,\Sigma)$ (a <em>shared</em> covariance matrix $\Sigma$), with prior class probabilities $P(y=1)=\pi$, $P(y=0)=1-\pi$.</p>
+    <p>Prove that under this generative model (Gaussian Discriminant Analysis with shared covariance), the posterior $P(y=1\mid x)$ has <em>exactly</em> the logistic-regression form $g(\theta^Tx)$ for some $\theta$ depending on $\mu_0,\mu_1,\Sigma,\pi$ — and give $\theta$ explicitly. Conclude what this implies about when discriminative logistic regression and generative GDA should agree asymptotically, and state (without proof) one reason their finite-sample behavior can still differ.</p>
+    <p class="points">Total: 14 points</p>
+
+    <details>
+      <summary>Show full solution</summary>
+      <div class="solution">
+        <p class="step">Step 1 — Bayes' rule</p>
+        <p>By Bayes' rule,
+        $$P(y=1\mid x) = \frac{p(x\mid y=1)P(y=1)}{p(x\mid y=1)P(y=1) + p(x\mid y=0)P(y=0)} = \frac{1}{1 + \dfrac{p(x\mid y=0)P(y=0)}{p(x\mid y=1)P(y=1)}}.$$
+        This already has the form $\dfrac{1}{1+e^{-a}}$ where $a = \log\dfrac{p(x\mid y=1)P(y=1)}{p(x\mid y=0)P(y=0)}$ — we must show $a$ is affine in $x$.</p>
+
+        <p class="step">Step 2 — Compute the log-odds $a$</p>
+        <p>
+        $$a = \log\frac{p(x\mid y=1)}{p(x\mid y=0)} + \log\frac{\pi}{1-\pi}.$$
+        Using the multivariate Gaussian density with shared $\Sigma$:
+        $$\log\frac{p(x\mid y=1)}{p(x\mid y=0)} = -\tfrac12(x-\mu_1)^T\Sigma^{-1}(x-\mu_1) + \tfrac12(x-\mu_0)^T\Sigma^{-1}(x-\mu_0),$$
+        since the normalizing constants $(2\pi)^{-n/2}|\Sigma|^{-1/2}$ are identical (shared $\Sigma$) and cancel.</p>
+
+        <p class="step">Step 3 — Expand the quadratic forms</p>
+        <p>Expand each quadratic form:
+        $$(x-\mu_k)^T\Sigma^{-1}(x-\mu_k) = x^T\Sigma^{-1}x - 2\mu_k^T\Sigma^{-1}x + \mu_k^T\Sigma^{-1}\mu_k.$$
+        The $x^T\Sigma^{-1}x$ terms are identical for $k=0,1$ and cancel in the difference. What remains:
+        $$-\tfrac12\Big[-2\mu_1^T\Sigma^{-1}x + \mu_1^T\Sigma^{-1}\mu_1\Big] + \tfrac12\Big[-2\mu_0^T\Sigma^{-1}x + \mu_0^T\Sigma^{-1}\mu_0\Big]$$
+        $$= (\mu_1-\mu_0)^T\Sigma^{-1}x - \tfrac12\mu_1^T\Sigma^{-1}\mu_1 + \tfrac12\mu_0^T\Sigma^{-1}\mu_0.$$
+        This is affine in $x$: linear coefficient $\Sigma^{-1}(\mu_1-\mu_0)$, plus a constant.</p>
+
+        <p class="step">Step 4 — Assemble $\theta$</p>
+        <p>Combining with the prior log-odds term from Step 2:
+        $$a = \underbrace{\big(\Sigma^{-1}(\mu_1-\mu_0)\big)^T}_{\theta_{1:n}^T} x \;+\; \underbrace{\left[-\tfrac12\mu_1^T\Sigma^{-1}\mu_1 + \tfrac12\mu_0^T\Sigma^{-1}\mu_0 + \log\frac{\pi}{1-\pi}\right]}_{\theta_0}.$$
+        So indeed $P(y=1\mid x) = g(\theta_0 + \theta_1^Tx)$ with
+        $$\theta_1 = \Sigma^{-1}(\mu_1-\mu_0), \qquad \theta_0 = \tfrac12(\mu_0^T\Sigma^{-1}\mu_0 - \mu_1^T\Sigma^{-1}\mu_1) + \log\frac{\pi}{1-\pi}.$$
+        This is exactly logistic regression's functional form, but with $\theta$ derived analytically from Gaussian parameters rather than fit by MLE on $\theta$ directly. $\blacksquare$</p>
+
+        <p class="step">Conclusion</p>
+        <p>Because GDA's induced posterior is a special case of the logistic model, whenever the true data-generating process really is Gaussian-with-shared-covariance, both GDA and (correctly-fit, asymptotically many samples) logistic regression converge to the <em>same</em> Bayes-optimal decision rule — logistic regression is a strictly weaker (fewer assumptions) but still correctly-specified model in this case, so it is asymptotically consistent for the true $\theta$ too. However, with <em>finite</em> samples the two can disagree: GDA additionally assumes and exploits Gaussianity to estimate $\mu_0,\mu_1,\Sigma$ efficiently, so if the Gaussian assumption truly holds, GDA typically needs fewer samples to reach a given accuracy; but GDA's estimates become biased/inconsistent if the true class-conditionals are not Gaussian, whereas logistic regression — because it directly models only the posterior's functional form — remains asymptotically consistent under a much broader family of class-conditional distributions (any exponential family with shared natural-parameter structure yields the same logistic posterior form).</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- PROBLEM 8 -->
+<div class="problem" id="p8">
+  <div class="problem-header">
+    <span class="tag">Problem 8 · Real Analysis / Optimization Rates</span>
+    <span class="diff silver">Silver</span>
+  </div>
+  <div class="problem-body">
+    <h3>A Sharp Bound on the Sigmoid's Lipschitz Constant, and a Safe SGD Step Size</h3>
+    <p><strong>(a)</strong> Prove that $g'(z) = g(z)(1-g(z)) \le \tfrac14$ for all $z\in\mathbb{R}$, with equality iff $z=0$. Conclude that $g$ is $\tfrac14$-Lipschitz: $|g(z_1)-g(z_2)| \le \tfrac14|z_1-z_2|$.</p>
+    <p><strong>(b)</strong> Using Part (a) and Problem 2(a), show that for any single training example $(x,y)$ with $\|x\|_2 \le R$, the per-example loss $\ell_i(\theta) = -\big[y\log h_\theta(x) + (1-y)\log(1-h_\theta(x))\big]$ has gradient that is $\tfrac{R^2}{4}$-Lipschitz in $\theta$: $\|\nabla \ell_i(\theta_1) - \nabla\ell_i(\theta_2)\|_2 \le \tfrac{R^2}{4}\|\theta_1-\theta_2\|_2.$</p>
+    <p><strong>(c)</strong> Standard convex optimization theory guarantees that gradient descent with a fixed step size $\alpha \le 1/L$ on an $L$-smooth convex function converges monotonically. Using (b), state a data-dependent, provably safe learning rate $\alpha$ for (stochastic) gradient descent on the full empirical loss $J(\theta) = \frac1m\sum_i \ell_i(\theta)$, and justify it.</p>
+    <p class="points">Total: 12 points (4 + 4 + 4)</p>
+
+    <details>
+      <summary>Show full solution</summary>
+      <div class="solution">
+        <p class="step">Part (a)</p>
+        <p>Let $u = g(z) \in (0,1)$. By AM–GM (or completing the square), for $u\in(0,1)$:
+        $$u(1-u) = \tfrac14 - \left(u-\tfrac12\right)^2 \le \tfrac14,$$
+        with equality iff $u = \tfrac12$, i.e. $g(z)=\tfrac12$, which by Problem 1(c) happens uniquely at $z=0$. So $g'(z) = g(z)(1-g(z)) \le \tfrac14$ for all $z$, equality iff $z=0$.</p>
+        <p>By the Mean Value Theorem, for any $z_1<z_2$ there is $\xi\in(z_1,z_2)$ with $g(z_2)-g(z_1) = g'(\xi)(z_2-z_1)$, so $|g(z_2)-g(z_1)| = |g'(\xi)||z_2-z_1| \le \tfrac14|z_2-z_1|$, establishing $\tfrac14$-Lipschitz continuity.</p>
+
+        <p class="step">Part (b)</p>
+        <p>From Problem 2(a) restricted to one example, $\nabla_\theta \ell_i(\theta) = (h_\theta(x)-y)\,x$ and $\nabla^2_\theta \ell_i(\theta) = h_\theta(x)(1-h_\theta(x))\, xx^T = g'(\theta^Tx)\, xx^T$. The spectral norm of $xx^T$ is $\|x\|_2^2 \le R^2$ (its only nonzero eigenvalue is $\|x\|_2^2$, with eigenvector $x$). Combined with Part (a)'s bound $g'(\theta^Tx)\le\tfrac14$:
+        $$\|\nabla^2 \ell_i(\theta)\|_{op} = g'(\theta^Tx)\,\|x\|_2^2 \le \tfrac14 R^2 \quad \text{for every } \theta.$$
+        A twice-differentiable function whose Hessian has operator norm bounded by $L$ everywhere has $L$-Lipschitz gradient (standard consequence of the mean value inequality applied to $\nabla\ell_i$ along the segment $[\theta_1,\theta_2]$). Hence $\nabla\ell_i$ is $\tfrac{R^2}{4}$-Lipschitz.</p>
+
+        <p class="step">Part (c)</p>
+        <p>Since $J = \frac1m\sum_i \ell_i$ is an average of functions each with gradient Lipschitz constant $\le R^2/4$, $\nabla J$ is also $\tfrac{R^2}{4}$-Lipschitz (Lipschitz constants of a convex combination are bounded by the max of the individual constants, by the triangle inequality applied termwise). So $J$ is $L$-smooth with $L = R^2/4$, where $R = \max_i \|x^{(i)}\|_2$.</p>
+        <p>Therefore the theoretically safe fixed step size is
+        $$\alpha = \frac{1}{L} = \frac{4}{R^2} = \frac{4}{\max_i \|x^{(i)}\|_2^2}.$$
+        With this choice, standard descent-lemma arguments guarantee $J(\theta_{t+1}) \le J(\theta_t) - \tfrac{\alpha}{2}\|\nabla J(\theta_t)\|_2^2$, so $J$ decreases monotonically every iteration and gradient descent is guaranteed not to diverge or oscillate — a fully data-derived (no hand-tuning) certificate for a safe learning rate, in sharp contrast to the typical practice of tuning $\alpha$ by trial and error. $\blacksquare$</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<div class="footer-note">
+  Compiled from and extending "Machine Learning" lecture notes by Dr. Indu Joshi, IIT Mandi (Sept 3, 2026).<br>
+  Click each "Show full solution" to reveal rigorous, self-contained proofs.
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Linear Regression, MLE, MAP & Regularization — Olympiad Problem Set</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(','\\)'], ['$','$']],
+      displayMath: [['\\[','\\]'], ['$$','$$']],
+      processEscapes: true
+    },
+    options: {
+      // details/summary content is in the DOM from the start (just visually collapsed),
+      // so MathJax can typeset it immediately even before the user opens it.
+      skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+    }
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js" id="MathJax-script" async></script>
+<style>
+  :root{
+    --ink:#1c1e26;
+    --paper:#faf7f0;
+    --accent:#3b3fa1;
+    --accent2:#a13b5c;
+    --gold:#b8860b;
+    --line:#d8d2c2;
+    --aha:#fff4d6;
+    --ahaborder:#d8a933;
+    --sol:#eef0fb;
+    --solborder:#3b3fa1;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Georgia','Iowan Old Style',serif;
+    line-height:1.65;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:40px 28px 80px;}
+  header.title-block{
+    text-align:center;
+    border-bottom:4px double var(--accent);
+    padding-bottom:22px;
+    margin-bottom:36px;
+  }
+  header.title-block h1{
+    font-size:2rem;
+    margin:0 0 6px;
+    letter-spacing:0.5px;
+    color:var(--accent);
+  }
+  header.title-block .subtitle{
+    font-style:italic;
+    color:var(--accent2);
+    font-size:1.05rem;
+    margin-bottom:10px;
+  }
+  header.title-block .meta{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:0.85rem;
+    color:#555;
+    display:flex;
+    justify-content:center;
+    gap:22px;
+    flex-wrap:wrap;
+    margin-top:10px;
+  }
+  .instructions{
+    background:#fff;
+    border:1px solid var(--line);
+    border-left:6px solid var(--accent);
+    padding:16px 20px;
+    margin-bottom:40px;
+    font-size:0.95rem;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+  }
+  .instructions h3{margin-top:0;color:var(--accent);font-family:Georgia,serif;}
+  .instructions ul{margin:6px 0 0; padding-left:20px;}
+
+  .toc{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    background:#fff;
+    border:1px solid var(--line);
+    padding:14px 22px;
+    margin-bottom:44px;
+    font-size:0.9rem;
+  }
+  .toc h3{margin-top:0;color:var(--accent2);font-family:Georgia,serif;}
+  .toc a{color:var(--ink);text-decoration:none;}
+  .toc a:hover{text-decoration:underline;color:var(--accent);}
+  .toc ol{padding-left:20px;}
+  .toc li{margin-bottom:4px;}
+
+  section.problem{
+    margin-bottom:56px;
+    padding-top:8px;
+    border-top:2px solid var(--line);
+  }
+  .problem-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .problem-header h2{
+    font-size:1.35rem;
+    color:var(--accent);
+    margin:0;
+  }
+  .tag{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    background:var(--accent);
+    color:#fff;
+    padding:3px 10px;
+    border-radius:12px;
+  }
+  .points{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:0.8rem;
+    color:#777;
+  }
+  .statement{
+    background:#fff;
+    border:1px solid var(--line);
+    padding:18px 22px;
+    margin:12px 0 18px;
+    border-radius:2px;
+  }
+  .statement p{margin:0 0 10px;}
+  .statement p:last-child{margin-bottom:0;}
+
+  details.solution{
+    background:var(--sol);
+    border:1px solid var(--solborder);
+    border-radius:4px;
+    padding:0;
+    overflow:hidden;
+  }
+  details.solution > summary{
+    cursor:pointer;
+    list-style:none;
+    padding:12px 20px;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-weight:700;
+    color:#fff;
+    background:var(--solborder);
+    letter-spacing:0.03em;
+  }
+  details.solution > summary::-webkit-details-marker{display:none;}
+  details.solution > summary::before{
+    content:"▸ ";
+  }
+  details.solution[open] > summary::before{
+    content:"▾ ";
+  }
+  .solution-body{padding:18px 24px 22px;}
+  .solution-body h4{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:0.82rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--accent2);
+    margin:18px 0 6px;
+  }
+  .solution-body h4:first-child{margin-top:0;}
+
+  .aha{
+    background:var(--aha);
+    border-left:5px solid var(--ahaborder);
+    padding:12px 18px;
+    margin:16px 0;
+    font-style:italic;
+    border-radius:2px;
+  }
+  .aha b{
+    font-style:normal;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    color:var(--gold);
+    letter-spacing:0.03em;
+  }
+
+  table{
+    border-collapse:collapse;
+    width:100%;
+    margin:12px 0;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:0.88rem;
+  }
+  th,td{
+    border:1px solid var(--line);
+    padding:6px 10px;
+    text-align:center;
+  }
+  th{background:#efe9d8;}
+
+  .answer-box{
+    display:inline-block;
+    background:#fff;
+    border:2px solid var(--accent);
+    padding:6px 14px;
+    border-radius:4px;
+    font-weight:bold;
+    margin:8px 0;
+  }
+
+  code{
+    background:#f0f0f0;
+    padding:1px 5px;
+    border-radius:3px;
+    font-size:0.9em;
+  }
+
+  footer{
+    text-align:center;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:0.8rem;
+    color:#999;
+    margin-top:60px;
+    border-top:1px solid var(--line);
+    padding-top:16px;
+  }
+
+  @media print{
+    details.solution{ }
+    body{background:#fff;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="title-block">
+  <h1>The Regression &amp; Estimation Olympiad</h1>
+  <div class="subtitle">Linear Regression · Gradient Descent · Maximum Likelihood · Maximum A Posteriori · Regularization</div>
+  <div class="meta">
+    <span>Time: 3 hours</span>
+    <span>Total: 100 points</span>
+    <span>7 Problems</span>
+    <span>Based on: Dr. Indu Joshi's Lecture, IIT Mandi</span>
+  </div>
+</header>
+
+<div class="instructions">
+  <h3>Instructions to the Candidate</h3>
+  <ul>
+    <li>Every problem is self-contained; no result from one problem may be assumed in another unless stated.</li>
+    <li>Full marks require complete derivations — a correct final formula with no justification earns partial credit only.</li>
+    <li>Click "Show Solution" only after making a genuine attempt. Every solution ends with an <strong>Aha! Moment</strong> box distilling the key insight.</li>
+    <li>Standard notation follows the lecture: design matrix \(X\in\mathbb{R}^{m\times(n+1)}\), parameter vector \(\theta\in\mathbb{R}^{n+1}\), targets \(y^{(i)}\), noise \(\epsilon^{(i)}\sim\mathcal N(0,\sigma^2)\).</li>
+  </ul>
+</div>
+
+<div class="toc">
+  <h3>Contents</h3>
+  <ol>
+    <li><a href="#p1">The LMS Rule from First Principles</a> — 12 pts</li>
+    <li><a href="#p2">The Convergence Threshold</a> — 14 pts</li>
+    <li><a href="#p3">Taming a Divergent Descent</a> — 12 pts</li>
+    <li><a href="#p4">The Treacherous Basin</a> — 14 pts</li>
+    <li><a href="#p5">Least Squares is a Disguised Gaussian</a> — 16 pts</li>
+    <li><a href="#p6">From Prior Belief to Ridge Penalty</a> — 18 pts</li>
+    <li><a href="#p7">The Convexity Certificate</a> — 14 pts</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<section class="problem" id="p1">
+  <div class="problem-header">
+    <h2>Problem 1 — The LMS Rule from First Principles</h2>
+    <span class="tag">Gradient Descent</span>
+  </div>
+  <div class="points">12 points</div>
+  <div class="statement">
+    <p>The cost function for linear regression on a training set of $m$ examples is
+    \[ J(\theta) = \frac{1}{2}\sum_{i=1}^{m}\left(h_\theta(x^{(i)}) - y^{(i)}\right)^2, \qquad h_\theta(x) = \theta^\top x = \sum_{k=0}^n \theta_k x_k. \]</p>
+    <p><b>(a)</b> Derive, from scratch, an explicit expression for $\dfrac{\partial J}{\partial \theta_j}$ for a <em>single</em> training example $(x,y)$. Do not merely quote the result — show every step of the chain rule.</p>
+    <p><b>(b)</b> Hence write down the stochastic (single-example) update rule, and the batch update rule.</p>
+    <p><b>(c)</b> A classmate claims: "Since the LMS update for one example already looks like a full gradient step, batch and stochastic gradient descent must always converge to the same point after the same number of parameter updates." Prove or disprove this claim with a concrete counterexample using $m=2$ points in 1D (i.e. $\theta \in \mathbb{R}$, no intercept).</p>
+  </div>
+  <details class="solution">
+    <summary>Show Solution</summary>
+    <div class="solution-body">
+      <h4>Part (a): The derivative</h4>
+      <p>For a single example, $J(\theta) = \frac12 (h_\theta(x)-y)^2$. Let $u = h_\theta(x) - y$, so $J = \frac12 u^2$. By the chain rule,
+      \[ \frac{\partial J}{\partial \theta_j} = u\cdot \frac{\partial u}{\partial \theta_j} = \big(h_\theta(x)-y\big)\cdot\frac{\partial}{\partial\theta_j}\left(\sum_{k=0}^n \theta_k x_k - y\right). \]
+      Inside the last derivative, every term $\theta_k x_k$ with $k \neq j$ is treated as a constant with respect to $\theta_j$, and $y$ does not depend on $\theta$ at all. Only the $k=j$ term survives, contributing $x_j$. Hence
+      \[ \frac{\partial J}{\partial \theta_j} = (h_\theta(x) - y)\, x_j. \]</p>
+
+      <h4>Part (b): The update rules</h4>
+      <p>Gradient descent moves <em>against</em> the gradient: $\theta_j \leftarrow \theta_j - \alpha\,\partial J/\partial\theta_j$. Substituting the result of (a) for example $i$,
+      \[ \theta_j := \theta_j + \alpha\left(y^{(i)} - h_\theta(x^{(i)})\right)x_j^{(i)} \qquad \text{(stochastic / LMS rule)}. \]
+      Summing the single-example gradients over all $m$ examples (since the total cost is a sum, its gradient is the sum of gradients — linearity of differentiation) gives the batch rule:
+      \[ \theta_j := \theta_j + \alpha\sum_{i=1}^m \left(y^{(i)} - h_\theta(x^{(i)})\right)x_j^{(i)}. \]</p>
+
+      <h4>Part (c): Disproving the claim</h4>
+      <p>Take two points $(x^{(1)},y^{(1)}) = (1, 4)$ and $(x^{(2)},y^{(2)}) = (2, 0)$, model $h_\theta(x) = \theta x$, start $\theta_0 = 0$, learning rate $\alpha = 0.1$.</p>
+      <p><u>Batch GD, one update</u> (uses both points at once):
+      \[ \theta_1 = 0 + 0.1\Big[(4-0)(1) + (0-0)(2)\Big] = 0 + 0.1(4) = 0.4. \]</p>
+      <p><u>Stochastic GD, one full pass</u> (updates sequentially on point 1, then point 2):
+      \[ \theta^{(a)} = 0 + 0.1(4 - 0\cdot 1)(1) = 0.4 \]
+      \[ \theta^{(b)} = 0.4 + 0.1\big(0 - 0.4\cdot 2\big)(2) = 0.4 + 0.1(-0.8)(2) = 0.4 - 0.16 = 0.24. \]</p>
+      <p>After "one update" in the loose sense of "one pass touching all the data," batch GD gives $\theta = 0.4$ while stochastic GD gives $\theta = 0.24$ — different values. The claim is <b>false</b>: SGD's intermediate updates use a partially-updated $\theta$ when processing later points in the same pass, so the order of examples matters and the trajectories diverge (they may still converge to the same eventual minimizer, but not "after the same number of updates").</p>
+
+      <div class="aha"><b>Aha! Moment:</b> Batch GD computes one gradient using a "frozen" snapshot of $\theta$ across the whole dataset, whereas SGD updates $\theta$ <em>between</em> seeing each example — so by the time SGD reaches example 2, it is already evaluating with a different set of weights than batch GD used for the same example. This path-dependence is precisely why SGD "oscillates" near the minimum (as the lecture notes) rather than settling exactly: it is chasing a slightly different sub-gradient at every single step.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ============================================================ -->
+<section class="problem" id="p2">
+  <div class="problem-header">
+    <h2>Problem 2 — The Convergence Threshold</h2>
+    <span class="tag">Gradient Descent Dynamics</span>
+  </div>
+  <div class="points">14 points</div>
+  <div class="statement">
+    <p>The lecture shows gradient descent on $f(x) = x^2$ with $\alpha = 0.2$ converging geometrically to $0$, since each step satisfies $x_{k+1} = 0.6\,x_k$.</p>
+    <p><b>(a)</b> Generalize: for $f(x) = ax^2$ ($a>0$) minimized by gradient descent with learning rate $\alpha$ starting at $x_0 \neq 0$, derive a closed-form expression for $x_k$ in terms of $x_0, a, \alpha, k$.</p>
+    <p><b>(b)</b> Find the exact range of $\alpha$ (in terms of $a$) for which the iteration converges to the minimizer $x^\star = 0$ as $k\to\infty$.</p>
+    <p><b>(c)</b> Find the single value of $\alpha$ that reaches the minimum in exactly <em>one</em> step, for arbitrary $x_0$. Explain, in one sentence, why such a "perfect" learning rate exists here but would not exist for $f(x) = x^4$.</p>
+  </div>
+  <details class="solution">
+    <summary>Show Solution</summary>
+    <div class="solution-body">
+      <h4>Part (a): Closed form</h4>
+      <p>$f'(x) = 2ax$, so the update is
+      \[ x_{k+1} = x_k - \alpha(2a x_k) = (1-2a\alpha)\,x_k. \]
+      This is a first-order linear recurrence with constant ratio $r := 1-2a\alpha$. Unrolling it,
+      \[ x_k = r^k x_0 = (1-2a\alpha)^k\, x_0. \]</p>
+
+      <h4>Part (b): Convergence condition</h4>
+      <p>A geometric sequence $r^k x_0 \to 0$ as $k\to\infty$ if and only if $|r| < 1$ (if $|r|=1$ it neither grows nor decays to zero except trivially, and if $|r|>1$ it blows up). So we need
+      \[ |1-2a\alpha| < 1 \iff -1 < 1-2a\alpha < 1 \iff 0 < \alpha < \frac{1}{a}. \]
+      (Check against the lecture: $a=1 \Rightarrow$ need $0<\alpha<1$; indeed $\alpha=0.2$ converges, matching $r=0.6$; and the divergent example used $f(x)=(x-3)^2$, i.e. $a=1$, with $\alpha = 1.5 > 1$, consistent with divergence.)</p>
+
+      <h4>Part (c): The perfect step</h4>
+      <p>One step reaches $x^\star=0$ exactly for <em>any</em> $x_0 \ne 0$ iff $r=0$, i.e. $1-2a\alpha=0 \Rightarrow \alpha = \dfrac{1}{2a}$.
+      <div class="answer-box">\(\alpha^\star = \dfrac{1}{2a}\)</div>
+      This is precisely Newton's method for a quadratic: $\alpha = 1/f''(x)$, since $f''(x)=2a$ everywhere. A perfect one-step learning rate exists for $f(x)=ax^2$ because the second derivative $f''=2a$ is <em>constant</em> — the local quadratic model is exact everywhere, not just locally. For $f(x)=x^4$, $f''(x)=12x^2$ varies with $x$, so no single constant $\alpha$ can cancel the gradient exactly at every point; the "right" step size itself changes as $x$ changes, so pure gradient descent with fixed $\alpha$ can only approach, never leap directly to, $x^\star=0$.</p>
+
+      <div class="aha"><b>Aha! Moment:</b> Gradient descent on a quadratic is <em>literally</em> a geometric sequence — the entire qualitative story (converge / stall / diverge / oscillate) is governed by a single number $r = 1-2a\alpha$, exactly as in the recurrences you meet in classical algebra olympiad problems. The critical curvature-dependent threshold $\alpha < 1/a$ is the seed of a deep fact used throughout optimization: safe step sizes for gradient descent are governed by the curvature (the Lipschitz constant of the gradient, generalizing "$2a$" here), <em>not</em> by some universal constant.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ============================================================ -->
+<section class="problem" id="p3">
+  <div class="problem-header">
+    <h2>Problem 3 — Taming a Divergent Descent</h2>
+    <span class="tag">Instability &amp; Oscillation</span>
+  </div>
+  <div class="points">12 points</div>
+  <div class="statement">
+    <p>The lecture exhibits $f(x)=(x-3)^2$ with $x_0=0,\ \alpha=1.5$ producing the wildly diverging sequence $0, 9, -9, 27, -45, 99,\dots$</p>
+    <p><b>(a)</b> Using the ratio $r = 1-2a\alpha$ from Problem 2 (here $a=1$), predict the <em>sign pattern</em> and the <em>growth rate</em> of $|x_k - 3|$ for this example, and verify both against the given numbers.</p>
+    <p><b>(b)</b> The engineer keeps $\alpha = 1.5$ fixed but is allowed to choose $x_0$. Is there any choice of $x_0 \ne 3$ that would make the sequence converge? Justify rigorously.</p>
+    <p><b>(c)</b> Suppose instead the engineer must keep $x_0=0$ fixed, but may choose $\alpha$. Find the largest $\alpha$ that still guarantees convergence, and describe qualitatively what happens exactly at the boundary value.</p>
+  </div>
+  <details class="solution">
+    <summary>Show Solution</summary>
+    <div class="solution-body">
+      <h4>Part (a): Sign and growth</h4>
+      <p>Let $e_k = x_k - 3$ (distance to the minimizer). Since $f(x)=(x-3)^2$ is just $f(x)=au^2$ with $u=x-3$ shifted, the same recurrence applies to the error: $e_{k+1} = r\, e_k$ with $r = 1-2(1)(1.5) = 1-3 = -2$.</p>
+      <p>Because $r=-2$ is negative, the error <b>alternates in sign</b> every step (a negative ratio flips sign each multiplication), and because $|r|=2>1$, $|e_k| = 2^k |e_0|$ <b>doubles in magnitude every step</b> — pure exponential blow-up.</p>
+      <p>Check: $e_0 = 0-3=-3$. Then $e_1 = -2(-3)=6 \Rightarrow x_1 = 9$ ✓. $e_2=-2(6)=-12 \Rightarrow x_2=-9$ ✓. $e_3=-2(-12)=24\Rightarrow x_3=27$ ✓. $e_4 = -2(24) = -48 \Rightarrow x_4 = -45$ ✓. $e_5 = -2(-48)=96 \Rightarrow x_5=99$ ✓. Every value in the lecture's table matches $e_k = (-2)^k(-3)$, i.e. $|e_k|=3\cdot 2^k$ with alternating sign — exactly as predicted.</p>
+
+      <h4>Part (b): Can a different $x_0$ save it?</h4>
+      <p>No. From $e_k = r^k e_0 = (-2)^k e_0$, the only way for $e_k \to 0$ is $e_0 = 0$, i.e. $x_0 = 3$ (starting exactly at the minimum — trivial and excluded since $x_0\neq 3$ is required, and even $x_0=3$ isn't really "gradient descent converging," it's already converged). For <em>any</em> other $x_0$, $|e_k| = 2^k|e_0| \to \infty$. The instability is a property of $\alpha$ (through $r$), completely independent of where you start — every non-trivial starting point is amplified by the same diverging factor $2^k$.</p>
+
+      <h4>Part (c): The largest safe $\alpha$</h4>
+      <p>From Problem 2(b), convergence requires $\alpha < 1/a = 1$ (here $a=1$). So the supremum of safe learning rates is
+      <div class="answer-box">\(\alpha \to 1^-\), boundary at \(\alpha = 1\)</div>
+      At exactly $\alpha=1$: $r = 1-2(1)(1)=-1$. Then $e_k = (-1)^k e_0$, so $x_k$ <b>oscillates forever between $x_0$ and $2\cdot3-x_0$</b> (here, between $0$ and $6$) without ever growing or shrinking — a permanent, non-decaying, non-diverging oscillation. This is the razor's-edge boundary case: for $\alpha$ ever so slightly less than $1$, the oscillation slowly decays to $3$; for $\alpha$ ever so slightly more than $1$, it explodes just like the lecture's $\alpha=1.5$ case.</p>
+
+      <div class="aha"><b>Aha! Moment:</b> The entire zoo of behaviors described qualitatively in the lecture — "too small $\Rightarrow$ slow," "too large $\Rightarrow$ overshoot and diverge," "optimal $\Rightarrow$ steady progress" — collapses to reading off the sign and magnitude of one number, $r=1-2a\alpha$: $r\in(0,1)$ is monotone decay, $r\in(-1,0)$ is decaying oscillation, $|r|=1$ is a permanent oscillation, and $|r|>1$ is explosive divergence. Instability is not "randomness" or "bad luck" — it is a deterministic doubling machine, $|e_k|=|r|^k|e_0|$, and it doesn't care at all which $x_0$ you started from.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ============================================================ -->
+<section class="problem" id="p4">
+  <div class="problem-header">
+    <h2>Problem 4 — The Treacherous Basin</h2>
+    <span class="tag">Initialization &amp; Non-convexity</span>
+  </div>
+  <div class="points">14 points</div>
+  <div class="statement">
+    <p>Consider $f(x) = x^3 - 3x$, with $f'(x) = 3x^2-3$, critical points at $x=\pm1$ (local min at $x=1$, local max at $x=-1$, as shown in the lecture). Gradient descent is run with $\alpha=0.1$.</p>
+    <p><b>(a)</b> The lecture starts at $x_0=-1.5$ and shows the iterates diverging to $-\infty$ ($x_1=-1.875,\ x_2=-2.6297,\dots$). Explain <em>why</em> starting just past the local maximum sends the iterate the "wrong way," using the sign of $f'(x_0)$.</p>
+    <p><b>(b)</b> Find the <em>exact</em> set of starting points $x_0$ for which gradient descent (with infinitesimally small $\alpha$, i.e. the idealized gradient flow $\dot x = -f'(x)$) converges to the local minimum at $x=1$, rather than diverging to $-\infty$ or $+\infty$. Sketch the qualitative reasoning (you do not need to solve the ODE explicitly).</p>
+    <p><b>(c)</b> True or False, with justification: "For a strictly convex function, this basin-of-attraction issue can never occur, no matter the starting point." </p>
+  </div>
+  <details class="solution">
+    <summary>Show Solution</summary>
+    <div class="solution-body">
+      <h4>Part (a): Why $x_0=-1.5$ is disastrous</h4>
+      <p>The update is $x_1 = x_0 - \alpha f'(x_0)$. At $x_0=-1.5$: $f'(-1.5) = 3(2.25)-3 = 3.75 > 0$. A positive gradient means the function is <em>increasing</em> at $x_0$, so gradient descent correctly moves left: $x_1 = -1.5-0.1(3.75) = -1.875$. But moving left from a point already left of the local max $x=-1$ pushes the iterate deeper into the region where $f$ is monotonically decreasing towards $-\infty$ (for $x<-1$, one can check $f'(x)>0$ always grows, e.g. $f'(-2)=9>0$, $f'(-3)=24>0$, so the pull left never reverses). The local structure that would normally pull the point <em>back up towards</em> $x=-1$ only exists for $x \in (-1,1)$ where $f'<0$; once you are to the <em>left</em> of $x=-1$, the geometry sends you further left forever.</p>
+
+      <h4>Part (b): The true basin of attraction of $x=1$</h4>
+      <p>The sign of $f'(x) = 3x^2-3 = 3(x-1)(x+1)$ determines the flow direction: $f'(x)>0$ for $x<-1$ or $x>1$ (function increasing $\Rightarrow$ gradient flow moves left), and $f'(x)<0$ for $-1<x<1$ (function decreasing $\Rightarrow$ gradient flow moves right, <em>towards</em> $x=1$).</p>
+      <p>So: for any $x_0 \in (-1, +\infty)$, the flow moves monotonically towards $x=1$ and converges there (points in $(-1,1)$ get pushed right toward 1; points already $>1$ get pushed left toward 1). But $x_0=-1$ itself is an unstable equilibrium (it never moves, but any perturbation sends it away), and for any $x_0 < -1$, $f'(x_0)>0$ pushes the point further left/negative, and $f$ has no lower bound as $x\to-\infty$, so the flow diverges to $-\infty$.</p>
+      <div class="answer-box">Basin of attraction of the minimum at \(x=1\): \(\;x_0 \in (-1,\ \infty)\)</div>
+
+      <h4>Part (c): True/False on convexity</h4>
+      <p><b>True.</b> A strictly convex function has a unique global minimizer $x^\star$, and its derivative is strictly increasing everywhere; there is exactly one point where $f'=0$ and it is a global (hence also the only local) minimum. There is no competing local maximum or second local minimum to be "trapped near," and $f'(x)$ has the same sign as $x-x^\star$ throughout its domain (negative for $x<x^\star$, positive for $x>x^\star$), so gradient descent (with a small enough $\alpha$, per Problem 2) always moves monotonically towards $x^\star$ regardless of $x_0$. This exactly matches the lecture's statement that linear regression's cost $J(\theta)$ is convex quadratic and gradient descent "always converges to the global minimum" for it — unlike $f(x)=x^3-3x$, which is <em>not</em> convex and does suffer from this basin problem.</p>
+
+      <div class="aha"><b>Aha! Moment:</b> "Bad initialization" is not really about being numerically far from the answer — $x_0=-1.5$ is closer to the true minimizer $x=1$ than, say, $x_0=+100$ would be, yet $x_0=-1.5$ diverges while $x_0=100$ converges nicely. What matters is <em>which side of an unstable equilibrium (local max)</em> you land on. This is exactly why the lecture singles out convexity as the property that rescues linear regression from this entire failure mode: convexity guarantees there is no "wrong side" to be on in the first place.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ============================================================ -->
+<section class="problem" id="p5">
+  <div class="problem-header">
+    <h2>Problem 5 — Least Squares is a Disguised Gaussian</h2>
+    <span class="tag">Maximum Likelihood Estimation</span>
+  </div>
+  <div class="points">16 points</div>
+  <div class="statement">
+    <p>Assume $y^{(i)} = \theta^\top x^{(i)} + \epsilon^{(i)}$ with $\epsilon^{(i)} \overset{iid}{\sim} \mathcal N(0,\sigma^2)$.</p>
+    <p><b>(a)</b> Derive the log-likelihood $\ell(\theta)$ of the full dataset from the individual Gaussian densities $p(y^{(i)}\mid x^{(i)};\theta)$, showing every algebraic simplification (do not skip the step where the product becomes a sum).</p>
+    <p><b>(b)</b> Prove carefully that maximizing $\ell(\theta)$ over $\theta$ is <em>exactly</em> equivalent to minimizing the sum-of-squares cost $J(\theta)=\frac12\sum_i (y^{(i)}-\theta^\top x^{(i)})^2$ — i.e., identify precisely which terms in $\ell(\theta)$ depend on $\theta$ and which do not.</p>
+    <p><b>(c)</b> A skeptic argues: "This derivation secretly assumes the noise is Gaussian, so if I believe $\theta_{MLE}=\theta_{LS}$ (least squares), I am implicitly claiming my measurement errors are Gaussian — but what if instead $\epsilon^{(i)}$ were Laplace-distributed, $p(\epsilon)=\frac{1}{2b}\exp(-|\epsilon|/b)$?" Redo the MLE derivation under this Laplace assumption and state which classical cost function you obtain instead of least squares.</p>
+  </div>
+  <details class="solution">
+    <summary>Show Solution</summary>
+    <div class="solution-body">
+      <h4>Part (a): Deriving the log-likelihood</h4>
+      <p>Since the $\epsilon^{(i)}$ are i.i.d. and $y^{(i)}$ is a deterministic (given $x^{(i)},\theta$) shift of $\epsilon^{(i)}$, the $y^{(i)}$'s are conditionally independent given the $x^{(i)}$'s and $\theta$. Hence the joint likelihood factorizes:
+      \[ L(\theta) = \prod_{i=1}^m p(y^{(i)}\mid x^{(i)};\theta) = \prod_{i=1}^m \frac{1}{\sqrt{2\pi}\sigma}\exp\!\left(-\frac{(y^{(i)}-\theta^\top x^{(i)})^2}{2\sigma^2}\right). \]
+      Taking $\log$ turns the product into a sum (since $\log$ of a product is the sum of logs) and turns each $\exp(\cdot)$ into its exponent:
+      \[ \ell(\theta) = \sum_{i=1}^m \left[\log\frac{1}{\sqrt{2\pi}\sigma} - \frac{(y^{(i)}-\theta^\top x^{(i)})^2}{2\sigma^2}\right] = m\log\frac{1}{\sqrt{2\pi}\sigma} \;-\; \frac{1}{2\sigma^2}\sum_{i=1}^m (y^{(i)}-\theta^\top x^{(i)})^2. \]</p>
+
+      <h4>Part (b): Equivalence to least squares</h4>
+      <p>Look at the two terms in $\ell(\theta)$ above. The first term, $m\log\frac{1}{\sqrt{2\pi}\sigma}$, involves only $m$ and $\sigma$ — <b>neither depends on $\theta$</b> — so it is a constant as far as optimization over $\theta$ is concerned, and adding a constant to an objective never changes its maximizer. The coefficient $\frac{1}{2\sigma^2}$ in front of the second term is a strictly <em>positive</em> constant (again independent of $\theta$, assuming $\sigma$ is fixed/known), so multiplying a function by a positive constant does not change the location of its maximum or minimum.</p>
+      <p>Therefore
+      \[ \arg\max_\theta \ell(\theta) = \arg\max_\theta \left[-\sum_i (y^{(i)}-\theta^\top x^{(i)})^2\right] = \arg\min_\theta \sum_i (y^{(i)}-\theta^\top x^{(i)})^2 = \arg\min_\theta J(\theta), \]
+      where the middle step used $\max(-g)=\min(g)$, and the last equality holds because scaling by the positive constant $\frac12$ doesn't move the minimizer. This proves $\theta_{MLE}=\theta_{LS}$ exactly, <b>for any value of $\sigma$</b> — the MLE for $\theta$ does not even depend on knowing the true noise variance.</p>
+
+      <h4>Part (c): The Laplace-noise case</h4>
+      <p>Under $\epsilon^{(i)}\sim \text{Laplace}(0,b)$, $p(\epsilon^{(i)}) = \frac{1}{2b}\exp(-|\epsilon^{(i)}|/b)$, so $p(y^{(i)}\mid x^{(i)};\theta) = \frac{1}{2b}\exp\!\left(-\dfrac{|y^{(i)}-\theta^\top x^{(i)}|}{b}\right)$. By the identical factorization-then-log argument as in (a)–(b):
+      \[ \ell(\theta) = m\log\frac{1}{2b} - \frac{1}{b}\sum_{i=1}^m \left|y^{(i)}-\theta^\top x^{(i)}\right|. \]
+      Again the first term is $\theta$-independent and $1/b>0$ is a constant multiplier, so
+      \[ \arg\max_\theta \ell(\theta) = \arg\min_\theta \sum_{i=1}^m \left|y^{(i)}-\theta^\top x^{(i)}\right|, \]
+      which is exactly the <b>Mean/Sum Absolute Error (L1)</b> objective, not sum-of-squares.
+      <div class="answer-box">Laplace noise \(\Rightarrow\) MLE = Least Absolute Deviations (L1 regression)</div>
+      </p>
+
+      <div class="aha"><b>Aha! Moment:</b> "Least squares" is not an arbitrary or purely geometric convention — it is the maximum-likelihood answer to one specific, falsifiable statistical belief: that your errors are Gaussian. The proof works purely through the observation that a monotone, $\theta$-independent transformation (adding/multiplying by a constant) never moves the location of an optimum — the exact same trick that turns $\arg\max L(\theta)$ into $\arg\max \ell(\theta)$ in the lecture. And the moment you swap the noise model for a Laplace distribution, the "natural" loss silently swaps from squared error to absolute error — this is precisely why L1 regression is famous for being robust to outliers: heavy-tailed Laplace noise "expects" occasional large deviations far more than thin-tailed Gaussian noise does.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ============================================================ -->
+<section class="problem" id="p6">
+  <div class="problem-header">
+    <h2>Problem 6 — From Prior Belief to Ridge Penalty</h2>
+    <span class="tag">MAP Estimation &amp; Regularization</span>
+  </div>
+  <div class="points">18 points</div>
+  <div class="statement">
+    <p>Suppose again $y^{(i)}\mid x^{(i)};\theta \sim \mathcal N(\theta^\top x^{(i)}, \sigma^2)$, i.i.d. over $i$, but now $\theta$ itself is treated as random with a Gaussian prior $\theta \sim \mathcal N(0,\tau^2 I)$ (a scalar-variance version of the lecture's prior, with density $p(\theta) \propto \exp(-\theta^\top\theta / 2\tau^2)$).</p>
+    <p><b>(a)</b> Starting from Bayes' rule, derive the expression $\theta_{MAP} = \arg\max_\theta \left[\sum_{i=1}^n \log p(y_i\mid x_i,\theta) + \log p(\theta)\right]$, explaining exactly which terms in the denominator/joint distribution of Bayes' rule are discarded and <em>why</em> discarding them is legitimate.</p>
+    <p><b>(b)</b> Substitute the Gaussian likelihood and Gaussian prior densities and simplify all the way down to
+    \[ \theta_{MAP} = \arg\min_\theta \frac{1}{n}\sum_{i=1}^n (y_i - \theta^\top x_i)^2 + \lambda \|\theta\|_2^2, \]
+    and give the exact formula for $\lambda$ in terms of $\sigma^2, \tau^2, n$.</p>
+    <p><b>(c)</b> Using your formula for $\lambda$, explain quantitatively (not just qualitatively) what happens to the ridge penalty as: (i) $\tau^2 \to \infty$ (an "uninformative" prior that barely constrains $\theta$), and (ii) $n\to\infty$ with $\sigma^2,\tau^2$ fixed. In each case, state which classical estimator ridge regression reduces to, and explain the statistical intuition in one sentence.</p>
+  </div>
+  <details class="solution">
+    <summary>Show Solution</summary>
+    <div class="solution-body">
+      <h4>Part (a): From Bayes' rule to the log-posterior sum</h4>
+      <p>By Bayes' rule, the posterior over $\theta$ given all the data is
+      \[ P(\theta \mid y_1,x_1,\dots,y_n,x_n) = \frac{P(y_1,x_1,\dots,y_n,x_n\mid \theta)\,P(\theta)}{P(y_1,x_1,\dots,y_n,x_n)}. \]
+      The MAP estimate maximizes this over $\theta$. The denominator $P(y_1,x_1,\dots,y_n,x_n)$ is the marginal probability of the observed data — it does not involve $\theta$ at all (it is obtained by integrating $\theta$ out), so it is a constant with respect to the $\arg\max_\theta$ operation and may be dropped, giving
+      \[ \theta_{MAP} = \arg\max_\theta\; P(y_1,x_1,\dots,y_n,x_n\mid\theta)\,P(\theta). \]
+      Next, factor $P(y_i,x_i\mid\theta) = P(y_i\mid x_i,\theta)P(x_i\mid\theta)$, and note that the distribution of the <em>inputs</em> $x_i$ does not depend on $\theta$ (in the standard regression setup, $\theta$ only governs how $y$ depends on $x$, not the marginal distribution of $x$ itself), so $P(x_i\mid\theta)=P(x_i)$, another $\theta$-independent constant that can be dropped from the maximization. By independence across examples this gives $\theta_{MAP} = \arg\max_\theta\left[\prod_i P(y_i\mid x_i,\theta)\right]P(\theta)$. Finally, since $\log$ is strictly increasing, maximizing a product is equivalent to maximizing the log of that product, which turns the product into a sum:
+      \[ \theta_{MAP} = \arg\max_\theta \left[\sum_{i=1}^n \log P(y_i\mid x_i,\theta) + \log P(\theta)\right]. \]</p>
+
+      <h4>Part (b): Simplifying to the ridge objective</h4>
+      <p>From Problem 5(a)'s computation (with $n$ in place of $m$),
+      \[ \sum_{i=1}^n \log P(y_i\mid x_i,\theta) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (y_i-\theta^\top x_i)^2. \]
+      For the Gaussian prior $p(\theta)=\dfrac{1}{(2\pi\tau^2)^{d/2}}\exp\!\left(-\dfrac{\theta^\top\theta}{2\tau^2}\right)$ (writing $d$ for the dimension of $\theta$),
+      \[ \log p(\theta) = -\frac{d}{2}\log(2\pi\tau^2) - \frac{1}{2\tau^2}\theta^\top\theta. \]
+      Adding these and dropping every additive term that does not involve $\theta$ (namely $-\frac n2\log(2\pi\sigma^2)$ and $-\frac d2\log(2\pi\tau^2)$, exactly as justified in Problem 5(b)):
+      \[ \theta_{MAP} = \arg\max_\theta \left[-\frac{1}{2\sigma^2}\sum_i (y_i-\theta^\top x_i)^2 - \frac{1}{2\tau^2}\theta^\top\theta\right] = \arg\min_\theta \left[\frac{1}{2\sigma^2}\sum_i (y_i-\theta^\top x_i)^2 + \frac{1}{2\tau^2}\theta^\top\theta\right], \]
+      flipping max to min by negating (as in Problem 5(b)). Multiply the whole expression inside the $\arg\min$ by the positive constant $\dfrac{2\sigma^2}{n}$ (allowed since positive scaling never moves the minimizer):
+      \[ \theta_{MAP} = \arg\min_\theta\left[\frac1n\sum_i (y_i-\theta^\top x_i)^2 + \frac{\sigma^2}{n\tau^2}\theta^\top\theta\right]. \]
+      Comparing to the target form, and using $\theta^\top\theta = \|\theta\|_2^2$:
+      <div class="answer-box">\(\displaystyle \lambda = \frac{\sigma^2}{n\tau^2}\)</div></p>
+
+      <h4>Part (c): Limiting behavior of $\lambda$</h4>
+      <p><b>(i) $\tau^2\to\infty$:</b> $\lambda = \sigma^2/(n\tau^2) \to 0$. A very large prior variance $\tau^2$ means the prior $\mathcal N(0,\tau^2 I)$ is extremely spread out — it barely constrains $\theta$ at all (it is "uninformative," assigning almost equal density to a huge range of $\theta$ values). As $\lambda \to 0$ the ridge objective reduces exactly to the plain least-squares objective $\frac1n\sum_i(y_i-\theta^\top x_i)^2$, so $\theta_{MAP}\to\theta_{MLE}=\theta_{LS}$. <em>Intuition: with no real prior belief constraining $\theta$, MAP has nothing to fall back on except the data, so it agrees with MLE.</em></p>
+      <p><b>(ii) $n\to\infty$ with $\sigma^2,\tau^2$ fixed:</b> $\lambda = \sigma^2/(n\tau^2)\to 0$ as well, for the same algebraic reason but a different statistical cause. Here the prior stays exactly as informative as before, but it is being outvoted by an ever-growing amount of data — the penalty term $\lambda\|\theta\|_2^2$ shrinks relative to the (per-example-normalized) data-fit term, so again $\theta_{MAP}\to\theta_{LS}$ in the limit. <em>Intuition: with infinite data, empirical evidence always eventually overwhelms any fixed prior belief, however informative.</em></p>
+
+      <div class="aha"><b>Aha! Moment:</b> Ridge regression's $\lambda$ is not an arbitrary "regularization knob" — it is <em>literally</em> the ratio of noise variance to prior variance, rescaled by sample size: $\lambda=\sigma^2/(n\tau^2)$. This single formula unifies three separate intuitions the lecture only states qualitatively: (1) a small $\tau^2$ (strong belief that $\theta$ is near $0$) means large $\lambda$, i.e. aggressive shrinkage — exactly matching "L2 penalty shrinks parameters"; (2) noisy data (large $\sigma^2$) makes you trust your prior more relative to the data, again increasing $\lambda$; and (3) more data (large $n$) should always dilute the influence of any fixed prior, driving $\lambda\to0$ and MAP back to MLE. Regularization strength is exactly quantified prior confidence, nothing more mystical.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ============================================================ -->
+<section class="problem" id="p7">
+  <div class="problem-header">
+    <h2>Problem 7 — The Convexity Certificate</h2>
+    <span class="tag">Optimization Theory</span>
+  </div>
+  <div class="points">14 points</div>
+  <div class="statement">
+    <p>The lecture asserts, without proof, that "the cost function $J(\theta)$ for linear regression is a convex quadratic function" and that consequently gradient descent always finds the global minimum.</p>
+    <p><b>(a)</b> Write $J(\theta) = \frac12\|X\theta - y\|_2^2$ where $X\in\mathbb R^{m\times d}$ is the design matrix and $y\in\mathbb R^m$. Compute the gradient $\nabla J(\theta)$ and the Hessian $\nabla^2 J(\theta)$ explicitly in matrix form.</p>
+    <p><b>(b)</b> Prove that $J$ is convex by showing its Hessian is positive semi-definite (PSD) for <em>every</em> $X$, with no assumptions on $X$ at all.</p>
+    <p><b>(c)</b> Now consider Ridge regression's objective, $J_{ridge}(\theta) = \frac12\|X\theta-y\|_2^2 + \frac{\lambda}{2}\|\theta\|_2^2$ for $\lambda>0$. Prove that $J_{ridge}$ is not merely convex but <em>strictly</em> convex, even when $X^\top X$ is singular (e.g. when $d>m$, more features than examples — the classic "high-dimensional" regime where plain least squares has no unique solution). What does strict convexity guarantee that mere convexity does not?</p>
+  </div>
+  <details class="solution">
+    <summary>Show Solution</summary>
+    <div class="solution-body">
+      <h4>Part (a): Gradient and Hessian</h4>
+      <p>Expand $J(\theta) = \frac12(X\theta-y)^\top(X\theta-y) = \frac12\left(\theta^\top X^\top X\theta - 2y^\top X\theta + y^\top y\right)$ (using $\theta^\top X^\top y = y^\top X\theta$ since it's a scalar, hence equal to its own transpose). Differentiating term by term using standard matrix-calculus identities $\nabla_\theta(\theta^\top A\theta) = (A+A^\top)\theta$ and $\nabla_\theta(b^\top\theta)=b$:
+      \[ \nabla J(\theta) = X^\top X\theta - X^\top y = X^\top(X\theta-y). \]
+      Differentiating again (the gradient is linear in $\theta$, so its Jacobian is simply the constant matrix multiplying $\theta$):
+      \[ \nabla^2 J(\theta) = X^\top X. \]
+      (Sanity check against the lecture's scalar single-feature LMS rule: setting $d=1$, $X$ a column vector, recovers $\nabla J = x^\top(x\theta - y) = \sum_i x_i(\theta x_i - y_i)$, matching $\sum_i(h_\theta(x^{(i)})-y^{(i)})x_i$ up to sign convention.)</p>
+
+      <h4>Part (b): PSD proof (no assumptions on $X$)</h4>
+      <p>A symmetric matrix $M$ is PSD iff $v^\top M v \ge 0$ for every vector $v$. Take $M = X^\top X$ and any $v\in\mathbb R^d$:
+      \[ v^\top (X^\top X) v = (Xv)^\top(Xv) = \|Xv\|_2^2 \ge 0, \]
+      since a sum of squares (the squared Euclidean norm) is never negative, for absolutely any real matrix $X$ and any real vector $v$ — no rank condition, no assumption that $m\ge d$, nothing. Also, $X^\top X$ is automatically symmetric since $(X^\top X)^\top = X^\top X^{\top\top} = X^\top X$. Hence $\nabla^2 J(\theta) = X^\top X \succeq 0$ everywhere (it doesn't even depend on $\theta$, since $J$ is exactly quadratic), which is precisely the second-order condition for $J$ to be convex.</p>
+
+      <h4>Part (c): Strict convexity of the ridge objective</h4>
+      <p>By the identical computation, $\nabla^2 J_{ridge}(\theta) = X^\top X + \lambda I$ (the $\lambda$ term contributes $\lambda I$ to the Hessian since $\nabla^2_\theta(\frac{\lambda}{2}\theta^\top\theta) = \lambda I$). For any $v \ne 0$:
+      \[ v^\top(X^\top X+\lambda I)v = \|Xv\|_2^2 + \lambda \|v\|_2^2 \;\ge\; \lambda\|v\|_2^2 \;>\;0, \]
+      because $\|Xv\|_2^2 \ge 0$ always, and $\lambda\|v\|_2^2 > 0$ strictly whenever $v\ne 0$ (since $\lambda>0$ is given and $\|v\|_2^2>0$ for nonzero $v$). This holds <em>regardless</em> of whether $X^\top X$ itself is singular — even if $Xv=0$ for some nonzero $v$ (which happens whenever $\text{rank}(X)<d$, e.g. $d>m$), the $\lambda\|v\|_2^2$ term alone is already strictly positive, rescuing strict positivity of the whole quadratic form. Hence $\nabla^2 J_{ridge}(\theta) = X^\top X + \lambda I \succ 0$ (strictly positive definite) for every $\lambda>0$, for <em>every</em> $X$, which is the second-order condition for strict convexity.</p>
+      <p>Strict convexity guarantees the minimizer, if it exists, is <b>unique</b> — mere convexity (as in part (b)) only guarantees that any local minimum is global, but leaves open the possibility of a whole flat set/subspace of equally-good minimizers (exactly what happens with plain least squares when $X^\top X$ is singular: infinitely many $\theta$ achieve the minimum $J=0$-residual-in-that-null-direction). Strict positive-definiteness of the Hessian rules this out entirely: the closed form $\theta^\star_{ridge} = (X^\top X+\lambda I)^{-1}X^\top y$ is well-defined and unique because $X^\top X+\lambda I$ is now always invertible (a strictly positive-definite matrix has all eigenvalues $>0$, hence nonzero determinant).</p>
+
+      <div class="aha"><b>Aha! Moment:</b> The regularization term in ridge regression is not just a heuristic penalty for "large weights" — algebraically, it is exactly the mechanism that turns $X^\top X$ (which is PSD, but can have zero eigenvalues) into $X^\top X + \lambda I$ (which is strictly PD, guaranteed invertible for every $\lambda>0$). This is why ridge regression is the classical fix for the $d>m$ "more features than data" regime where ordinary least squares has no unique solution at all: adding $\lambda I$ shifts every eigenvalue of $X^\top X$ up by exactly $\lambda$, so even directions in parameter space that the data says nothing about ($Xv=0$) are still penalized and pinned down by the prior. The same single trick — shift the spectrum away from zero — is simultaneously an optimization fix (guaranteed invertibility), a statistical fix (a proper Bayesian prior, from Problem 6), and a generalization fix (shrinkage reduces overfitting, as the lecture states).</div>
+    </div>
+  </details>
+</section>
+
+<footer>
+  Compiled from "Machine Learning" (Dr. Indu Joshi, IIT Mandi, August 19 2026) — Linear Regression, MLE, MAP and Regularization.<br>
+  Every derivation above extends the lecture's own worked examples and numerical tables; verify the arithmetic yourself as further practice.
+</footer>
+
+</div>
+</body>
+</html>

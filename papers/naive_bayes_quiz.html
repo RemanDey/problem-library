@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Naive Bayes — Practice Quiz</title>
+<style>
+  body { font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6fb; margin:0; padding:0 0 60px; color:#1f2530;}
+  header { background:#2e3a8c; color:white; padding:28px 20px; text-align:center;}
+  header h1 { margin:0 0 6px; font-size:1.6em;}
+  header p { margin:0; opacity:0.85; font-size:0.95em;}
+  .container { max-width:800px; margin:24px auto; padding:0 16px;}
+  .question { background:white; border-radius:10px; padding:20px 22px; margin-bottom:18px; box-shadow:0 2px 6px rgba(0,0,0,0.06);}
+  .q-title { font-weight:600; margin-bottom:12px; }
+  .q-num { color:#2e3a8c; margin-right:6px;}
+  label { display:block; padding:8px 10px; margin:6px 0; border-radius:6px; cursor:pointer; border:1px solid #e2e5ee; transition:background .15s;}
+  label:hover { background:#f0f2fb; }
+  input[type=radio] { margin-right:8px; }
+  .feedback { display:none; margin-top:10px; padding:10px 12px; border-radius:6px; font-size:0.92em; line-height:1.4;}
+  .feedback.correct { background:#e5f7ec; color:#1a7a41; border:1px solid #b7e6c9; }
+  .feedback.incorrect { background:#fdecec; color:#a4292c; border:1px solid #f5c2c2; }
+  .show { display:block; }
+  .disabled label { pointer-events:none; opacity:0.85; }
+  .correct-choice { background:#e5f7ec !important; border-color:#b7e6c9 !important; }
+  .incorrect-choice { background:#fdecec !important; border-color:#f5c2c2 !important; }
+  #score-bar { position:sticky; top:0; background:#20265e; color:white; text-align:center; padding:10px; font-weight:600; z-index:10;}
+  #reset-btn { display:block; margin:30px auto 0; background:#2e3a8c; color:white; border:none; padding:10px 22px; border-radius:6px; font-size:1em; cursor:pointer;}
+  #reset-btn:hover { background:#232d70; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Naive Bayes — Practice Quiz</h1>
+  <p>Based on Dr. Indu Joshi's Machine Learning Lecture 6 (IIT Mandi)</p>
+</header>
+
+<div id="score-bar">Score: <span id="score">0</span> / <span id="total">0</span></div>
+
+<div class="container" id="quiz"></div>
+<div class="container">
+  <button id="reset-btn" onclick="resetQuiz()">Reset Quiz</button>
+</div>
+
+<script>
+const questions = [
+{
+  q: "What property makes the Bayes classifier 'optimal'?",
+  options: [
+    "It always achieves 100% training accuracy",
+    "It minimizes the expected classification error rate",
+    "It requires no training data",
+    "It works only for continuous features"
+  ],
+  answer: 1,
+  explain: "The Bayes classifier is theoretically optimal because it minimizes the expected error, i.e., it achieves the lowest possible classification error rate."
+},
+{
+  q: "Estimating P(x,y) directly by counting (the 'giant die' approach) fails in practice mainly because:",
+  options: [
+    "P(x,y) is always negative",
+    "In high-dimensional or continuous spaces, almost no training points share identical feature vectors, so counts go to zero",
+    "Y must be continuous for this method to work",
+    "It requires knowing P(y) in advance"
+  ],
+  answer: 1,
+  explain: "In high-dimensional spaces (or with continuous x), very few or no training samples share the exact same feature vector x, so both |B| and |C| shrink to zero, making the estimate unreliable."
+},
+{
+  q: "In the Venn-diagram view of P(y|x) estimation, what do the sets B and C represent?",
+  options: [
+    "B = samples with y_i = y; C = samples with x_i = x",
+    "B = samples with x_i = x; C = samples with both x_i = x and y_i = y",
+    "B and C are unrelated to counting",
+    "B = all samples; C = samples with y_i = y only"
+  ],
+  answer: 1,
+  explain: "B is the set of samples with x_i = x, and C is the overlap — samples with x_i = x AND y_i = y. The estimate is P̂(y|x) = |C| / |B|."
+},
+{
+  q: "What is the core Naive Bayes assumption?",
+  options: [
+    "The class prior P(y) is uniform",
+    "Features are independent of each other given the class label",
+    "All features are Gaussian distributed",
+    "The number of classes equals the number of features"
+  ],
+  answer: 1,
+  explain: "Naive Bayes assumes P(x|y) = Π_α P(x_α|y): feature values are conditionally independent given the label — a strong ('naive') simplifying assumption."
+},
+{
+  q: "Why do we take the logarithm when computing arg max_y Π_α P(x_α|y) P(y)?",
+  options: [
+    "To make probabilities negative",
+    "To convert a product of many small probabilities into a sum, which is numerically easier and avoids underflow",
+    "Logs are required by Bayes' rule",
+    "To normalize P(x)"
+  ],
+  answer: 1,
+  explain: "Taking logs turns the product into a sum: arg max_y Σ_α log P(x_α|y) + log P(y), which is easier to compute and avoids numerical underflow from multiplying many small probabilities."
+},
+{
+  q: "In the categorical feature model, what does the Laplace smoothing parameter l accomplish?",
+  options: [
+    "It increases the number of classes",
+    "It prevents zero probability estimates when a feature value never appears with a given class in training data",
+    "It forces all probabilities to be equal",
+    "It removes the need for a prior P(y)"
+  ],
+  answer: 1,
+  explain: "Laplace smoothing adds a small constant l to the numerator and l·K_α to the denominator so that unseen feature-class combinations don't get a probability of exactly zero."
+},
+{
+  q: "In the categorical Naive Bayes worked example, training data was: Class A = {red, red, blue}, Class B = {blue, green, green}, with l=1 and K=3. What is the estimated P(red | A)?",
+  options: [
+    "0.17",
+    "0.33",
+    "0.50",
+    "0.75"
+  ],
+  answer: 2,
+  explain: "count(red, A) = 2, n_A = 3, K = 3, l = 1 → (2+1)/(3+3) = 3/6 = 0.50."
+},
+{
+  q: "For the same example, given the test sample color = red, what is the predicted class and posterior probability?",
+  options: [
+    "Class B with probability 0.75",
+    "Class A with probability 0.75",
+    "Class A with probability 0.50",
+    "Class B with probability 0.25 only, class undetermined"
+  ],
+  answer: 1,
+  explain: "P(red,A) = 0.5×0.5 = 0.25 and P(red,B) ≈ 0.083. Normalizing gives P(A|red) = 0.25/0.333 = 0.75, so class A is predicted."
+},
+{
+  q: "In Multinomial Naive Bayes, what does the feature value x_α typically represent?",
+  options: [
+    "A binary category such as male/female",
+    "A count, e.g., the number of times word α appears in a document",
+    "A continuous measurement like height",
+    "The class label itself"
+  ],
+  answer: 1,
+  explain: "In the multinomial model, x_α = j means word α (the α-th word in the dictionary) appears j times in the document — features are counts, not categories."
+},
+{
+  q: "In the Multinomial Naive Bayes parameter estimation formula, what does the denominator represent?",
+  options: [
+    "The total number of classes",
+    "The total number of documents in the training set",
+    "The total count of all word occurrences across all documents of class c (plus smoothing)",
+    "The number of unique words in the vocabulary only"
+  ],
+  answer: 2,
+  explain: "The denominator Σ I(y_i=c) m_i + l·d sums the total number of words across all documents of class c (m_i being the length of document i), plus the Laplace smoothing term."
+},
+{
+  q: "In the Multinomial Naive Bayes worked example, Class A word counts were [3,1,1] with m_A = 5, d = 3, l = 1. What is θ̂(w1 | A)?",
+  options: [
+    "3/5 = 0.60",
+    "4/8 = 0.50",
+    "3/8 = 0.375",
+    "1/6 ≈ 0.17"
+  ],
+  answer: 1,
+  explain: "θ̂ = (count + l) / (m_c + l·d) = (3+1)/(5+1×3) = 4/8 = 0.50."
+},
+{
+  q: "For the test document x = [1,1,0] in that example, which class was predicted and why?",
+  options: [
+    "Class B, because P(x|B)·π_B was larger",
+    "Class A, because P(x|A)·π_A ≈ 0.0625 was larger than P(x|B)·π_B ≈ 0.0485",
+    "Neither, the probabilities were exactly tied",
+    "Class A, because it had more training documents"
+  ],
+  answer: 1,
+  explain: "Computing P(x|A)π_A ≈ 0.125×0.5 = 0.0625 and P(x|B)π_B ≈ 0.097×0.5 ≈ 0.0485 shows class A has the higher (unnormalized) posterior, so A is predicted."
+},
+{
+  q: "In Gaussian Naive Bayes, what is assumed about each feature's class-conditional distribution?",
+  options: [
+    "Each feature follows a multinomial distribution",
+    "Each feature α, given class y, follows an independent Gaussian with its own mean μ_α,y and variance σ²_α,y",
+    "All features share exactly the same mean and variance",
+    "Features must be discrete integers"
+  ],
+  answer: 1,
+  explain: "Gaussian Naive Bayes models P(x_α|y=c) as N(μ_αc, σ²_αc), a separate 1D Gaussian per feature per class, consistent with the diagonal-covariance multivariate Gaussian P(x|y) ~ N(μ_y, Σ_y)."
+},
+{
+  q: "In the Gaussian Naive Bayes height example, Class A had samples [160,170,165]. What are μ_A and σ_A?",
+  options: [
+    "μ_A = 165, σ_A ≈ 4.08",
+    "μ_A = 160, σ_A ≈ 5.0",
+    "μ_A = 170, σ_A ≈ 4.08",
+    "μ_A = 165, σ_A ≈ 16.67"
+  ],
+  answer: 0,
+  explain: "μ_A = (160+170+165)/3 = 165, and the variance = 50/3 ≈ 16.67, so σ_A = √16.67 ≈ 4.08."
+},
+{
+  q: "For the test sample x = 162 in that example, which class is predicted and roughly why?",
+  options: [
+    "Class B, because 162 is far from 165",
+    "Class A, because 162 is much closer to μ_A = 165 than to μ_B = 150, giving a far higher Gaussian likelihood",
+    "Class A, purely because of a higher prior",
+    "It's a tie between A and B"
+  ],
+  answer: 1,
+  explain: "162 is close to μ_A=165 (z≈-0.735) but far from μ_B=150 (z≈2.94), so the Gaussian likelihood for A (≈0.0747) far exceeds that for B (≈0.0013), giving P(A|x) ≈ 0.98."
+},
+{
+  q: "Which of the following correctly matches the three feature types with their Naive Bayes modeling approach?",
+  options: [
+    "Categorical → Gaussian; Counts → Multinomial; Continuous → Categorical",
+    "Categorical → categorical/'dice' distribution; Count data → Multinomial distribution; Continuous → Gaussian distribution",
+    "All feature types use the same Gaussian model",
+    "Categorical → Multinomial; Counts → Gaussian; Continuous → categorical"
+  ],
+  answer: 1,
+  explain: "The lecture covers three cases: categorical features modeled with a per-class categorical ('dice') distribution, count features (e.g., word counts) modeled with a multinomial distribution, and continuous features modeled with per-class Gaussian distributions."
+}
+];
+
+let userAnswers = new Array(questions.length).fill(null);
+
+function renderQuiz() {
+  const quizDiv = document.getElementById('quiz');
+  quizDiv.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'question';
+    qDiv.id = 'q' + qi;
+
+    const title = document.createElement('div');
+    title.className = 'q-title';
+    title.innerHTML = '<span class="q-num">Q' + (qi+1) + '.</span>' + q.q;
+    qDiv.appendChild(title);
+
+    q.options.forEach((opt, oi) => {
+      const label = document.createElement('label');
+      label.id = 'q' + qi + 'opt' + oi;
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'q' + qi;
+      input.value = oi;
+      input.onclick = () => selectAnswer(qi, oi);
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(opt));
+      qDiv.appendChild(label);
+    });
+
+    const feedback = document.createElement('div');
+    feedback.className = 'feedback';
+    feedback.id = 'feedback' + qi;
+    qDiv.appendChild(feedback);
+
+    quizDiv.appendChild(qDiv);
+  });
+  document.getElementById('total').textContent = questions.length;
+  updateScore();
+}
+
+function selectAnswer(qi, oi) {
+  if (userAnswers[qi] !== null) return; // already answered
+  userAnswers[qi] = oi;
+  const q = questions[qi];
+  const qDiv = document.getElementById('q' + qi);
+  qDiv.classList.add('disabled');
+
+  const correctLabel = document.getElementById('q' + qi + 'opt' + q.answer);
+  correctLabel.classList.add('correct-choice');
+
+  if (oi !== q.answer) {
+    const chosenLabel = document.getElementById('q' + qi + 'opt' + oi);
+    chosenLabel.classList.add('incorrect-choice');
+  }
+
+  const feedback = document.getElementById('feedback' + qi);
+  feedback.classList.add('show');
+  if (oi === q.answer) {
+    feedback.classList.add('correct');
+    feedback.innerHTML = '<strong>Correct!</strong> ' + q.explain;
+  } else {
+    feedback.classList.add('incorrect');
+    feedback.innerHTML = '<strong>Not quite.</strong> ' + q.explain;
+  }
+  updateScore();
+}
+
+function updateScore() {
+  let score = 0;
+  userAnswers.forEach((a, i) => { if (a === questions[i].answer) score++; });
+  document.getElementById('score').textContent = score;
+}
+
+function resetQuiz() {
+  userAnswers = new Array(questions.length).fill(null);
+  renderQuiz();
+}
+
+renderQuiz();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,291 @@
+/* ==========================================================================
+   shared.css — Problem Archive
+   Plain black-and-white academic theme. No frameworks.
+   Used by index.html (library) and optionally by papers/*.html.
+   Papers in /papers/ are fully standalone (embedded styles) so this file
+   is NOT required for them to render. It is the single stylesheet for the
+   homepage / archive chrome.
+   All paths that reference this file must be relative (GitHub Pages subpath
+   safe). e.g. from index.html:  assets/css/shared.css
+              from papers/x.html: ../assets/css/shared.css (optional)
+   ========================================================================== */
+
+:root {
+  --ink: #111;
+  --paper: #fff;
+  --muted: #555;
+  --rule: #111;
+  --hairline: #ccc;
+  --focus: #000;
+  --max-width: 44rem;
+  --serif: "Latin Modern Roman", "Computer Modern", "CMU Serif",
+           "STIX Two Text", "TeX Gyre Termes", "Times New Roman", Times, serif;
+  --sans: "Latin Modern Sans", "Computer Modern Sans", system-ui, -apple-system,
+          "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3rem;
+  background: #000;
+  color: #fff;
+  padding: 0.5rem 0.9rem;
+  z-index: 100;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 0.5rem; color: #fff; }
+
+/* Focus visibility everywhere */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ---------- Archive masthead ---------- */
+.archive-header {
+  border-bottom: 3px double var(--rule);
+  padding: 2.5rem 1.25rem 1.75rem;
+  text-align: center;
+}
+.archive-kicker {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.75rem;
+}
+.archive-title {
+  font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin: 0;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.archive-subtitle {
+  margin: 0.6rem 0 0;
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1rem;
+}
+.archive-meta {
+  margin-top: 1rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* ---------- Layout ---------- */
+.archive-main {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.25rem 3rem;
+}
+
+.controls {
+  padding: 1.5rem 0 0.5rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.controls label {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.search-row { display: flex; gap: 0.6rem; }
+
+input[type="search"] {
+  flex: 1;
+  font-family: var(--serif);
+  font-size: 1rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--ink);
+  border-radius: 0; /* avoid glassy rounded look */
+  background: #fff;
+  color: var(--ink);
+  min-width: 0;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.9rem 0 1.2rem;
+  padding: 0;
+  list-style: none;
+}
+.filters button {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 0.35rem 0.8rem;
+  cursor: pointer;
+}
+.filters button[aria-pressed="true"] {
+  background: #000;
+  color: #fff;
+}
+.filters button:hover { background: #eee; }
+.filters button[aria-pressed="true"]:hover { background: #000; }
+
+/* ---------- Catalogue ---------- */
+.catalogue {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.paper-entry {
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--hairline);
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 0 1rem;
+}
+.paper-number {
+  font-size: 1.4rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+}
+.paper-title {
+  font-size: 1.25rem;
+  margin: 0 0 0.15rem;
+  line-height: 1.35;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.paper-classification {
+  font-style: italic;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+  font-size: 0.98rem;
+}
+.paper-facts {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--ink);
+  margin: 0 0 0.6rem;
+}
+.paper-desc {
+  margin: 0 0 1rem;
+  max-width: 36rem;
+}
+.read-row {
+  display: flex;
+  justify-content: flex-end;
+}
+.btn-read {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fff;
+  background: #000;
+  border: 1px solid #000;
+  padding: 0.6rem 1.2rem;
+  min-height: 44px;
+  line-height: 1.4;
+}
+.btn-read:hover { background: #333; border-color: #333; }
+
+.archive-count {
+  text-align: center;
+  font-style: italic;
+  color: var(--muted);
+  margin: 2rem 0 0;
+}
+.no-results {
+  padding: 2rem 0;
+  text-align: center;
+  font-style: italic;
+}
+
+.archive-footer {
+  border-top: 3px double var(--rule);
+  text-align: center;
+  padding: 1.5rem 1.25rem 2.5rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.archive-footer p { margin: 0.3rem 0; }
+.archive-footer a { color: var(--ink); }
+
+/* ---------- Generic paper-sheet styles (optional reuse) ---------- */
+/* Individual papers embed their own copy so they stay standalone. */
+.sheet {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+.topnav {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--hairline);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.topnav a { color: var(--ink); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 560px) {
+  body { font-size: 1rem; }
+  .paper-entry { grid-template-columns: 1fr; }
+  .paper-number { margin-bottom: 0.25rem; font-size: 1rem; }
+  .read-row { justify-content: stretch; }
+  .btn-read {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Equations must not break layout on small screens */
+mjx-container[jax="CHTML"][display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+}
+
+/* Print: clean paper output */
+@media print {
+  .archive-header, .controls, .filters, .read-row, .archive-footer { display: none; }
+  body { font-size: 11pt; }
+}

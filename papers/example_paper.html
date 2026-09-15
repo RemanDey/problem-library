@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Example Paper — Template &amp; Style Guide</title>
+  <meta name="description" content="Minimal standalone template for question papers: sections, problems, subparts, equations, figures, solutions.">
+  <style>
+    :root {
+      --ink: #111; --paper: #fff; --muted: #555; --hair: #ccc;
+      --serif: "Latin Modern Roman","Computer Modern","CMU Serif","STIX Two Text","Times New Roman",serif;
+      --sans: system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:1.06rem;line-height:1.65}
+    a{color:var(--ink)}
+    a:focus-visible,button:focus-visible{outline:2px solid #000;outline-offset:2px}
+    .topnav{font-family:var(--sans);font-size:.82rem;max-width:44rem;margin:0 auto;padding:.9rem 1.25rem;border-bottom:1px solid var(--hair);display:flex;justify-content:space-between;gap:1rem}
+    .sheet{max-width:44rem;margin:0 auto;padding:2rem 1.25rem 4rem}
+    .paper-head{text-align:center;border-bottom:3px double #111;padding-bottom:1.5rem;margin-bottom:1.5rem}
+    .paper-head h1{margin:.2rem 0;font-size:clamp(1.5rem,4vw,2.1rem);letter-spacing:.05em;text-transform:uppercase;line-height:1.25}
+    .paper-head .sub{font-style:italic;color:var(--muted);margin:.3rem 0}
+    .id-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem 1.5rem;text-align:left;max-width:26rem;margin:1.2rem auto 0;font-size:.95rem}
+    .id-grid span{border-bottom:1px solid var(--hair);min-height:1.6em}
+    h2.section{font-size:1.1rem;letter-spacing:.14em;text-transform:uppercase;border-top:1px solid #111;border-bottom:1px solid var(--hair);padding:.5rem 0;margin:2rem 0 1rem}
+    .problem{margin:1.5rem 0}
+    .problem h3{font-size:1.05rem;margin:0 0 .4rem;text-transform:uppercase;letter-spacing:.06em}
+    .parts{list-style:none;margin:.6rem 0;padding:0}
+    .parts li{margin:.4rem 0;padding-left:2rem;position:relative}
+    .parts li::before{position:absolute;left:0;color:var(--muted)}
+    .parts li:nth-child(1)::before{content:"(a)"}
+    .parts li:nth-child(2)::before{content:"(b)"}
+    .parts li:nth-child(3)::before{content:"(c)"}
+    .parts li:nth-child(4)::before{content:"(d)"}
+    figure{margin:1rem 0;padding:1rem;border:1px solid var(--hair);text-align:center}
+    figcaption{font-size:.9rem;color:var(--muted);font-style:italic;margin-top:.5rem}
+    .solution{border-left:3px solid #111;padding:.2rem 0 .2rem 1rem;margin:1rem 0}
+    .solution strong{font-family:var(--sans);font-size:.85rem;letter-spacing:.06em;text-transform:uppercase}
+    .mark{font-family:var(--sans);font-size:.78rem;color:var(--muted)}
+    footer{border-top:3px double #111;margin-top:2.5rem;padding-top:1rem;text-align:center;font-size:.9rem;color:var(--muted)}
+    mjx-container[jax="CHTML"][display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
+    @media(max-width:560px){body{font-size:1rem}.id-grid{grid-template-columns:1fr}}
+    @media print{.topnav,.backtop{display:none}.sheet{max-width:none}}
+  </style>
+  <script>
+    MathJax = { tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] } };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body id="top">
+  <nav class="topnav" aria-label="Paper navigation">
+    <a href="../index.html">&larr; Back to Archive</a>
+    <a href="#solutions">Solutions</a>
+  </nav>
+
+  <main class="sheet">
+    <header class="paper-head">
+      <p class="sub">Problem Archive &middot; Template</p>
+      <h1>Example Paper<br>Template &amp; Style Guide</h1>
+      <p class="sub">4 problems &middot; Introductory &middot; 60 minutes</p>
+      <div class="id-grid" aria-label="Candidate details">
+        <div>Name: <span></span></div>
+        <div>Date: <span></span></div>
+        <div>Class: <span></span></div>
+        <div>Score: <span></span></div>
+      </div>
+    </header>
+
+    <section aria-labelledby="instr">
+      <h2 class="section" id="instr">Instructions</h2>
+      <ol>
+        <li>Attempt all questions.</li>
+        <li>Show all necessary reasoning. Answers without working receive no credit.</li>
+        <li>Calculators are not permitted unless stated.</li>
+        <li>Use $ \dots $ for inline mathematics and <code>$$ \dots $$</code> for displayed equations.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="problems">
+      <h2 class="section" id="problems">Problems</h2>
+
+      <article class="problem">
+        <h3>Problem 1 <span class="mark">[5 marks]</span></h3>
+        <p>Evaluate $\int_0^1 x^2\,dx$ from first principles or by antiderivative, and interpret the result as an area.</p>
+        <ol class="parts">
+          <li>Compute the antiderivative of $x^2$.</li>
+          <li>Hence evaluate the definite integral.</li>
+        </ol>
+      </article>
+
+      <article class="problem">
+        <h3>Problem 2 <span class="mark">[7 marks]</span></h3>
+        <p>Solve the quadratic equation $$x^2 - 5x + 6 = 0$$ and verify each root by substitution.</p>
+      </article>
+
+      <article class="problem">
+        <h3>Problem 3 <span class="mark">[8 marks]</span></h3>
+        <p>A block of mass $m$ slides from rest down a frictionless incline of height $h$. Using conservation of energy,</p>
+        $$mgh = \tfrac{1}{2}mv^2,$$
+        <ol class="parts">
+          <li>Find the speed $v$ at the bottom.</li>
+          <li>What happens to $v$ if the mass is doubled? Justify.</li>
+        </ol>
+        <figure aria-label="Inclined plane diagram">
+          <svg width="260" height="120" viewBox="0 0 260 120" role="img" aria-label="Block on an incline of height h">
+            <polygon points="20,100 240,100 240,20" fill="none" stroke="black" stroke-width="2"/>
+            <rect x="120" y="52" width="26" height="18" transform="rotate(-22 133 61)" fill="white" stroke="black" stroke-width="2"/>
+            <text x="248" y="70" font-size="14" font-style="italic">h</text>
+          </svg>
+          <figcaption>Fig. 1 — Block sliding down a frictionless incline.</figcaption>
+        </figure>
+      </article>
+
+      <article class="problem">
+        <h3>Problem 4 <span class="mark">[5 marks]</span></h3>
+        <p>Prove by induction that for all integers $n \ge 1$, $$\sum_{k=1}^{n} k = \frac{n(n+1)}{2}.$$</p>
+      </article>
+    </section>
+
+    <section aria-labelledby="solutions">
+      <h2 class="section" id="solutions">Solutions</h2>
+      <div class="solution"><p><strong>Solution 1.</strong> $\int x^2 dx = x^3/3 + C$, so $\int_0^1 x^2 dx = 1/3$.</p></div>
+      <div class="solution"><p><strong>Solution 2.</strong> $(x-2)(x-3)=0$, hence $x = 2$ or $x = 3$.</p></div>
+      <div class="solution"><p><strong>Solution 3.</strong> $v = \sqrt{2gh}$, independent of $m$; doubling $m$ leaves $v$ unchanged.</p></div>
+      <div class="solution"><p><strong>Solution 4.</strong> Base case $n=1$ holds; assuming the formula for $n$, adding $n+1$ gives $(n+1)(n+2)/2$. ∎</p></div>
+    </section>
+
+    <footer>
+      <p><a href="../index.html">&larr; Back to Archive</a> &middot; <a class="backtop" href="#top">&uarr; Back to Top</a></p>
+      <p>End of paper.</p>
+    </footer>
+  </main>
+</body>
+</html>
