@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IC252 — Olympiad Problem Set | Reman Dey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=JetBrains+Mono:wght@300;400;500;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f5f0e8;
+    --cream: #ede7d5;
+    --gold: #c8972a;
+    --gold-light: #e8b84b;
+    --crimson: #8b1a1a;
+    --teal: #1a5f6b;
+    --teal-light: #2a8a9b;
+    --charcoal: #1c1c28;
+    --muted: #6b6558;
+    --rule: #c8b89a;
+    --code-bg: #13131e;
+    --code-border: #2a2a40;
+    --aha-bg: #1a0e05;
+    --aha-border: #c8972a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--ink);
+    color: var(--paper);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE TEXTURE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    overflow: hidden;
+  }
+
+  .header-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(200, 151, 42, 0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 80% at 20% 80%, rgba(26, 95, 107, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(139, 26, 26, 0.06) 0%, transparent 50%);
+  }
+
+  .header-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,151,42,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,151,42,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+
+  .header-ornament {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gold);
+    opacity: 0.5;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    animation: fadeUp 1s ease both;
+  }
+
+  .header-course {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--gold-light);
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+    animation: fadeUp 1s 0.15s ease both;
+  }
+
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 8vw, 6.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--paper);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 1s 0.3s ease both;
+  }
+
+  .header-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .header-subtitle {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--rule);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    animation: fadeUp 1s 0.45s ease both;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 1s 0.6s ease both;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .meta-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .meta-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--paper);
+  }
+
+  .header-divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 2rem auto;
+    animation: fadeUp 1s 0.75s ease both;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    animation: fadeUp 1s 1s ease both;
+    opacity: 0.4;
+  }
+
+  .scroll-cue span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+
+  /* ─── TABLE OF CONTENTS ─── */
+  .toc-section {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .toc-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .toc-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--rule), transparent);
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+
+  .toc-card {
+    position: relative;
+    padding: 1.5rem;
+    border: 1px solid rgba(200, 151, 42, 0.2);
+    background: rgba(200, 151, 42, 0.03);
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .toc-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,151,42,0.06), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .toc-card:hover::before { opacity: 1; }
+  .toc-card:hover { border-color: rgba(200, 151, 42, 0.5); transform: translateY(-2px); }
+
+  .toc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.6rem;
+  }
+
+  .toc-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--paper);
+    margin-bottom: 0.4rem;
+  }
+
+  .toc-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    padding: 0.2rem 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 2px;
+  }
+
+  .tag-normal { background: rgba(26,95,107,0.3); color: var(--teal-light); border: 1px solid rgba(26,95,107,0.4); }
+  .tag-uniform { background: rgba(139,26,26,0.25); color: #e07070; border: 1px solid rgba(139,26,26,0.4); }
+  .tag-exp { background: rgba(60,40,120,0.3); color: #a090e0; border: 1px solid rgba(60,40,120,0.4); }
+  .tag-clt { background: rgba(40,100,50,0.3); color: #70c080; border: 1px solid rgba(40,100,50,0.4); }
+  .tag-algo { background: rgba(100,70,20,0.3); color: var(--gold-light); border: 1px solid rgba(200,151,42,0.3); }
+
+  .difficulty-stars {
+    display: flex;
+    gap: 3px;
+    margin-top: 0.8rem;
+  }
+
+  .star { width: 8px; height: 8px; border-radius: 50%; }
+  .star.filled { background: var(--gold); }
+  .star.empty { background: rgba(200,151,42,0.2); }
+
+  /* ─── MAIN CONTENT ─── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 8rem;
+  }
+
+  /* ─── PROBLEM BLOCK ─── */
+  .problem {
+    margin-bottom: 7rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .problem.visible { opacity: 1; transform: translateY(0); }
+
+  .problem-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(200,151,42,0.15);
+  }
+
+  .problem-number {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border: 1px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--gold);
+    position: relative;
+    background: rgba(200,151,42,0.05);
+  }
+
+  .problem-number::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 1px solid rgba(200,151,42,0.2);
+  }
+
+  .problem-meta { flex: 1; }
+
+  .problem-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--paper);
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+  }
+
+  .problem-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .problem-subtitle {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  /* ─── SECTIONS ─── */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,151,42,0.3), transparent);
+  }
+
+  .prose {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.85);
+    margin-bottom: 1.5rem;
+  }
+
+  .prose strong { color: var(--paper); font-weight: 600; }
+  .prose em { color: var(--gold-light); font-style: italic; }
+
+  /* ─── MATH BLOCKS ─── */
+  .math-block {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    background: rgba(200,151,42,0.04);
+    border-left: 2px solid var(--gold);
+    border-right: 1px solid rgba(200,151,42,0.15);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem;
+    color: var(--gold-light);
+    line-height: 2;
+    overflow-x: auto;
+  }
+
+  .math-block .comment {
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.9rem;
+  }
+
+  /* ─── CODE BLOCKS ─── */
+  .code-wrapper {
+    margin: 1.5rem 0;
+    border: 1px solid var(--code-border);
+    overflow: hidden;
+  }
+
+  .code-header {
+    background: var(--code-bg);
+    padding: 0.6rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--code-border);
+  }
+
+  .code-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .code-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .code-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot-red { background: #ff5f56; }
+  .dot-yellow { background: #ffbd2e; }
+  .dot-green { background: #27c93f; }
+
+  pre {
+    background: var(--code-bg);
+    padding: 1.5rem;
+    overflow-x: auto;
+    margin: 0;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .kw { color: #c792ea; }
+  .fn { color: #82aaff; }
+  .st { color: #c3e88d; }
+  .cm { color: #546e7a; font-style: italic; }
+  .nm { color: #f78c6c; }
+  .op { color: #89ddff; }
+  .va { color: #eeffff; }
+
+  /* ─── IO BLOCKS ─── */
+  .io-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+  }
+
+  @media (max-width: 600px) { .io-grid { grid-template-columns: 1fr; } }
+
+  .io-box {
+    border: 1px solid var(--code-border);
+    overflow: hidden;
+  }
+
+  .io-label {
+    padding: 0.5rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--code-bg);
+    border-bottom: 1px solid var(--code-border);
+  }
+
+  .io-label.input { color: var(--teal-light); }
+  .io-label.output { color: #c3e88d; }
+
+  .io-content {
+    padding: 1rem;
+    background: rgba(19,19,30,0.7);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.7);
+    white-space: pre;
+  }
+
+  /* ─── CONSTRAINTS TABLE ─── */
+  .constraints {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+  }
+
+  .constraints td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid rgba(200,151,42,0.1);
+    color: rgba(245,240,232,0.7);
+  }
+
+  .constraints td:first-child {
+    color: var(--gold-light);
+    width: 40%;
+    border-right: 1px solid rgba(200,151,42,0.1);
+  }
+
+  .constraints tr:last-child td { border-bottom: none; }
+
+  /* ─── AHA MOMENT ─── */
+  .aha-block {
+    margin: 2rem 0;
+    padding: 1.8rem;
+    background: var(--aha-bg);
+    border: 1px solid var(--aha-border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .aha-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .aha-block::after {
+    content: '"';
+    position: absolute;
+    top: -0.5rem;
+    right: 1.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    color: rgba(200,151,42,0.05);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .aha-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .aha-bulb {
+    font-size: 1.1rem;
+    animation: pulse 2s infinite;
+  }
+
+  .aha-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.05rem;
+    font-style: italic;
+    line-height: 1.8;
+    color: rgba(232,184,75,0.9);
+  }
+
+  .aha-text strong {
+    font-style: normal;
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  /* ─── DIFFICULTY BADGE ─── */
+  .difficulty-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+    padding: 1rem 1.2rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .diff-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .star-row { display: flex; gap: 5px; }
+  .star-lg { font-size: 1rem; }
+  .star-lg.filled { color: var(--gold); }
+  .star-lg.empty { color: rgba(200,151,42,0.2); }
+
+  /* ─── CONCEPT MAP ─── */
+  .concept-map {
+    margin: 5rem 0;
+    padding: 3rem 2rem;
+    border: 1px solid rgba(200,151,42,0.2);
+    background: rgba(200,151,42,0.02);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .concept-map::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 50% 80% at 0% 50%, rgba(26,95,107,0.08), transparent),
+      radial-gradient(ellipse 50% 80% at 100% 50%, rgba(200,151,42,0.05), transparent);
+  }
+
+  .concept-map-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--paper);
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .concept-map-sub {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-size: 0.95rem;
+  }
+
+  .matrix-wrapper { overflow-x: auto; }
+
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+  }
+
+  .matrix-table th {
+    padding: 0.6rem 0.8rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(200,151,42,0.3);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .matrix-table th:first-child { text-align: left; }
+
+  .matrix-table td {
+    padding: 0.6rem 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: rgba(245,240,232,0.5);
+  }
+
+  .matrix-table td:first-child {
+    text-align: left;
+    color: var(--paper);
+    font-weight: 500;
+  }
+
+  .matrix-table tr:hover td { background: rgba(200,151,42,0.04); }
+
+  .check { color: var(--gold); }
+  .check-strong { color: var(--gold-light); font-weight: 700; }
+
+  .diff-cell { white-space: nowrap; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-top: 1px solid rgba(200,151,42,0.1);
+    margin-top: 4rem;
+  }
+
+  .footer-quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: rgba(245,240,232,0.5);
+    max-width: 600px;
+    margin: 0 auto 1rem;
+    line-height: 1.6;
+  }
+
+  .footer-attr {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+  }
+
+  /* ─── COLLAPSIBLE STARTER CODE ─── */
+  .collapse-btn {
+    width: 100%;
+    background: rgba(200,151,42,0.05);
+    border: 1px solid rgba(200,151,42,0.2);
+    padding: 0.9rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: background 0.2s;
+    margin-top: 1rem;
+  }
+
+  .collapse-btn:hover { background: rgba(200,151,42,0.1); }
+  .collapse-btn .arrow { transition: transform 0.3s; }
+  .collapse-btn.open .arrow { transform: rotate(180deg); }
+  .collapse-content { display: none; }
+  .collapse-content.open { display: block; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 0.8; transform: scaleY(1.2); }
+  }
+
+  /* ─── INLINE CODE ─── */
+  .ic {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82em;
+    background: rgba(200,151,42,0.1);
+    color: var(--gold-light);
+    padding: 0.1em 0.4em;
+    border-radius: 2px;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--teal-light));
+    z-index: 9998;
+    transition: width 0.1s;
+    width: 0%;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    z-index: 100;
+  }
+
+  @media (max-width: 768px) { nav { display: none; } }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(200,151,42,0.25);
+    border: 1px solid rgba(200,151,42,0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .nav-dot:hover, .nav-dot.active {
+    background: var(--gold);
+    transform: scale(1.3);
+  }
+
+  .nav-dot .nav-tooltip {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(10,10,15,0.9);
+    border: 1px solid rgba(200,151,42,0.3);
+    padding: 0.3rem 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--gold-light);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .nav-dot:hover .nav-tooltip { opacity: 1; }
+
+  /* Horizontal rule between sections */
+  .section-gap {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,151,42,0.2), transparent);
+    margin: 3rem 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="reading-progress" id="readingProgress"></div>
+
+<!-- Side Navigation -->
+<nav id="sideNav">
+  <div class="nav-dot active" onclick="scrollToSection(0)">
+    <span class="nav-tooltip">Overview</span>
+  </div>
+  <div class="nav-dot" onclick="scrollToSection(1)">
+    <span class="nav-tooltip">P1 — Ghost Measurements</span>
+  </div>
+  <div class="nav-dot" onclick="scrollToSection(2)">
+    <span class="nav-tooltip">P2 — Bridging Binomial</span>
+  </div>
+  <div class="nav-dot" onclick="scrollToSection(3)">
+    <span class="nav-tooltip">P3 — Invisible Boundary</span>
+  </div>
+  <div class="nav-dot" onclick="scrollToSection(4)">
+    <span class="nav-tooltip">P4 — Percentile Ladder</span>
+  </div>
+  <div class="nav-dot" onclick="scrollToSection(5)">
+    <span class="nav-tooltip">P5 — Uniforms Become Normal</span>
+  </div>
+  <div class="nav-dot" onclick="scrollToSection(6)">
+    <span class="nav-tooltip">P6 — Renewal Oracle</span>
+  </div>
+  <div class="nav-dot" onclick="scrollToSection(7)">
+    <span class="nav-tooltip">Concept Map</span>
+  </div>
+</nav>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header id="section-0">
+  <div class="header-bg"></div>
+  <div class="header-grid"></div>
+
+  <div style="position:relative; z-index:1;">
+    <div class="header-ornament">IC252 · Probability & Statistics</div>
+    <div class="header-course">Reman Dey — Normal Distributions</div>
+    <h1 class="header-title">Olympiad<br><em>Problem Set</em></h1>
+    <p class="header-subtitle">Six deep, programming-based problems that transform statistical theory into algorithmic insight.</p>
+    <div class="header-divider"></div>
+    <div class="header-meta">
+      <div class="meta-item">
+        <span class="meta-label">Problems</span>
+        <span class="meta-value">6</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Distributions</span>
+        <span class="meta-value">Uniform · Normal · Exponential</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Level</span>
+        <span class="meta-value">★★★☆☆ — ★★★★★</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<!-- ═══════════════ TABLE OF CONTENTS ═══════════════ -->
+<div class="toc-section">
+  <div class="toc-title">Problems at a Glance</div>
+  <div class="toc-grid">
+
+    <a href="#p1" class="toc-card">
+      <div class="toc-num">Problem 01</div>
+      <div class="toc-name">The Ghost Measurements</div>
+      <div class="toc-tags">
+        <span class="tag tag-normal">Normal</span>
+        <span class="tag tag-algo">68-95-99.7</span>
+        <span class="tag tag-algo">CDF from Scratch</span>
+      </div>
+      <div class="difficulty-stars">
+        <div class="star filled"></div><div class="star filled"></div><div class="star filled"></div>
+        <div class="star empty"></div><div class="star empty"></div>
+      </div>
+    </a>
+
+    <a href="#p2" class="toc-card">
+      <div class="toc-num">Problem 02</div>
+      <div class="toc-name">Bridging Binomial to Bell</div>
+      <div class="toc-tags">
+        <span class="tag tag-normal">Normal Approx</span>
+        <span class="tag tag-algo">Exact Binomial</span>
+        <span class="tag tag-algo">Berry-Esseen</span>
+      </div>
+      <div class="difficulty-stars">
+        <div class="star filled"></div><div class="star filled"></div><div class="star filled"></div>
+        <div class="star filled"></div><div class="star empty"></div>
+      </div>
+    </a>
+
+    <a href="#p3" class="toc-card">
+      <div class="toc-num">Problem 03</div>
+      <div class="toc-name">The Invisible Boundary</div>
+      <div class="toc-tags">
+        <span class="tag tag-normal">Normal</span>
+        <span class="tag tag-algo">Newton's Method</span>
+        <span class="tag tag-algo">Two-Population</span>
+      </div>
+      <div class="difficulty-stars">
+        <div class="star filled"></div><div class="star filled"></div><div class="star filled"></div>
+        <div class="star filled"></div><div class="star empty"></div>
+      </div>
+    </a>
+
+    <a href="#p4" class="toc-card">
+      <div class="toc-num">Problem 04</div>
+      <div class="toc-name">The Percentile Ladder Tournament</div>
+      <div class="toc-tags">
+        <span class="tag tag-normal">Truncated Normal</span>
+        <span class="tag tag-algo">Inverse CDF</span>
+        <span class="tag tag-algo">Recurrence</span>
+      </div>
+      <div class="difficulty-stars">
+        <div class="star filled"></div><div class="star filled"></div><div class="star filled"></div>
+        <div class="star filled"></div><div class="star filled"></div>
+      </div>
+    </a>
+
+    <a href="#p5" class="toc-card">
+      <div class="toc-num">Problem 05</div>
+      <div class="toc-name">When Uniforms Become Normal</div>
+      <div class="toc-tags">
+        <span class="tag tag-uniform">Uniform</span>
+        <span class="tag tag-clt">CLT</span>
+        <span class="tag tag-algo">KS Test</span>
+      </div>
+      <div class="difficulty-stars">
+        <div class="star filled"></div><div class="star filled"></div><div class="star filled"></div>
+        <div class="star filled"></div><div class="star filled"></div>
+      </div>
+    </a>
+
+    <a href="#p6" class="toc-card">
+      <div class="toc-num">Problem 06</div>
+      <div class="toc-name">The Exponential Renewal Oracle</div>
+      <div class="toc-tags">
+        <span class="tag tag-exp">Exponential</span>
+        <span class="tag tag-exp">Erlang</span>
+        <span class="tag tag-clt">CLT Bridge</span>
+      </div>
+      <div class="difficulty-stars">
+        <div class="star filled"></div><div class="star filled"></div><div class="star filled"></div>
+        <div class="star filled"></div><div class="star filled"></div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMS ═══════════════ -->
+<main>
+
+<!-- ──────────── PROBLEM 1 ──────────── -->
+<div class="problem" id="p1" data-section="1">
+
+  <div class="problem-header">
+    <div class="problem-number">01</div>
+    <div class="problem-meta">
+      <h2 class="problem-title"><em>"The Ghost Measurements"</em></h2>
+      <div class="problem-subtitle">Iterative Sigma Purification · Normal CDF from Scratch · Outlier Elimination</div>
+      <div class="toc-tags">
+        <span class="tag tag-normal">Normal PDF</span>
+        <span class="tag tag-algo">68-95-99.7</span>
+        <span class="tag tag-algo">Taylor Series erf</span>
+        <span class="tag tag-algo">Iterative Algorithm</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="difficulty-row">
+    <span class="diff-label">Difficulty</span>
+    <div class="star-row">
+      <span class="star-lg filled">★</span><span class="star-lg filled">★</span>
+      <span class="star-lg filled">★</span><span class="star-lg empty">★</span>
+      <span class="star-lg empty">★</span>
+    </div>
+  </div>
+
+  <div class="section-label">Background</div>
+  <p class="prose">
+    A lab claims its instrument measures a normally distributed quantity. However, a saboteur has silently injected <em>at most</em> ⌊N/4⌋ corrupted readings into the dataset before you received it. Your job is to recover the true distribution and answer probability queries — <strong>without any math library</strong>.
+  </p>
+
+  <div class="section-label">The Setup</div>
+  <p class="prose">
+    Define a reading as an <em>outlier</em> with respect to parameters (μ, σ) if it falls outside (μ − 3σ, μ + 3σ). The <strong>Iterative Sigma Purification</strong> algorithm works as follows:
+  </p>
+
+  <div class="code-wrapper">
+    <div class="code-header">
+      <div class="code-dots"><div class="code-dot dot-red"></div><div class="code-dot dot-yellow"></div><div class="code-dot dot-green"></div></div>
+      <div class="code-lang">Algorithm</div>
+    </div>
+    <pre><code><span class="cm">repeat:</span>
+    <span class="kw">compute</span> <span class="va">mean μ</span> <span class="op">and</span> <span class="va">std σ</span> <span class="op">of</span> current dataset <span class="va">S</span>
+    <span class="kw">remove</span> all <span class="va">x ∈ S</span> where <span class="op">|</span><span class="va">x</span> <span class="op">-</span> <span class="va">μ</span><span class="op">| > 3σ</span>
+<span class="cm">until S does not change</span></code></pre>
+  </div>
+
+  <p class="prose">
+    By the 99.7% rule, at most 0.3% of <em>genuine</em> readings get removed per iteration — but outliers get eliminated aggressively. This converges in O(log N) iterations.
+  </p>
+
+  <div class="section-label">Task</div>
+  <p class="prose">
+    Given N readings and Q queries of the form <span class="ic">(a, b)</span>, output P(a ≤ X ≤ b) to 6 decimal places, where X follows the recovered N(μ, σ²). You <strong>may not</strong> use any built-in erf, erfc, or normal distribution functions. You must implement the normal CDF yourself via Taylor series.
+  </p>
+
+  <div class="section-label">Key Formulae</div>
+
+  <div class="math-block">
+erf(x)  =  (2/√π) · Σ  (-1)ⁿ · x^(2n+1)  /  [n! · (2n+1)]    <span class="comment">// Taylor series</span>
+
+Φ(z)    =  (1/2) · [1 + erf(z / √2)]                           <span class="comment">// Normal CDF from erf</span>
+
+P(a ≤ X ≤ b)  =  Φ((b-μ)/σ)  -  Φ((a-μ)/σ)                   <span class="comment">// Probability query</span>
+  </div>
+
+  <div class="section-label">Input / Output Format</div>
+  <p class="prose">Line 1: <span class="ic">N Q</span> &nbsp;·&nbsp; Next N lines: one real per line &nbsp;·&nbsp; Next Q lines: <span class="ic">a b</span></p>
+
+  <div class="io-grid">
+    <div class="io-box">
+      <div class="io-label input">Sample Input</div>
+      <div class="io-content">12 3
+98.2 101.3 99.7 100.1
+350.0 100.5 98.9 99.2
+101.1 -280.0 100.3 99.8
+95.0 105.0
+85.0 115.0
+99.0 101.0</div>
+    </div>
+    <div class="io-box">
+      <div class="io-label output">Sample Output</div>
+      <div class="io-content">99.900000 0.938083
+0.999970
+1.000000
+0.712816</div>
+    </div>
+  </div>
+
+  <div class="section-label">Constraints</div>
+  <table class="constraints">
+    <tr><td>N (readings)</td><td>10 ≤ N ≤ 100,000</td></tr>
+    <tr><td>Q (queries)</td><td>1 ≤ Q ≤ 10,000</td></tr>
+    <tr><td>readings</td><td>∈ [−10⁶, 10⁶]</td></tr>
+    <tr><td>outliers injected</td><td>at most ⌊N/4⌋</td></tr>
+    <tr><td>erf Taylor terms</td><td>50 terms sufficient</td></tr>
+  </table>
+
+  <div class="aha-block">
+    <div class="aha-title"><span class="aha-bulb">💡</span> The AHA Moment</div>
+    <p class="aha-text">
+      The 68-95-99.7 rule is not just a memorization fact — it's an <strong>algorithmic convergence guarantee</strong>. Each iteration removes true outliers while keeping ≥99.7% of genuine data. This proves the algorithm must terminate in O(log N) steps. The moment you realize the rule <strong>proves termination</strong> — not just describes probabilities — is the aha.
+    </p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggleCode(this)">
+    <span>▶ Starter Code (Python)</span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="code-wrapper">
+      <div class="code-header">
+        <div class="code-dots"><div class="code-dot dot-red"></div><div class="code-dot dot-yellow"></div><div class="code-dot dot-green"></div></div>
+        <div class="code-lang">Python 3</div>
+      </div>
+      <pre><code><span class="kw">import</span> <span class="va">math</span>
+
+<span class="kw">def</span> <span class="fn">erf_taylor</span>(<span class="va">x</span>, <span class="va">terms</span><span class="op">=</span><span class="nm">50</span>):
+    <span class="cm"># Implement erf via Taylor series expansion</span>
+    <span class="va">result</span> <span class="op">=</span> <span class="nm">0.0</span>
+    <span class="kw">for</span> <span class="va">n</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="va">terms</span>):
+        <span class="va">sign</span>   <span class="op">=</span> (<span class="op">-</span><span class="nm">1</span>)<span class="op">**</span><span class="va">n</span>
+        <span class="va">num</span>    <span class="op">=</span> <span class="va">x</span><span class="op">**</span>(<span class="nm">2</span><span class="op">*</span><span class="va">n</span><span class="op">+</span><span class="nm">1</span>)
+        <span class="va">den</span>    <span class="op">=</span> <span class="va">math</span>.<span class="fn">factorial</span>(<span class="va">n</span>) <span class="op">*</span> (<span class="nm">2</span><span class="op">*</span><span class="va">n</span><span class="op">+</span><span class="nm">1</span>)
+        <span class="va">result</span> <span class="op">+=</span> <span class="va">sign</span> <span class="op">*</span> <span class="va">num</span> <span class="op">/</span> <span class="va">den</span>
+    <span class="kw">return</span> (<span class="nm">2</span> <span class="op">/</span> <span class="va">math</span>.<span class="fn">sqrt</span>(<span class="va">math</span>.<span class="va">pi</span>)) <span class="op">*</span> <span class="va">result</span>
+
+<span class="kw">def</span> <span class="fn">normal_cdf</span>(<span class="va">z</span>):
+    <span class="kw">return</span> <span class="nm">0.5</span> <span class="op">*</span> (<span class="nm">1</span> <span class="op">+</span> <span class="fn">erf_taylor</span>(<span class="va">z</span> <span class="op">/</span> <span class="va">math</span>.<span class="fn">sqrt</span>(<span class="nm">2</span>)))
+
+<span class="kw">def</span> <span class="fn">prob_between</span>(<span class="va">a</span>, <span class="va">b</span>, <span class="va">mu</span>, <span class="va">sigma</span>):
+    <span class="va">za</span> <span class="op">=</span> (<span class="va">a</span> <span class="op">-</span> <span class="va">mu</span>) <span class="op">/</span> <span class="va">sigma</span>
+    <span class="va">zb</span> <span class="op">=</span> (<span class="va">b</span> <span class="op">-</span> <span class="va">mu</span>) <span class="op">/</span> <span class="va">sigma</span>
+    <span class="kw">return</span> <span class="fn">normal_cdf</span>(<span class="va">zb</span>) <span class="op">-</span> <span class="fn">normal_cdf</span>(<span class="va">za</span>)
+
+<span class="kw">def</span> <span class="fn">purify</span>(<span class="va">data</span>):
+    <span class="va">S</span> <span class="op">=</span> <span class="va">data</span>[:]
+    <span class="kw">while True</span>:
+        <span class="va">mu</span>    <span class="op">=</span> <span class="fn">sum</span>(<span class="va">S</span>) <span class="op">/</span> <span class="fn">len</span>(<span class="va">S</span>)
+        <span class="va">sigma</span> <span class="op">=</span> <span class="va">math</span>.<span class="fn">sqrt</span>(<span class="fn">sum</span>((<span class="va">x</span><span class="op">-</span><span class="va">mu</span>)<span class="op">**</span><span class="nm">2</span> <span class="kw">for</span> <span class="va">x</span> <span class="kw">in</span> <span class="va">S</span>) <span class="op">/</span> <span class="fn">len</span>(<span class="va">S</span>))
+        <span class="va">new_S</span> <span class="op">=</span> [<span class="va">x</span> <span class="kw">for</span> <span class="va">x</span> <span class="kw">in</span> <span class="va">S</span> <span class="kw">if</span> <span class="fn">abs</span>(<span class="va">x</span><span class="op">-</span><span class="va">mu</span>) <span class="op">&lt;=</span> <span class="nm">3</span><span class="op">*</span><span class="va">sigma</span>]
+        <span class="kw">if</span> <span class="fn">len</span>(<span class="va">new_S</span>) <span class="op">==</span> <span class="fn">len</span>(<span class="va">S</span>): <span class="kw">return</span> <span class="va">mu</span>, <span class="va">sigma</span>
+        <span class="va">S</span> <span class="op">=</span> <span class="va">new_S</span>
+
+<span class="cm"># --- YOUR MAIN SOLUTION HERE ---</span></code></pre>
+    </div>
+  </div>
+</div>
+
+<div class="section-gap"></div>
+
+<!-- ──────────── PROBLEM 2 ──────────── -->
+<div class="problem" id="p2" data-section="2">
+
+  <div class="problem-header">
+    <div class="problem-number">02</div>
+    <div class="problem-meta">
+      <h2 class="problem-title"><em>"Bridging Binomial to Bell"</em></h2>
+      <div class="problem-subtitle">Normal Approximation · Exact Binomial CDF · Berry-Esseen Theorem · Continuity Correction</div>
+      <div class="toc-tags">
+        <span class="tag tag-normal">Normal Approx</span>
+        <span class="tag tag-algo">Log-Space Arithmetic</span>
+        <span class="tag tag-algo">Berry-Esseen</span>
+        <span class="tag tag-algo">Binary Search</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="difficulty-row">
+    <span class="diff-label">Difficulty</span>
+    <div class="star-row">
+      <span class="star-lg filled">★</span><span class="star-lg filled">★</span>
+      <span class="star-lg filled">★</span><span class="star-lg filled">★</span>
+      <span class="star-lg empty">★</span>
+    </div>
+  </div>
+
+  <div class="section-label">Background</div>
+  <p class="prose">
+    The normal approximation to the binomial is taught as "works when np &gt; 5." But <em>how wrong is it exactly</em> for a given (n, p)? And what is the precise effect of the <strong>continuity correction</strong>? This problem forces you to compute it rigorously.
+  </p>
+
+  <div class="section-label">Task</div>
+  <p class="prose">
+    Given rational p = a/b and tolerance ε, find the <strong>minimum integer n</strong> such that for <em>every</em> k ∈ {0, 1, ..., n}:
+  </p>
+
+  <div class="math-block">
+|F_binom(k; n, p)  −  Φ((k + 0.5 − np) / √(np(1−p)))|  ≤  ε
+
+<span class="comment">// The +0.5 is the continuity correction — omit it and required n grows ~4×</span>
+  </div>
+
+  <div class="section-label">Exact Binomial CDF (Log-Space Recursion)</div>
+
+  <div class="math-block">
+log P(X=0)  =  n · log(1−p)
+
+log P(X=j)  =  log P(X=j−1)  +  log(n−j+1)  −  log(j)
+                               +  log(p)  −  log(1−p)
+
+<span class="comment">// Accumulate via log-sum-exp for numerical stability</span>
+<span class="comment">// Berry-Esseen bound: max error ≤ 0.5 / √n  → upper bound for search space</span>
+  </div>
+
+  <div class="io-grid">
+    <div class="io-box">
+      <div class="io-label input">Sample Input 1</div>
+      <div class="io-content">1 2 0.01</div>
+    </div>
+    <div class="io-box">
+      <div class="io-label output">Sample Output 1</div>
+      <div class="io-content">n = 28 (violates)
+Last violating k: k=14
+  error = 0.010021
+First satisfying n: 29
+  max error = 0.009871 at k=14</div>
+    </div>
+  </div>
+
+  <div class="io-grid">
+    <div class="io-box">
+      <div class="io-label input">Sample Input 2</div>
+      <div class="io-content">1 10 0.01</div>
+    </div>
+    <div class="io-box">
+      <div class="io-label output">Sample Output 2</div>
+      <div class="io-content">n = 73 (violates)
+Last violating k: k=7
+  error = 0.010156
+First satisfying n: 74
+  max error = 0.009923 at k=8</div>
+    </div>
+  </div>
+
+  <div class="section-label">Constraints</div>
+  <table class="constraints">
+    <tr><td>p = a/b</td><td>1 ≤ a &lt; b ≤ 100</td></tr>
+    <tr><td>ε</td><td>10⁻⁸ ≤ ε ≤ 0.1</td></tr>
+    <tr><td>n_min</td><td>guaranteed ≤ 10⁷</td></tr>
+    <tr><td>Subtlety</td><td>max error over k is NOT monotone in n</td></tr>
+  </table>
+
+  <div class="aha-block">
+    <div class="aha-title"><span class="aha-bulb">💡</span> The AHA Moment</div>
+    <p class="aha-text">
+      Without the continuity correction, the required n is roughly <strong>4× larger</strong>. The correction aligns the discrete bar centers with the continuous curve. Most students learn this as a mechanical rule, but the moment you <em>see the error profile change shape</em> when you add +0.5 — the systematic bias evaporates — that is the aha. The correction isn't a trick; it compensates for the fundamental discrete-vs-continuous mismatch at bar boundaries.
+    </p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggleCode(this)">
+    <span>▶ Starter Code (Python)</span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="code-wrapper">
+      <div class="code-header">
+        <div class="code-dots"><div class="code-dot dot-red"></div><div class="code-dot dot-yellow"></div><div class="code-dot dot-green"></div></div>
+        <div class="code-lang">Python 3</div>
+      </div>
+      <pre><code><span class="kw">import</span> <span class="va">math</span>
+
+<span class="kw">def</span> <span class="fn">log_binom_pmf</span>(<span class="va">n</span>, <span class="va">p</span>):
+    <span class="cm"># log P(X=k) for k=0..n via stable recursion</span>
+    <span class="va">lp</span> <span class="op">=</span> [<span class="nm">0.0</span>] <span class="op">*</span> (<span class="va">n</span><span class="op">+</span><span class="nm">1</span>)
+    <span class="va">lp</span>[<span class="nm">0</span>] <span class="op">=</span> <span class="va">n</span> <span class="op">*</span> <span class="va">math</span>.<span class="fn">log</span>(<span class="nm">1</span><span class="op">-</span><span class="va">p</span>)
+    <span class="kw">for</span> <span class="va">k</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">1</span>, <span class="va">n</span><span class="op">+</span><span class="nm">1</span>):
+        <span class="va">lp</span>[<span class="va">k</span>] <span class="op">=</span> (<span class="va">lp</span>[<span class="va">k</span><span class="op">-</span><span class="nm">1</span>]
+                  <span class="op">+</span> <span class="va">math</span>.<span class="fn">log</span>(<span class="va">n</span><span class="op">-</span><span class="va">k</span><span class="op">+</span><span class="nm">1</span>) <span class="op">-</span> <span class="va">math</span>.<span class="fn">log</span>(<span class="va">k</span>)
+                  <span class="op">+</span> <span class="va">math</span>.<span class="fn">log</span>(<span class="va">p</span>)     <span class="op">-</span> <span class="va">math</span>.<span class="fn">log</span>(<span class="nm">1</span><span class="op">-</span><span class="va">p</span>))
+    <span class="kw">return</span> <span class="va">lp</span>
+
+<span class="kw">def</span> <span class="fn">max_approx_error</span>(<span class="va">n</span>, <span class="va">p</span>):
+    <span class="va">mu</span>    <span class="op">=</span> <span class="va">n</span> <span class="op">*</span> <span class="va">p</span>
+    <span class="va">sigma</span> <span class="op">=</span> <span class="va">math</span>.<span class="fn">sqrt</span>(<span class="va">n</span><span class="op">*</span><span class="va">p</span><span class="op">*</span>(<span class="nm">1</span><span class="op">-</span><span class="va">p</span>))
+    <span class="va">cdf</span>   <span class="op">=</span> []
+    <span class="va">run</span>   <span class="op">=</span> <span class="nm">0.0</span>
+    <span class="kw">for</span> <span class="va">lp</span> <span class="kw">in</span> <span class="fn">log_binom_pmf</span>(<span class="va">n</span>, <span class="va">p</span>):
+        <span class="va">run</span> <span class="op">+=</span> <span class="va">math</span>.<span class="fn">exp</span>(<span class="va">lp</span>)
+        <span class="va">cdf</span>.<span class="fn">append</span>(<span class="fn">min</span>(<span class="va">run</span>, <span class="nm">1.0</span>))
+    <span class="va">max_e</span>, <span class="va">wk</span> <span class="op">=</span> <span class="nm">0.0</span>, <span class="nm">0</span>
+    <span class="kw">for</span> <span class="va">k</span>, <span class="va">fk</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="va">cdf</span>):
+        <span class="va">z</span> <span class="op">=</span> (<span class="va">k</span> <span class="op">+</span> <span class="nm">0.5</span> <span class="op">-</span> <span class="va">mu</span>) <span class="op">/</span> <span class="va">sigma</span>  <span class="cm"># continuity correction</span>
+        <span class="va">e</span> <span class="op">=</span> <span class="fn">abs</span>(<span class="va">fk</span> <span class="op">-</span> <span class="fn">normal_cdf</span>(<span class="va">z</span>))
+        <span class="kw">if</span> <span class="va">e</span> <span class="op">&gt;</span> <span class="va">max_e</span>: <span class="va">max_e</span>, <span class="va">wk</span> <span class="op">=</span> <span class="va">e</span>, <span class="va">k</span>
+    <span class="kw">return</span> <span class="va">max_e</span>, <span class="va">wk</span>
+
+<span class="cm"># --- YOUR SEARCH LOGIC HERE (linear or guided by Berry-Esseen) ---</span></code></pre>
+    </div>
+  </div>
+</div>
+
+<div class="section-gap"></div>
+
+<!-- ──────────── PROBLEM 3 ──────────── -->
+<div class="problem" id="p3" data-section="3">
+
+  <div class="problem-header">
+    <div class="problem-number">03</div>
+    <div class="problem-meta">
+      <h2 class="problem-title"><em>"The Invisible Boundary"</em></h2>
+      <div class="problem-subtitle">Two-Population Gaussians · Optimal Decision Threshold · Newton's Method · Disconnected Classifiers</div>
+      <div class="toc-tags">
+        <span class="tag tag-normal">Normal PDF</span>
+        <span class="tag tag-algo">Newton's Method</span>
+        <span class="tag tag-algo">Global Optimization</span>
+        <span class="tag tag-algo">Transcendental Equations</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="difficulty-row">
+    <span class="diff-label">Difficulty</span>
+    <div class="star-row">
+      <span class="star-lg filled">★</span><span class="star-lg filled">★</span>
+      <span class="star-lg filled">★</span><span class="star-lg filled">★</span>
+      <span class="star-lg empty">★</span>
+    </div>
+  </div>
+
+  <div class="section-label">Background</div>
+  <p class="prose">
+    A hospital measures a biomarker. Healthy patients have X ~ N(μ₁, σ₁²); diseased patients have X ~ N(μ₂, σ₂²). The population proportions are π and (1−π). Find the <strong>optimal threshold t</strong> that minimizes total misclassification probability.
+  </p>
+
+  <div class="section-label">The Objective Function</div>
+
+  <div class="math-block">
+MCP(t)  =  π · [1 − Φ(z₁(t))]  +  (1−π) · Φ(z₂(t))
+
+where  z₁(t) = (t−μ₁)/σ₁  and  z₂(t) = (t−μ₂)/σ₂
+
+<span class="comment">// Optimality condition (set dMCP/dt = 0):</span>
+(π/σ₁) · φ(z₁(t))  =  ((1−π)/σ₂) · φ(z₂(t))
+
+<span class="comment">// φ = standard normal PDF. No closed form → Newton's method</span>
+<span class="comment">// When σ₁ ≠ σ₂, this may have TWO solutions → two-region classifier</span>
+  </div>
+
+  <div class="section-label">Input / Output</div>
+  <div class="io-grid">
+    <div class="io-box">
+      <div class="io-label input">Sample Input</div>
+      <div class="io-content">3
+0.0 1.0  3.0 1.0  0.5
+0.0 1.0  3.0 2.0  0.5
+0.0 1.0  0.0 3.0  0.3</div>
+    </div>
+    <div class="io-box">
+      <div class="io-label output">Sample Output</div>
+      <div class="io-content">1  1.500000          MCP=0.066807
+1  1.088859          MCP=0.133493
+2  -2.671238 2.671238  MCP=0.148721</div>
+    </div>
+  </div>
+
+  <div class="section-label">Constraints</div>
+  <table class="constraints">
+    <tr><td>T (test cases)</td><td>1 ≤ T ≤ 1000</td></tr>
+    <tr><td>μ₁, μ₂</td><td>−1000 to 1000, μ₁ ≠ μ₂</td></tr>
+    <tr><td>σ₁, σ₂</td><td>0.01 ≤ σ ≤ 100</td></tr>
+    <tr><td>π</td><td>0.01 ≤ π ≤ 0.99</td></tr>
+    <tr><td>Newton tolerance</td><td>1e-10 sufficient</td></tr>
+  </table>
+
+  <div class="aha-block">
+    <div class="aha-title"><span class="aha-bulb">💡</span> The AHA Moment</div>
+    <p class="aha-text">
+      When σ₁ = σ₂, one threshold suffices. But when σ₁ ≠ σ₂, the two Gaussian PDFs intersect at <strong>two points</strong>, creating a bizarre situation: the "healthy" region is a <strong>disconnected set</strong> — a union of two intervals. This means a patient is classified as diseased if their biomarker is either <em>too low or too high</em>. This two-threshold phenomenon falls naturally out of the math but is never taught in intro stats.
+    </p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggleCode(this)">
+    <span>▶ Starter Code (Python)</span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="code-wrapper">
+      <div class="code-header">
+        <div class="code-dots"><div class="code-dot dot-red"></div><div class="code-dot dot-yellow"></div><div class="code-dot dot-green"></div></div>
+        <div class="code-lang">Python 3</div>
+      </div>
+      <pre><code><span class="kw">def</span> <span class="fn">MCP</span>(<span class="va">t</span>, <span class="va">m1</span>,<span class="va">s1</span>,<span class="va">m2</span>,<span class="va">s2</span>,<span class="va">pi</span>):
+    <span class="va">z1</span> <span class="op">=</span> (<span class="va">t</span><span class="op">-</span><span class="va">m1</span>)<span class="op">/</span><span class="va">s1</span>;  <span class="va">z2</span> <span class="op">=</span> (<span class="va">t</span><span class="op">-</span><span class="va">m2</span>)<span class="op">/</span><span class="va">s2</span>
+    <span class="kw">return</span> <span class="va">pi</span><span class="op">*</span>(<span class="nm">1</span><span class="op">-</span><span class="fn">Phi</span>(<span class="va">z1</span>)) <span class="op">+</span> (<span class="nm">1</span><span class="op">-</span><span class="va">pi</span>)<span class="op">*</span><span class="fn">Phi</span>(<span class="va">z2</span>)
+
+<span class="kw">def</span> <span class="fn">dMCP</span>(<span class="va">t</span>, <span class="va">m1</span>,<span class="va">s1</span>,<span class="va">m2</span>,<span class="va">s2</span>,<span class="va">pi</span>):
+    <span class="kw">return</span> <span class="op">-</span><span class="va">pi</span><span class="op">*</span><span class="fn">phi</span>((<span class="va">t</span><span class="op">-</span><span class="va">m1</span>)<span class="op">/</span><span class="va">s1</span>)<span class="op">/</span><span class="va">s1</span> <span class="op">+</span> (<span class="nm">1</span><span class="op">-</span><span class="va">pi</span>)<span class="op">*</span><span class="fn">phi</span>((<span class="va">t</span><span class="op">-</span><span class="va">m2</span>)<span class="op">/</span><span class="va">s2</span>)<span class="op">/</span><span class="va">s2</span>
+
+<span class="kw">def</span> <span class="fn">find_all_thresholds</span>(<span class="va">m1</span>,<span class="va">s1</span>,<span class="va">m2</span>,<span class="va">s2</span>,<span class="va">pi</span>):
+    <span class="cm"># Scan for sign changes in dMCP across the support</span>
+    <span class="va">lo</span>  <span class="op">=</span> <span class="fn">min</span>(<span class="va">m1</span>,<span class="va">m2</span>) <span class="op">-</span> <span class="nm">5</span><span class="op">*</span><span class="fn">max</span>(<span class="va">s1</span>,<span class="va">s2</span>)
+    <span class="va">hi</span>  <span class="op">=</span> <span class="fn">max</span>(<span class="va">m1</span>,<span class="va">m2</span>) <span class="op">+</span> <span class="nm">5</span><span class="op">*</span><span class="fn">max</span>(<span class="va">s1</span>,<span class="va">s2</span>)
+    <span class="va">pts</span> <span class="op">=</span> [<span class="va">lo</span> <span class="op">+</span> (<span class="va">hi</span><span class="op">-</span><span class="va">lo</span>)<span class="op">*</span><span class="va">i</span><span class="op">/</span><span class="nm">10000</span> <span class="kw">for</span> <span class="va">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">10001</span>)]
+    <span class="va">roots</span> <span class="op">=</span> []
+    <span class="kw">for</span> <span class="va">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(<span class="va">pts</span>)<span class="op">-</span><span class="nm">1</span>):
+        <span class="kw">if</span> <span class="fn">dMCP</span>(<span class="va">pts</span>[<span class="va">i</span>],<span class="va">m1</span>,<span class="va">s1</span>,<span class="va">m2</span>,<span class="va">s2</span>,<span class="va">pi</span>)<span class="op">*</span><span class="fn">dMCP</span>(<span class="va">pts</span>[<span class="va">i</span><span class="op">+</span><span class="nm">1</span>],<span class="va">m1</span>,<span class="va">s1</span>,<span class="va">m2</span>,<span class="va">s2</span>,<span class="va">pi</span>) <span class="op">&lt;</span> <span class="nm">0</span>:
+            <span class="cm"># Bracket found → refine with Newton</span>
+            <span class="va">roots</span>.<span class="fn">append</span>(<span class="fn">newton_refine</span>(<span class="va">pts</span>[<span class="va">i</span>],<span class="va">m1</span>,<span class="va">s1</span>,<span class="va">m2</span>,<span class="va">s2</span>,<span class="va">pi</span>))
+    <span class="kw">return</span> <span class="va">roots</span>
+
+<span class="cm"># --- Filter to local minima, return global minimum ---</span></code></pre>
+    </div>
+  </div>
+</div>
+
+<div class="section-gap"></div>
+
+<!-- ──────────── PROBLEM 4 ──────────── -->
+<div class="problem" id="p4" data-section="4">
+
+  <div class="problem-header">
+    <div class="problem-number">04</div>
+    <div class="problem-meta">
+      <h2 class="problem-title"><em>"The Percentile Ladder Tournament"</em></h2>
+      <div class="problem-subtitle">Truncated Normal · Inverse Mills Ratio · Multi-Stage Selection · Probit Function</div>
+      <div class="toc-tags">
+        <span class="tag tag-normal">Truncated Normal</span>
+        <span class="tag tag-algo">Inverse CDF</span>
+        <span class="tag tag-algo">Recurrence</span>
+        <span class="tag tag-algo">Conditional Probability</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="difficulty-row">
+    <span class="diff-label">Difficulty</span>
+    <div class="star-row">
+      <span class="star-lg filled">★</span><span class="star-lg filled">★</span>
+      <span class="star-lg filled">★</span><span class="star-lg filled">★</span>
+      <span class="star-lg filled">★</span>
+    </div>
+  </div>
+
+  <div class="section-label">Background</div>
+  <p class="prose">
+    In each tournament round, the top p% of scorers advance. Scores are normally distributed. <strong>Critical insight:</strong> keeping only the top fraction produces a <em>truncated normal distribution</em> — the next round's population is NOT the same family as before; its mean and variance shift via the <strong>Inverse Mills Ratio</strong>.
+  </p>
+
+  <div class="section-label">Truncated Normal Recurrence</div>
+  <div class="math-block">
+λ  =  φ(z_p) / (1 − Φ(z_p))        <span class="comment">// Inverse Mills Ratio; z_p = Φ⁻¹(1−p_keep)</span>
+
+μ_new   =  μ  +  σ · λ
+
+σ²_new  =  σ² · [1  −  z_p · λ  −  λ²]
+
+<span class="comment">// Note: σ² DECREASES each round — survivors are more homogeneous</span>
+<span class="comment">// Survival prob of individual x₀ requires conditional CDF composition, NOT simple product</span>
+  </div>
+
+  <div class="section-label">Input / Output</div>
+  <div class="io-grid">
+    <div class="io-box">
+      <div class="io-label input">Sample Input</div>
+      <div class="io-content">10000 500.0 50.0 3
+0.5
+0.5
+0.5
+3
+500.0
+600.0
+650.0</div>
+    </div>
+    <div class="io-box">
+      <div class="io-label output">Sample Output</div>
+      <div class="io-content">Final: μ=578.321041 σ=28.401823
+P(survive | 500.0) = 0.054931
+P(survive | 600.0) = 0.468201
+P(survive | 650.0) = 0.891203
+x_min (95% survival) = 634.821047</div>
+    </div>
+  </div>
+
+  <div class="section-label">Constraints</div>
+  <table class="constraints">
+    <tr><td>N₀</td><td>100 ≤ N₀ ≤ 10⁹</td></tr>
+    <tr><td>R (rounds)</td><td>1 ≤ R ≤ 50</td></tr>
+    <tr><td>p_keep per round</td><td>0.01 ≤ p ≤ 0.99</td></tr>
+    <tr><td>Q (individual queries)</td><td>1 ≤ Q ≤ 1000</td></tr>
+    <tr><td>Probit method</td><td>Bisection on Φ(z) sufficient</td></tr>
+  </table>
+
+  <div class="aha-block">
+    <div class="aha-title"><span class="aha-bulb">💡</span> The AHA Moment</div>
+    <p class="aha-text">
+      Students expect survival probability to be a simple product of round probabilities. It is NOT — because surviving round 1 <strong>updates your rank within the surviving pool</strong>. The correct computation is a composition of conditional probabilities through truncated normal CDFs. Also: σ² strictly decreases each round — elite survivors converge toward a single score. This is why real-world competition winners all seem nearly equally talented; the truncation squeezes variance toward zero.
+    </p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggleCode(this)">
+    <span>▶ Starter Code (Python)</span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="code-wrapper">
+      <div class="code-header">
+        <div class="code-dots"><div class="code-dot dot-red"></div><div class="code-dot dot-yellow"></div><div class="code-dot dot-green"></div></div>
+        <div class="code-lang">Python 3</div>
+      </div>
+      <pre><code><span class="kw">def</span> <span class="fn">Phi_inv</span>(<span class="va">p</span>, <span class="va">lo</span><span class="op">=-</span><span class="nm">10</span>, <span class="va">hi</span><span class="op">=</span><span class="nm">10</span>, <span class="va">tol</span><span class="op">=</span><span class="nm">1e-10</span>):
+    <span class="cm"># Bisection-based probit function</span>
+    <span class="kw">while</span> <span class="va">hi</span><span class="op">-</span><span class="va">lo</span> <span class="op">&gt;</span> <span class="va">tol</span>:
+        <span class="va">mid</span> <span class="op">=</span> (<span class="va">lo</span><span class="op">+</span><span class="va">hi</span>)<span class="op">/</span><span class="nm">2</span>
+        <span class="kw">if</span> <span class="fn">Phi</span>(<span class="va">mid</span>) <span class="op">&lt;</span> <span class="va">p</span>: <span class="va">lo</span> <span class="op">=</span> <span class="va">mid</span>
+        <span class="kw">else</span>: <span class="va">hi</span> <span class="op">=</span> <span class="va">mid</span>
+    <span class="kw">return</span> (<span class="va">lo</span><span class="op">+</span><span class="va">hi</span>)<span class="op">/</span><span class="nm">2</span>
+
+<span class="kw">def</span> <span class="fn">trunc_params</span>(<span class="va">mu</span>, <span class="va">sigma</span>, <span class="va">p_keep</span>):
+    <span class="va">zp</span>  <span class="op">=</span> <span class="fn">Phi_inv</span>(<span class="nm">1</span><span class="op">-</span><span class="va">p_keep</span>)
+    <span class="va">lam</span> <span class="op">=</span> <span class="fn">phi</span>(<span class="va">zp</span>) <span class="op">/</span> (<span class="nm">1</span><span class="op">-</span><span class="fn">Phi</span>(<span class="va">zp</span>))           <span class="cm"># Mills ratio</span>
+    <span class="va">mu2</span> <span class="op">=</span> <span class="va">mu</span> <span class="op">+</span> <span class="va">sigma</span><span class="op">*</span><span class="va">lam</span>
+    <span class="va">s2</span>  <span class="op">=</span> <span class="va">sigma</span><span class="op">**</span><span class="nm">2</span><span class="op">*</span>(<span class="nm">1</span> <span class="op">-</span> <span class="va">zp</span><span class="op">*</span><span class="va">lam</span> <span class="op">-</span> <span class="va">lam</span><span class="op">**</span><span class="nm">2</span>)
+    <span class="kw">return</span> <span class="va">mu2</span>, <span class="va">math</span>.<span class="fn">sqrt</span>(<span class="fn">max</span>(<span class="va">s2</span>,<span class="nm">1e-15</span>))
+
+<span class="kw">def</span> <span class="fn">survival_prob</span>(<span class="va">x0</span>, <span class="va">rounds</span>, <span class="va">mu0</span>, <span class="va">s0</span>):
+    <span class="cm"># P(x0 survives all rounds) — conditional composition</span>
+    <span class="va">prob</span> <span class="op">=</span> <span class="nm">1.0</span>
+    <span class="va">mu</span>, <span class="va">s</span> <span class="op">=</span> <span class="va">mu0</span>, <span class="va">s0</span>
+    <span class="kw">for</span> <span class="va">p_keep</span> <span class="kw">in</span> <span class="va">rounds</span>:
+        <span class="va">cutoff</span> <span class="op">=</span> <span class="va">mu</span> <span class="op">+</span> <span class="va">s</span><span class="op">*</span><span class="fn">Phi_inv</span>(<span class="nm">1</span><span class="op">-</span><span class="va">p_keep</span>)
+        <span class="cm"># P(x0 > cutoff) in ORIGINAL coordinates</span>
+        <span class="va">p_pass</span> <span class="op">=</span> <span class="nm">1</span> <span class="op">-</span> <span class="fn">Phi</span>((<span class="va">cutoff</span><span class="op">-</span><span class="va">x0</span>)<span class="op">/</span><span class="va">s0</span>)
+        <span class="cm"># but we need conditional on already being above prev cutoff</span>
+        <span class="cm"># --- COMPLETE THIS CONDITIONAL CHAIN ---</span>
+        <span class="va">mu</span>, <span class="va">s</span> <span class="op">=</span> <span class="fn">trunc_params</span>(<span class="va">mu</span>, <span class="va">s</span>, <span class="va">p_keep</span>)
+    <span class="kw">return</span> <span class="va">prob</span></code></pre>
+    </div>
+  </div>
+</div>
+
+<div class="section-gap"></div>
+
+<!-- ──────────── PROBLEM 5 ──────────── -->
+<div class="problem" id="p5" data-section="5">
+
+  <div class="problem-header">
+    <div class="problem-number">05</div>
+    <div class="problem-meta">
+      <h2 class="problem-title"><em>"When Uniforms Become Normal"</em></h2>
+      <div class="problem-subtitle">Central Limit Theorem · Irwin-Hall Distribution · Kolmogorov-Smirnov Distance · Convergence Rate</div>
+      <div class="toc-tags">
+        <span class="tag tag-uniform">Uniform</span>
+        <span class="tag tag-clt">CLT</span>
+        <span class="tag tag-algo">KS Statistic</span>
+        <span class="tag tag-algo">Exact vs Simulated</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="difficulty-row">
+    <span class="diff-label">Difficulty</span>
+    <div class="star-row">
+      <span class="star-lg filled">★</span><span class="star-lg filled">★</span>
+      <span class="star-lg filled">★</span><span class="star-lg filled">★</span>
+      <span class="star-lg filled">★</span>
+    </div>
+  </div>
+
+  <div class="section-label">Background</div>
+  <p class="prose">
+    The CLT says the standardized sum of n IID Uniform(0,1) variables converges to N(0,1). But <em>how fast?</em> The <strong>Kolmogorov-Smirnov distance</strong> Dₙ measures the worst-case gap between the empirical CDF and the normal. You will compute it exactly via the <strong>Irwin-Hall distribution</strong> and verify via simulation.
+  </p>
+
+  <div class="section-label">Key Formulae</div>
+  <div class="math-block">
+S_n  =  (Σ Uᵢ  −  n/2) / √(n/12)         <span class="comment">// Standardized sum of n Uniform(0,1)</span>
+
+D_n  =  sup_x |F_{S_n}(x) − Φ(x)|         <span class="comment">// KS distance</span>
+
+<span class="comment">// Exact Irwin-Hall CDF (sum of n uniforms at point x_raw):</span>
+P(S ≤ x)  =  (1/n!) · Σ_{k=0}^{⌊x⌋}  (−1)^k · C(n,k) · (x−k)^n
+
+<span class="comment">// Standardize: x_raw = z·√(n/12) + n/2, then apply above</span>
+<span class="comment">// Key finding: D_n ≈ C/n (not C/√n!) for uniform — superpolynomial convergence</span>
+  </div>
+
+  <div class="section-label">Input / Output</div>
+  <div class="io-grid">
+    <div class="io-box">
+      <div class="io-label input">Sample Input</div>
+      <div class="io-content">0.02 100000</div>
+    </div>
+    <div class="io-box">
+      <div class="io-label output">Sample Output</div>
+      <div class="io-content">n_min = 7
+n=1:  D_exact=0.207107  D_sim=0.207843
+n=2:  D_exact=0.124026  D_sim=0.124418
+n=4:  D_exact=0.063194  D_sim=0.063271
+n=7:  D_exact=0.019834  D_sim=0.020142
+n=8:  D_exact=0.017231  D_sim=0.017389</div>
+    </div>
+  </div>
+
+  <div class="section-label">Constraints</div>
+  <table class="constraints">
+    <tr><td>ε</td><td>0.001 ≤ ε ≤ 0.1</td></tr>
+    <tr><td>M (simulation trials)</td><td>10⁴ ≤ M ≤ 10⁶</td></tr>
+    <tr><td>n_min</td><td>guaranteed ≤ 1000</td></tr>
+    <tr><td>KS supremum</td><td>Check at inflection points of Irwin-Hall</td></tr>
+  </table>
+
+  <div class="aha-block">
+    <div class="aha-title"><span class="aha-bulb">💡</span> The AHA Moment</div>
+    <p class="aha-text">
+      Students expect CLT convergence at the Berry-Esseen rate O(1/√n). For the uniform distribution, convergence is <strong>O(1/n)</strong> — roughly twice as fast in log-log scale. This is because the uniform distribution is symmetric and has finite moments of all orders. The Berry-Esseen bound is not tight for well-behaved distributions. Seeing the convergence table and noticing the rate vastly outpaces 1/√n is the aha — one you can <em>prove computationally</em> before ever seeing the theory.
+    </p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggleCode(this)">
+    <span>▶ Starter Code (Python)</span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="code-wrapper">
+      <div class="code-header">
+        <div class="code-dots"><div class="code-dot dot-red"></div><div class="code-dot dot-yellow"></div><div class="code-dot dot-green"></div></div>
+        <div class="code-lang">Python 3</div>
+      </div>
+      <pre><code><span class="kw">import</span> <span class="va">math</span>, <span class="va">random</span>
+
+<span class="kw">def</span> <span class="fn">irwin_hall_cdf</span>(<span class="va">x</span>, <span class="va">n</span>):
+    <span class="cm"># Exact CDF of sum of n Uniform(0,1)</span>
+    <span class="kw">if</span> <span class="va">x</span> <span class="op">&lt;=</span> <span class="nm">0</span>: <span class="kw">return</span> <span class="nm">0.0</span>
+    <span class="kw">if</span> <span class="va">x</span> <span class="op">&gt;=</span> <span class="va">n</span>: <span class="kw">return</span> <span class="nm">1.0</span>
+    <span class="va">total</span> <span class="op">=</span> <span class="nm">0.0</span>
+    <span class="kw">for</span> <span class="va">k</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">int</span>(<span class="va">x</span>)<span class="op">+</span><span class="nm">1</span>):
+        <span class="va">total</span> <span class="op">+=</span> (<span class="op">-</span><span class="nm">1</span>)<span class="op">**</span><span class="va">k</span> <span class="op">*</span> <span class="va">math</span>.<span class="fn">comb</span>(<span class="va">n</span>,<span class="va">k</span>) <span class="op">*</span> (<span class="va">x</span><span class="op">-</span><span class="va">k</span>)<span class="op">**</span><span class="va">n</span>
+    <span class="kw">return</span> <span class="va">total</span> <span class="op">/</span> <span class="va">math</span>.<span class="fn">factorial</span>(<span class="va">n</span>)
+
+<span class="kw">def</span> <span class="fn">std_irwin_hall_cdf</span>(<span class="va">z</span>, <span class="va">n</span>):
+    <span class="va">x</span> <span class="op">=</span> <span class="va">z</span><span class="op">*</span><span class="va">math</span>.<span class="fn">sqrt</span>(<span class="va">n</span><span class="op">/</span><span class="nm">12</span>) <span class="op">+</span> <span class="va">n</span><span class="op">/</span><span class="nm">2</span>
+    <span class="kw">return</span> <span class="fn">irwin_hall_cdf</span>(<span class="va">x</span>, <span class="va">n</span>)
+
+<span class="kw">def</span> <span class="fn">ks_exact</span>(<span class="va">n</span>, <span class="va">num_pts</span><span class="op">=</span><span class="nm">2000</span>):
+    <span class="va">zs</span> <span class="op">=</span> [<span class="op">-</span><span class="nm">4</span><span class="op">+</span><span class="nm">8</span><span class="op">*</span><span class="va">i</span><span class="op">/</span><span class="va">num_pts</span> <span class="kw">for</span> <span class="va">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="va">num_pts</span><span class="op">+</span><span class="nm">1</span>)]
+    <span class="kw">return</span> <span class="fn">max</span>(<span class="fn">abs</span>(<span class="fn">std_irwin_hall_cdf</span>(<span class="va">z</span>,<span class="va">n</span>)<span class="op">-</span><span class="fn">Phi</span>(<span class="va">z</span>)) <span class="kw">for</span> <span class="va">z</span> <span class="kw">in</span> <span class="va">zs</span>)
+
+<span class="kw">def</span> <span class="fn">ks_simulate</span>(<span class="va">n</span>, <span class="va">M</span>):
+    <span class="va">zs</span> <span class="op">=</span> <span class="fn">sorted</span>(<span class="fn">sum</span>(<span class="fn">random</span>.<span class="fn">random</span>() <span class="kw">for</span> <span class="va">_</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="va">n</span>))
+                <span class="kw">for</span> <span class="va">_</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="va">M</span>))
+    <span class="va">zs</span> <span class="op">=</span> [(<span class="va">z</span><span class="op">-</span><span class="va">n</span><span class="op">/</span><span class="nm">2</span>)<span class="op">/</span><span class="va">math</span>.<span class="fn">sqrt</span>(<span class="va">n</span><span class="op">/</span><span class="nm">12</span>) <span class="kw">for</span> <span class="va">z</span> <span class="kw">in</span> <span class="va">zs</span>]
+    <span class="kw">return</span> <span class="fn">max</span>(<span class="fn">abs</span>((<span class="va">i</span><span class="op">+</span><span class="nm">1</span>)<span class="op">/</span><span class="va">M</span> <span class="op">-</span> <span class="fn">Phi</span>(<span class="va">z</span>)) <span class="kw">for</span> <span class="va">i</span>,<span class="va">z</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="va">zs</span>))
+
+<span class="cm"># --- YOUR CONVERGENCE SCAN AND TABLE HERE ---</span></code></pre>
+    </div>
+  </div>
+</div>
+
+<div class="section-gap"></div>
+
+<!-- ──────────── PROBLEM 6 ──────────── -->
+<div class="problem" id="p6" data-section="6">
+
+  <div class="problem-header">
+    <div class="problem-number">06</div>
+    <div class="problem-meta">
+      <h2 class="problem-title"><em>"The Exponential Renewal Oracle"</em></h2>
+      <div class="problem-subtitle">Exponential · Erlang-r · Poisson Connection · CLT Bridge · Convolution DP</div>
+      <div class="toc-tags">
+        <span class="tag tag-exp">Exponential</span>
+        <span class="tag tag-exp">Erlang-r</span>
+        <span class="tag tag-clt">CLT Bridge</span>
+        <span class="tag tag-algo">MLE</span>
+        <span class="tag tag-algo">Convolution DP</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="difficulty-row">
+    <span class="diff-label">Difficulty</span>
+    <div class="star-row">
+      <span class="star-lg filled">★</span><span class="star-lg filled">★</span>
+      <span class="star-lg filled">★</span><span class="star-lg filled">★</span>
+      <span class="star-lg filled">★</span>
+    </div>
+  </div>
+
+  <div class="section-label">Background</div>
+  <p class="prose">
+    A network processes packets. Each packet requires r exponential stages to complete (Erlang-r inter-arrival). This problem bridges all three distributions: Exponential arrivals → Erlang counting → Normal approximation (via CLT). You must estimate λ via MLE, compute exact Poisson probabilities for r=1, and handle the general Erlang case via convolution DP.
+  </p>
+
+  <div class="section-label">Three-Part Structure</div>
+  <div class="math-block">
+<span class="comment">// PART A: MLE for λ</span>
+λ̂  =  k / Σ Tᵢ                     <span class="comment">// Maximum Likelihood Estimator</span>
+
+<span class="comment">// PART B: Poisson counts when r = 1</span>
+P(N = m)  =  (λ̂W)^m · e^(−λ̂W) / m!
+
+<span class="comment">// PART C: Erlang-r CDF (r processing stages)</span>
+F_r(x)  =  1 − e^(−λx) · Σ_{j=0}^{r−1} (λx)^j / j!
+
+<span class="comment">// P(exactly m completions in [0,W]) = F_r^{*m}(W) − F_r^{*(m+1)}(W)</span>
+<span class="comment">// where * denotes convolution — compute via DP on time grid</span>
+
+<span class="comment">// As r→∞: inter-arrival time → N(r/λ, r/λ²) by CLT</span>
+<span class="comment">// Arrival process becomes nearly deterministic!</span>
+  </div>
+
+  <div class="section-label">Input / Output</div>
+  <div class="io-grid">
+    <div class="io-box">
+      <div class="io-label input">Sample Input</div>
+      <div class="io-content">5 1 10.0 5
+2.1 3.4 1.8 2.9 2.3
+0 1 2 3 4 5</div>
+    </div>
+    <div class="io-box">
+      <div class="io-label output">Sample Output</div>
+      <div class="io-content">lambda_hat = 0.393701
+P(N=0) = 0.017377
+P(N=1) = 0.068461
+P(N=2) = 0.134697
+P(N=3) = 0.176746
+P(N=4) = 0.173913
+P(N=5) = 0.136988</div>
+    </div>
+  </div>
+
+  <div class="section-label">Constraints</div>
+  <table class="constraints">
+    <tr><td>k (observations)</td><td>1 ≤ k ≤ 10,000</td></tr>
+    <tr><td>r (Erlang stages)</td><td>1 ≤ r ≤ 20</td></tr>
+    <tr><td>W (time window)</td><td>0 &lt; W ≤ 10,000</td></tr>
+    <tr><td>m (count queries)</td><td>0 ≤ m ≤ 200</td></tr>
+    <tr><td>DP grid resolution</td><td>~1000 points sufficient for W≤100</td></tr>
+  </table>
+
+  <div class="aha-block">
+    <div class="aha-title"><span class="aha-bulb">💡</span> The AHA Moment</div>
+    <p class="aha-text">
+      When r=1, Erlang → Exponential and counts → Poisson. As r→∞, the inter-arrival distribution becomes approximately <strong>Normal(r/λ, r/λ²)</strong> by the Central Limit Theorem, making packet arrivals <em>nearly deterministic</em>. This single problem traverses the entire journey: <strong>Exponential → Erlang → (CLT) → Normal</strong>. The three distributions of this lecture are secretly a single family parameterized by r. That unification — seeing all three as one — is the aha.
+    </p>
+  </div>
+
+  <button class="collapse-btn" onclick="toggleCode(this)">
+    <span>▶ Starter Code (Python)</span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="collapse-content">
+    <div class="code-wrapper">
+      <div class="code-header">
+        <div class="code-dots"><div class="code-dot dot-red"></div><div class="code-dot dot-yellow"></div><div class="code-dot dot-green"></div></div>
+        <div class="code-lang">Python 3</div>
+      </div>
+      <pre><code><span class="kw">import</span> <span class="va">math</span>
+
+<span class="kw">def</span> <span class="fn">erlang_cdf</span>(<span class="va">x</span>, <span class="va">r</span>, <span class="va">lam</span>):
+    <span class="cm"># F_r(x) = 1 - e^(-λx) · Σ_{j=0}^{r-1} (λx)^j / j!</span>
+    <span class="kw">if</span> <span class="va">x</span> <span class="op">&lt;=</span> <span class="nm">0</span>: <span class="kw">return</span> <span class="nm">0.0</span>
+    <span class="va">lx</span>  <span class="op">=</span> <span class="va">lam</span> <span class="op">*</span> <span class="va">x</span>
+    <span class="va">s</span>   <span class="op">=</span> <span class="nm">0.0</span>
+    <span class="va">term</span> <span class="op">=</span> <span class="nm">1.0</span>
+    <span class="kw">for</span> <span class="va">j</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="va">r</span>):
+        <span class="va">s</span> <span class="op">+=</span> <span class="va">term</span>
+        <span class="va">term</span> <span class="op">*=</span> <span class="va">lx</span> <span class="op">/</span> (<span class="va">j</span><span class="op">+</span><span class="nm">1</span>)
+    <span class="kw">return</span> <span class="nm">1.0</span> <span class="op">-</span> <span class="va">math</span>.<span class="fn">exp</span>(<span class="op">-</span><span class="va">lx</span>)<span class="op">*</span><span class="va">s</span>
+
+<span class="kw">def</span> <span class="fn">count_prob_dp</span>(<span class="va">m_max</span>, <span class="va">W</span>, <span class="va">r</span>, <span class="va">lam</span>, <span class="va">grid</span><span class="op">=</span><span class="nm">1000</span>):
+    <span class="cm"># P(exactly m completions in [0,W]) for m=0..m_max</span>
+    <span class="cm"># via convolution of Erlang-r CDFs on time grid</span>
+    <span class="va">dt</span>  <span class="op">=</span> <span class="va">W</span><span class="op">/</span><span class="va">grid</span>
+    <span class="va">ts</span>  <span class="op">=</span> [<span class="va">i</span><span class="op">*</span><span class="va">dt</span> <span class="kw">for</span> <span class="va">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="va">grid</span><span class="op">+</span><span class="nm">1</span>)]
+    <span class="cm"># conv[m][i] = P(m-th completion time ≤ ts[i])</span>
+    <span class="cm"># = m-fold convolution of Erlang-r CDF</span>
+    <span class="cm"># P(N=m in [0,W]) = conv[m][grid] - conv[m+1][grid]</span>
+    <span class="cm"># --- IMPLEMENT CONVOLUTION DP HERE ---</span>
+    <span class="kw">pass</span>
+
+<span class="cm"># MLE estimate</span>
+<span class="kw">def</span> <span class="fn">mle_lambda</span>(<span class="va">times</span>):
+    <span class="kw">return</span> <span class="fn">len</span>(<span class="va">times</span>) <span class="op">/</span> <span class="fn">sum</span>(<span class="va">times</span>)</code></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CONCEPT MAP ═══════════════ -->
+<div class="concept-map" id="p7" data-section="7">
+  <div class="concept-map-title">Coverage Matrix</div>
+  <div class="concept-map-sub">Which concepts each problem exercises and at what depth</div>
+  <div class="matrix-wrapper">
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>Problem</th>
+          <th>Uniform</th>
+          <th>Normal PDF</th>
+          <th>68-95-99.7</th>
+          <th>Z-score</th>
+          <th>Inv. CDF</th>
+          <th>Approximation</th>
+          <th>Exponential</th>
+          <th>Difficulty</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>P1 Ghost Measurements</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check-strong">✓✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td class="diff-cell">★★★☆☆</td>
+        </tr>
+        <tr>
+          <td>P2 Binomial Bridge</td>
+          <td>—</td>
+          <td><span class="check">✓</span></td>
+          <td>—</td>
+          <td><span class="check">✓</span></td>
+          <td>—</td>
+          <td><span class="check-strong">✓✓✓</span></td>
+          <td>—</td>
+          <td class="diff-cell">★★★★☆</td>
+        </tr>
+        <tr>
+          <td>P3 Invisible Boundary</td>
+          <td>—</td>
+          <td><span class="check-strong">✓✓</span></td>
+          <td>—</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check-strong">✓✓</span></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="diff-cell">★★★★☆</td>
+        </tr>
+        <tr>
+          <td>P4 Percentile Ladder</td>
+          <td>—</td>
+          <td><span class="check-strong">✓✓</span></td>
+          <td>—</td>
+          <td><span class="check-strong">✓✓</span></td>
+          <td><span class="check-strong">✓✓✓</span></td>
+          <td>—</td>
+          <td>—</td>
+          <td class="diff-cell">★★★★★</td>
+        </tr>
+        <tr>
+          <td>P5 Uniforms → Normal</td>
+          <td><span class="check-strong">✓✓✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td>—</td>
+          <td><span class="check">✓</span></td>
+          <td>—</td>
+          <td><span class="check-strong">✓✓</span></td>
+          <td>—</td>
+          <td class="diff-cell">★★★★★</td>
+        </tr>
+        <tr>
+          <td>P6 Renewal Oracle</td>
+          <td>—</td>
+          <td><span class="check">✓</span></td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="check-strong">✓✓✓</span></td>
+          <td class="diff-cell">★★★★★</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</main>
+<footer>
+  <div class="header-divider" style="margin-bottom:2rem;"></div>
+  <p class="footer-quote">"The goal is not to solve the problem — it is to see why the problem has exactly one elegant solution."</p>
+  <div class="footer-attr">— Reman Dey · IC252 Probability & Statistics</div>
+</footer>
+
+
+<script>
+  // Reading progress bar
+  window.addEventListener('scroll', () => {
+    const total = document.body.scrollHeight - window.innerHeight;
+    const pct = (window.scrollY / total) * 100;
+    document.getElementById('readingProgress').style.width = pct + '%';
+  });
+
+  // Intersection observer for problem reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.problem').forEach(p => observer.observe(p));
+
+  // Collapse/expand starter code
+  function toggleCode(btn) {
+    btn.classList.toggle('open');
+    const content = btn.nextElementSibling;
+    content.classList.toggle('open');
+    const arrow = btn.querySelector('.arrow');
+    const label = btn.querySelector('span:first-child');
+    if (content.classList.contains('open')) {
+      label.textContent = '▼ Starter Code (Python)';
+    } else {
+      label.textContent = '▶ Starter Code (Python)';
+    }
+  }
+
+  // Side nav scroll
+  const sections = [
+    document.getElementById('section-0'),
+    document.getElementById('p1'),
+    document.getElementById('p2'),
+    document.getElementById('p3'),
+    document.getElementById('p4'),
+    document.getElementById('p5'),
+    document.getElementById('p6'),
+    document.getElementById('p7'),
+  ];
+
+  function scrollToSection(i) {
+    if (sections[i]) sections[i].scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Active nav dot
+  const navDots = document.querySelectorAll('.nav-dot');
+  window.addEventListener('scroll', () => {
+    let current = 0;
+    sections.forEach((s, i) => {
+      if (s && window.scrollY >= s.offsetTop - 300) current = i;
+    });
+    navDots.forEach((d, i) => d.classList.toggle('active', i === current));
+  });
+</script>
+</body>
+</html>
