@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IC252 – Introduction to Statistics | INPHO-Style Problem Set</title>
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --accent: #1b4f72;
+    --accent2: #117a65;
+    --gold: #b7950b;
+    --light: #f0f4f8;
+    --border: #cbd5e0;
+    --sol-bg: #eaf6ff;
+    --warn: #784212;
+    --warn-bg: #fef9e7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Georgia", serif;
+    color: var(--ink);
+    background: #fff;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 32px;
+    line-height: 1.75;
+    font-size: 15.5px;
+  }
+  h1 {
+    font-size: 2rem;
+    color: var(--accent);
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #555;
+    font-style: italic;
+    margin-bottom: 6px;
+    font-size: 0.97rem;
+  }
+  .course-tag {
+    text-align: center;
+    color: var(--accent2);
+    font-size: 0.88rem;
+    font-family: monospace;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+  }
+  hr.divider {
+    border: none;
+    border-top: 2.5px solid var(--accent);
+    margin: 18px 0 36px 0;
+  }
+  .instructions {
+    background: var(--warn-bg);
+    border-left: 4px solid var(--gold);
+    border-radius: 4px;
+    padding: 14px 18px;
+    font-size: 0.93rem;
+    margin-bottom: 36px;
+    color: var(--warn);
+  }
+  .instructions b { color: #6e2f0a; }
+
+  /* Problem card */
+  .problem {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 42px;
+    overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  }
+  .prob-header {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: Arial, sans-serif;
+  }
+  .prob-header .pnum {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .prob-header .ptopic {
+    font-size: 0.82rem;
+    opacity: 0.82;
+    font-style: italic;
+  }
+  .prob-body {
+    padding: 20px 24px 14px 24px;
+    background: #fff;
+  }
+  .prob-intro {
+    margin-bottom: 14px;
+  }
+  .parts ol {
+    margin: 10px 0 0 22px;
+  }
+  .parts li {
+    margin-bottom: 8px;
+  }
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.93rem;
+  }
+  .data-table th {
+    background: var(--accent);
+    color: #fff;
+    padding: 7px 12px;
+    text-align: left;
+    font-family: Arial, sans-serif;
+    font-size: 0.85rem;
+  }
+  .data-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .data-table tr:nth-child(even) td { background: var(--light); }
+
+  /* Solution block */
+  details.solution {
+    margin-top: 14px;
+  }
+  details.solution summary {
+    cursor: pointer;
+    background: var(--accent2);
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    user-select: none;
+    list-style: none;
+  }
+  details.solution summary::-webkit-details-marker { display: none; }
+  details.solution summary::before {
+    content: "▶  ";
+    font-size: 0.7rem;
+  }
+  details[open].solution summary::before {
+    content: "▼  ";
+  }
+  .sol-body {
+    background: var(--sol-bg);
+    border: 1px solid #aed6f1;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding: 18px 22px;
+    font-size: 0.95rem;
+  }
+  .sol-part {
+    margin-bottom: 18px;
+  }
+  .sol-part:last-child { margin-bottom: 0; }
+  .sol-label {
+    font-weight: 700;
+    color: var(--accent);
+    font-family: Arial, sans-serif;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+  }
+  .key-result {
+    background: #d5f5e3;
+    border-left: 3px solid var(--accent2);
+    padding: 6px 12px;
+    border-radius: 3px;
+    font-weight: bold;
+    color: #117a65;
+    margin-top: 6px;
+    display: inline-block;
+    font-family: monospace;
+    font-size: 0.97rem;
+  }
+  .note {
+    background: #fef9e7;
+    border-left: 3px solid var(--gold);
+    padding: 6px 12px;
+    border-radius: 3px;
+    margin-top: 8px;
+    font-size: 0.88rem;
+    color: #7d6608;
+  }
+  .formula {
+    font-family: "Courier New", monospace;
+    background: #f0f0f0;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 0.93rem;
+  }
+  .math-block {
+    font-family: "Courier New", monospace;
+    background: #f0f4f8;
+    padding: 12px 16px;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-size: 0.93rem;
+    border: 1px solid var(--border);
+    white-space: pre-wrap;
+  }
+  .warning-note {
+    background: #fdedec;
+    border-left: 3px solid #e74c3c;
+    padding: 6px 12px;
+    border-radius: 3px;
+    margin-top: 8px;
+    font-size: 0.88rem;
+    color: #78281f;
+  }
+  .section-title {
+    font-size: 1.15rem;
+    color: var(--accent);
+    font-family: Arial, sans-serif;
+    margin: 40px 0 16px 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--accent);
+    letter-spacing: 0.2px;
+  }
+  .toc {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 24px;
+    margin-bottom: 36px;
+    font-size: 0.92rem;
+  }
+  .toc h3 {
+    font-family: Arial, sans-serif;
+    font-size: 0.95rem;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .toc ol { margin-left: 20px; }
+  .toc li { margin-bottom: 4px; }
+  .toc .topic { color: #666; font-style: italic; }
+
+  @media print {
+    details.solution { display: block; }
+    details.solution summary { display: none; }
+    .sol-body { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<h1>IC252 — Introduction to Statistics</h1>
+<p class="subtitle">Olympiad-Style Problem Set with Complete Solutions</p>
+<p class="course-tag">Think Unlimited · Descriptive Statistics · Distributions · Estimation</p>
+<hr class="divider">
+
+<div class="instructions">
+  <b>Instructions:</b> Each problem below is a multi-part analytical question in the style of the Indian National Physics Olympiad (INPHO) and Jinhui Wang problem sets — emphasizing <b>mathematical rigour, interpretation, and deep reasoning</b> over rote computation. Attempt each part before revealing the solution. Pay close attention to <b>edge cases</b>, <b>counterexamples</b>, and <b>conceptual traps</b> embedded in each problem.
+</div>
+
+<div class="toc">
+  <h3>🗂 Topics Covered</h3>
+  <ol>
+    <li>Problem 1 — <span class="topic">z-Scores, Relative Standing &amp; Comparisons</span></li>
+    <li>Problem 2 — <span class="topic">Measures of Central Tendency: Mean, Median, Mode</span></li>
+    <li>Problem 3 — <span class="topic">Levels of Measurement &amp; Appropriate Statistics</span></li>
+    <li>Problem 4 — <span class="topic">Quartiles, IQR, Outlier Detection &amp; the Five-Number Summary</span></li>
+    <li>Problem 5 — <span class="topic">Standard Deviation, Variance &amp; Degrees of Freedom</span></li>
+    <li>Problem 6 — <span class="topic">Coefficient of Variation &amp; Cross-Variable Comparison</span></li>
+    <li>Problem 7 — <span class="topic">Skewness, Box Plots &amp; Distribution Shape</span></li>
+    <li>Problem 8 — <span class="topic">Percentiles &amp; Quantile Reasoning</span></li>
+    <li>Problem 9 — <span class="topic">Properties of Mean &amp; Median Under Transformations</span></li>
+    <li>Problem 10 — <span class="topic">Synthesis: Complete Descriptive Analysis</span></li>
+  </ol>
+</div>
+
+
+<div class="problem">
+  <div class="prob-header">
+    <span class="pnum">Problem 1</span>
+    <span class="ptopic">z-Scores · Relative Standing · Interpretation</span>
+  </div>
+  <div class="prob-body">
+    <div class="prob-intro">
+      Three students — Arya, Bhanu, and Charu — each take a different university-level statistics exam on the same day. Their raw scores and class statistics are shown below:
+    </div>
+    <table class="data-table">
+      <tr><th>Student</th><th>Raw Score</th><th>Class Mean (μ)</th><th>Class Std Dev (σ)</th></tr>
+      <tr><td>Arya</td><td>72</td><td>60</td><td>8</td></tr>
+      <tr><td>Bhanu</td><td>85</td><td>78</td><td>14</td></tr>
+      <tr><td>Charu</td><td>91</td><td>88</td><td>4</td></tr>
+    </table>
+    <div class="parts">
+      <ol type="a">
+        <li>Compute the z-score for each student. Round to two decimal places.</li>
+        <li>Rank the three students by their relative performance within their respective classes. Who performed best relative to their peers?</li>
+        <li>Arya's professor offers to add a flat bonus of +10 marks to every student's score. Does Arya's z-score change? Justify rigorously using the definition of z-score.</li>
+        <li>Charu's class switches to a grading scheme where every score is doubled. What is Charu's new z-score? What general principle does this illustrate?</li>
+        <li>Suppose a fourth student, Dev, has a z-score of −2.3. What raw score did Dev earn if his class mean was 70 and standard deviation was 10? Interpret what this score means in plain language.</li>
+      </ol>
+    </div>
+    <details class="solution">
+      <summary>▶ Reveal Full Solution</summary>
+      <div class="sol-body">
+        <div class="sol-part">
+          <div class="sol-label">(a) Computing z-scores</div>
+          The z-score formula is <span class="formula">z = (X − μ) / σ</span>.
+          <div class="math-block">Arya:   z = (72 − 60) / 8  = 12/8  = 1.50
+Bhanu:  z = (85 − 78) / 14 = 7/14  = 0.50
+Charu:  z = (91 − 88) / 4  = 3/4   = 0.75</div>
+          <span class="key-result">z_Arya = 1.50 | z_Bhanu = 0.50 | z_Charu = 0.75</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(b) Ranking by relative performance</div>
+          A higher z-score means farther above the class mean. Ranking: <b>Arya (1.50) &gt; Charu (0.75) &gt; Bhanu (0.50)</b>. Despite Charu's higher raw score (91) and Bhanu's second-highest raw score (85), Arya performed the best relative to her class because her raw score was 1.5 standard deviations above her class mean — the largest relative margin.
+          <div class="note">⚠️ Raw scores alone are meaningless for cross-class comparison. z-scores put all students on a common scale.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(c) Adding a flat bonus of +10</div>
+          If every score increases by a constant <em>c</em>, the new mean becomes <span class="formula">μ' = μ + c</span> and the new standard deviation is unchanged (<span class="formula">σ' = σ</span>). Therefore:
+          <div class="math-block">z' = (X + c − (μ + c)) / σ = (X − μ) / σ = z</div>
+          <span class="key-result">Arya's z-score remains exactly 1.50.</span>
+          <p style="margin-top:8px">A uniform shift of origin does not change relative standing — everyone moves equally.</p>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(d) Doubling all scores</div>
+          If every score is multiplied by <em>k = 2</em>, the new mean is <span class="formula">μ' = 2μ = 176</span> and the new standard deviation is <span class="formula">σ' = 2σ = 8</span>. Charu's new score is <span class="formula">2 × 91 = 182</span>.
+          <div class="math-block">z' = (182 − 176) / 8 = 6/8 = 0.75</div>
+          <span class="key-result">z-score is unchanged: 0.75</span>
+          <p style="margin-top:8px"><b>Principle:</b> Multiplying all data by a nonzero constant scales both the mean and standard deviation equally, leaving z-scores invariant. The z-score is dimensionless and scale-free.</p>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(e) Recovering Dev's raw score from his z-score</div>
+          Rearranging <span class="formula">z = (X − μ) / σ</span>:
+          <div class="math-block">X = μ + z·σ = 70 + (−2.3)(10) = 70 − 23 = 47</div>
+          <span class="key-result">Dev's raw score = 47</span>
+          <p style="margin-top:8px"><b>Interpretation:</b> Dev scored 23 points below the class average, placing him 2.3 standard deviations below the mean. In a roughly normal distribution, fewer than ~2% of students would score this low, indicating Dev performed in the bottom tail of his class.</p>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROBLEM 2 -->
+<!-- ============================================================ -->
+<div class="problem">
+  <div class="prob-header">
+    <span class="pnum">Problem 2</span>
+    <span class="ptopic">Mean · Median · Mode · Robustness to Outliers</span>
+  </div>
+  <div class="prob-body">
+    <div class="prob-intro">
+      The annual salaries (in ₹ lakhs) of 9 employees at a startup are:
+      <div class="math-block">4, 5, 5, 6, 7, 8, 8, 9, 60</div>
+    </div>
+    <div class="parts">
+      <ol type="a">
+        <li>Calculate the mean, median, and mode. Show all working.</li>
+        <li>The CEO (earning ₹60 lakhs) leaves. Recalculate all three measures for the remaining 8 employees. By what percentage does the mean change? By what percentage does the median change?</li>
+        <li>Which measure — mean or median — is a more honest representation of the "typical" salary in the original dataset? Justify using the concept of skewness.</li>
+        <li>A new employee joins at ₹7 lakhs (the original dataset is restored without the CEO, but with the new employee). The dataset is now: 4, 5, 5, 6, 7, 7, 8, 8, 9. Without computing the mean explicitly, use the <em>shift-of-origin property</em> to determine the new mean, given that the mean of the original 8 employees (post-CEO departure) was 6.625.</li>
+        <li>True or False: For any dataset, the sum of deviations from the mean is always zero. Prove it algebraically.</li>
+      </ol>
+    </div>
+    <details class="solution">
+      <summary>▶ Reveal Full Solution</summary>
+      <div class="sol-body">
+        <div class="sol-part">
+          <div class="sol-label">(a) Original dataset: 4, 5, 5, 6, 7, 8, 8, 9, 60 (n = 9)</div>
+          <div class="math-block">Sum = 4+5+5+6+7+8+8+9+60 = 112
+Mean  = 112 / 9 ≈ 12.44 lakhs
+Median = 5th value (ordered) = 7 lakhs
+Mode  = 5 and 8 (bimodal)</div>
+          <span class="key-result">Mean ≈ ₹12.44L | Median = ₹7L | Mode = ₹5L and ₹8L</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(b) After CEO leaves: 4, 5, 5, 6, 7, 8, 8, 9 (n = 8)</div>
+          <div class="math-block">Sum = 52
+Mean  = 52/8 = 6.625 lakhs
+Median = (6+7)/2 = 6.5 lakhs
+
+% change in mean   = (12.44 − 6.625)/12.44 × 100 ≈ 46.7%
+% change in median = (7 − 6.5)/7 × 100 ≈ 7.1%</div>
+          <span class="key-result">Mean dropped ~46.7% | Median dropped only ~7.1%</span>
+          <p style="margin-top:8px">One extreme outlier caused almost a 47% shift in the mean but barely affected the median — a vivid demonstration of the median's robustness.</p>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(c) Which is more representative?</div>
+          The original dataset is <b>heavily right-skewed</b> (mean ≫ median, due to the ₹60L outlier). In such distributions, the mean is pulled far to the right by the outlier, overestimating the salary of a typical employee. The median (₹7L) accurately reflects what most employees earn.
+          <div class="note">📌 This is why national income reports use <em>median household income</em>, not mean — the mean is distorted by the ultra-wealthy.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(d) Shift-of-origin to find new mean</div>
+          The 8 employees have mean = 6.625. Adding one employee at 7 lakhs gives n = 9. The new mean is:
+          <div class="math-block">New mean = (8 × 6.625 + 7) / 9 = (53 + 7) / 9 = 60/9 ≈ 6.667 lakhs</div>
+          <span class="key-result">New mean ≈ ₹6.667 lakhs</span>
+          <div class="note">We used the property: new mean = (old sum + new value) / new n, without re-summing all values.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(e) Proof: Sum of deviations from mean = 0</div>
+          <div class="math-block">Σᵢ (Xᵢ − X̄) = Σᵢ Xᵢ − Σᵢ X̄
+            = n·X̄ − n·X̄    [since X̄ = (ΣXᵢ)/n ⟹ ΣXᵢ = n·X̄]
+            = 0  ✓</div>
+          <span class="key-result">TRUE — always exactly zero, for any dataset.</span>
+          <p style="margin-top:8px">This is why we cannot use the average of deviations as a measure of spread — we must square them first (variance) or take absolute values (mean absolute deviation).</p>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROBLEM 3 -->
+<!-- ============================================================ -->
+<div class="problem">
+  <div class="prob-header">
+    <span class="pnum">Problem 3</span>
+    <span class="ptopic">Levels of Measurement · Data Types · Appropriate Statistics</span>
+  </div>
+  <div class="prob-body">
+    <div class="prob-intro">
+      A researcher collects the following variables for a study on university students:
+    </div>
+    <table class="data-table">
+      <tr><th>#</th><th>Variable</th><th>Sample Values</th></tr>
+      <tr><td>1</td><td>Department</td><td>CSE, EEE, MECH, CIVIL</td></tr>
+      <tr><td>2</td><td>Year of study</td><td>1st, 2nd, 3rd, 4th</td></tr>
+      <tr><td>3</td><td>Temperature of lab (°C)</td><td>22, 23, 25, 19</td></tr>
+      <tr><td>4</td><td>Monthly pocket money (₹)</td><td>2000, 3500, 0, 5000</td></tr>
+      <tr><td>5</td><td>Whether student owns a laptop</td><td>Yes, No, Yes, Yes</td></tr>
+    </table>
+    <div class="parts">
+      <ol type="a">
+        <li>Classify each of the five variables as Nominal, Ordinal, Interval, or Ratio. Justify each classification rigorously — pay special attention to the "true zero" criterion.</li>
+        <li>For each variable, state which measure(s) of central tendency (mean, median, mode) are <em>mathematically meaningful</em> and which are not. Explain any exceptions.</li>
+        <li>A student argues: "Since Year of Study takes values 1, 2, 3, 4, I can compute the mean and say the average student is in Year 2.5." Is this valid? Why or why not?</li>
+        <li>Variable 5 (laptop ownership) is binary. Encode "Yes" = 1, "No" = 0. Given the sample above (Yes, No, Yes, Yes), compute the mean of the encoded data. What does this number represent in practical terms?</li>
+        <li>Can you compute a meaningful ratio like "Lab at 25°C is 25% warmer than at 20°C"? Why or why not? Which variable type would support such a ratio?</li>
+      </ol>
+    </div>
+    <details class="solution">
+      <summary>▶ Reveal Full Solution</summary>
+      <div class="sol-body">
+        <div class="sol-part">
+          <div class="sol-label">(a) Classification</div>
+          <table class="data-table" style="margin-top:8px">
+            <tr><th>Variable</th><th>Level</th><th>Key Reason</th></tr>
+            <tr><td>Department</td><td><b>Nominal</b></td><td>Named categories with no natural order; CSE ≠ &gt; EEE</td></tr>
+            <tr><td>Year of Study</td><td><b>Ordinal</b></td><td>Ordered (1st &lt; 2nd &lt; 3rd), but gaps between years are not equal in meaning</td></tr>
+            <tr><td>Temp (°C)</td><td><b>Interval</b></td><td>Equal units (1°C = 1°C everywhere), but 0°C does not mean "no temperature" — zero is arbitrary</td></tr>
+            <tr><td>Pocket Money (₹)</td><td><b>Ratio</b></td><td>True zero exists (₹0 = no money), ratios are meaningful (₹5000 is 2.5× ₹2000)</td></tr>
+            <tr><td>Laptop Ownership</td><td><b>Nominal (Binary)</b></td><td>Dichotomous category; no ordering, no scale</td></tr>
+          </table>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(b) Appropriate measures of central tendency</div>
+          <table class="data-table" style="margin-top:8px">
+            <tr><th>Variable</th><th>Mode</th><th>Median</th><th>Mean</th></tr>
+            <tr><td>Department (Nominal)</td><td>✅ Only valid option</td><td>❌ No ordering</td><td>❌ Not meaningful</td></tr>
+            <tr><td>Year of Study (Ordinal)</td><td>✅</td><td>✅ Ordering exists</td><td>⚠️ Technically invalid (unequal gaps)</td></tr>
+            <tr><td>Temp (°C) (Interval)</td><td>✅</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Pocket Money (Ratio)</td><td>✅</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Laptop Ownership (Binary)</td><td>✅ (Majority category)</td><td>⚠️ Tells only majority</td><td>✅ Gives proportion</td></tr>
+          </table>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(c) Is mean of Year of Study valid?</div>
+          <b>Not rigorously valid.</b> Year of study is an <em>ordinal</em> variable. While the labels 1, 2, 3, 4 are numbers, the difference between "1st year" and "2nd year" is not necessarily the same in academic workload, course count, or difficulty as between "3rd year" and "4th year." The arithmetic mean assumes equal intervals — a property ordinal data does not guarantee. "Year 2.5" has no real-world meaning.
+          <div class="warning-note">⚠️ Encoding ordinal categories as numbers and computing their mean is a common but questionable practice. It requires the assumption of equal spacing.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(d) Mean of binary variable</div>
+          Encoding: Yes=1, No=0 → data: 1, 0, 1, 1
+          <div class="math-block">Mean = (1+0+1+1)/4 = 3/4 = 0.75</div>
+          <span class="key-result">Mean = 0.75 = 75% of students own a laptop</span>
+          <p style="margin-top:8px">The mean of a binary 0/1 variable equals the <em>proportion</em> of "1"s in the sample. This is the one case where the mean is meaningful for nominal data.</p>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(e) Ratio comparison for Celsius temperature</div>
+          <b>No.</b> Celsius is an <em>interval</em> scale — it lacks a true zero. 0°C does not mean "no heat"; it is the arbitrary freezing point of water. Therefore, ratios like "25°C is 25% warmer than 20°C" are <em>mathematically invalid</em>.
+          <p style="margin-top:8px">To make meaningful temperature ratios, you must convert to Kelvin (a <em>ratio</em> scale with absolute zero): 25°C = 298 K, 20°C = 293 K → ratio = 298/293 ≈ 1.017, i.e., only ~1.7% warmer in absolute thermodynamic terms.</p>
+          <span class="key-result">Only Ratio scales support meaningful ratio comparisons.</span>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROBLEM 4 -->
+<!-- ============================================================ -->
+<div class="problem">
+  <div class="prob-header">
+    <span class="pnum">Problem 4</span>
+    <span class="ptopic">Quartiles · IQR · Five-Number Summary · Outlier Detection</span>
+  </div>
+  <div class="prob-body">
+    <div class="prob-intro">
+      The daily rainfall (mm) recorded at a Himalayan weather station over 15 consecutive days is:
+      <div class="math-block">3, 7, 7, 12, 15, 18, 22, 25, 28, 30, 35, 42, 58, 80, 140</div>
+    </div>
+    <div class="parts">
+      <ol type="a">
+        <li>Compute Q1, Q2 (Median), and Q3 using the split-at-median method. Show the partitioning clearly.</li>
+        <li>Compute the IQR. Using the standard 1.5 × IQR rule, identify all outliers (suspected and extreme). Show the fence calculations.</li>
+        <li>Construct the five-number summary. Based on the relative distances Q1→Median vs. Median→Q3 and Q3→fence vs. fence→Q1, determine the skewness of the distribution without computing Pearson's coefficient.</li>
+        <li>If a 16th observation of 200 mm is added (a cloudburst event), which changes more — the IQR or the range? Quantify both changes.</li>
+        <li>A meteorologist claims: "The IQR tells us about the variability of all 15 days." Critique this claim, explaining what the IQR actually captures and what it misses.</li>
+      </ol>
+    </div>
+    <details class="solution">
+      <summary>▶ Reveal Full Solution</summary>
+      <div class="sol-body">
+        <div class="sol-part">
+          <div class="sol-label">(a) Quartiles (n = 15)</div>
+          <div class="math-block">Ordered: 3, 7, 7, 12, 15 | 18, 22, 25, 28, 30 | 35, 42, 58, 80, 140
+                                    Lower half             Median             Upper half
+
+Q2 (Median) = 8th value = 25 mm
+Lower half: 3, 7, 7, 12, 15  → Q1 = 7 mm  (3rd value of 5)
+Upper half: 35, 42, 58, 80, 140 → Q3 = 58 mm (3rd value of 5)</div>
+          <span class="key-result">Q1 = 7 mm | Q2 = 25 mm | Q3 = 58 mm</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(b) IQR and Outlier Detection</div>
+          <div class="math-block">IQR = Q3 − Q1 = 58 − 7 = 51 mm
+
+Lower fence = Q1 − 1.5×IQR = 7 − 76.5 = −69.5 mm  (impossible for rainfall)
+Upper fence = Q3 + 1.5×IQR = 58 + 76.5 = 134.5 mm
+
+Extreme fence = Q3 + 3×IQR = 58 + 153 = 211 mm
+
+Values beyond upper fence (134.5 mm): 140 mm
+Values beyond extreme fence (211 mm): none</div>
+          <span class="key-result">140 mm is a suspected outlier. No extreme outliers.</span>
+          <div class="note">Lower fence is negative — physically impossible for rainfall — so no low-end outliers exist.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(c) Five-Number Summary and Skewness</div>
+          <div class="math-block">Five-Number Summary: 3 | 7 | 25 | 58 | 140
+
+Lower spread: Q2 − Q1 = 25 − 7 = 18 mm
+Upper spread: Q3 − Q2 = 58 − 25 = 33 mm  (upper > lower)
+
+Whisker: Q3 → max = 140 − 58 = 82 mm  (long upper whisker)
+Whisker: min → Q1 = 7 − 3 = 4 mm  (very short lower whisker)</div>
+          <b>Conclusion:</b> The box is asymmetric (upper half larger), and the upper whisker is dramatically longer. <span class="key-result">Distribution is strongly right-skewed (positively skewed).</span>
+          <p style="margin-top:8px">This makes physical sense — rainfall has a hard lower bound of 0 mm but no upper limit (cloudburst events extend the right tail).</p>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(d) Adding 200 mm observation</div>
+          <div class="math-block">Original Range = 140 − 3 = 137 mm
+New Range = 200 − 3 = 197 mm  → Change = +60 mm
+
+For n=16, new Q1 and Q3 must be recomputed:
+Ordered (n=16): 3,7,7,12,15,18,22 | 25,28 | 30,35,42,58,80,140,200
+New Q1 = median of lower 8: (12+15)/2 = 13.5 mm
+New Q3 = median of upper 8: (58+80)/2 = 69 mm
+New IQR = 69 − 13.5 = 55.5 mm
+
+Original IQR = 51 mm → Change = +4.5 mm</div>
+          <span class="key-result">Range increased by 60 mm | IQR increased by only 4.5 mm</span>
+          <p style="margin-top:8px">The range is extremely sensitive to the new outlier. The IQR, covering only the middle 50%, is largely resistant to it.</p>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(e) Critique of the meteorologist's claim</div>
+          The claim is <b>partially incorrect</b>. The IQR describes the spread of only the <em>central 50%</em> of observations. It effectively ignores the bottom 25% and top 25% — the very extreme events that matter most to a meteorologist studying floods or droughts. In this dataset, IQR = 51 mm but the range is 137 mm; the IQR tells us nothing about the extreme rainfall of 80 or 140 mm. For applications where tails matter (risk, flood planning), range, 90th/99th percentiles, or full distributional analysis are needed.
+          <div class="note">The IQR is robust to outliers precisely because it excludes them — a feature, not a bug, in some contexts; a critical limitation in others.</div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROBLEM 5 -->
+<!-- ============================================================ -->
+<div class="problem">
+  <div class="prob-header">
+    <span class="pnum">Problem 5</span>
+    <span class="ptopic">Standard Deviation · Variance · Degrees of Freedom · Least Squares</span>
+  </div>
+  <div class="prob-body">
+    <div class="prob-intro">
+      Two machines at a factory produce ball bearings. Their diameters (in mm) over 6 production runs are recorded:
+    </div>
+    <table class="data-table">
+      <tr><th>Run</th><th>Machine A (mm)</th><th>Machine B (mm)</th></tr>
+      <tr><td>1</td><td>10.1</td><td>9.5</td></tr>
+      <tr><td>2</td><td>10.0</td><td>11.0</td></tr>
+      <tr><td>3</td><td>9.9</td><td>10.2</td></tr>
+      <tr><td>4</td><td>10.2</td><td>8.8</td></tr>
+      <tr><td>5</td><td>10.0</td><td>10.5</td></tr>
+      <tr><td>6</td><td>9.8</td><td>10.0</td></tr>
+    </table>
+    <div class="parts">
+      <ol type="a">
+        <li>Compute the sample mean and sample standard deviation for each machine. Use n−1 in the denominator.</li>
+        <li>Which machine produces more consistent ball bearings? Justify numerically.</li>
+        <li>Why do we divide by (n−1) and not n when computing the sample standard deviation? Explain the concept of degrees of freedom in this context.</li>
+        <li>If the target diameter is 10.0 mm, compute the sum of squared deviations <span class="formula">Σ(Xᵢ − 10.0)²</span> for Machine A. Now compute <span class="formula">Σ(Xᵢ − X̄_A)²</span>. Which is larger? What fundamental property of the mean does this illustrate?</li>
+        <li>Both machines are recalibrated, increasing every reading by 0.5 mm. How do the standard deviations change?</li>
+      </ol>
+    </div>
+    <details class="solution">
+      <summary>▶ Reveal Full Solution</summary>
+      <div class="sol-body">
+        <div class="sol-part">
+          <div class="sol-label">(a) Means and Standard Deviations</div>
+          <div class="math-block">Machine A: Σ = 10.1+10.0+9.9+10.2+10.0+9.8 = 60.0
+  X̄_A = 60.0/6 = 10.0 mm
+
+  Deviations: 0.1, 0, −0.1, 0.2, 0, −0.2
+  Squared: 0.01, 0, 0.01, 0.04, 0, 0.04  → Σ = 0.10
+  s²_A = 0.10/5 = 0.02   →   s_A = √0.02 ≈ 0.141 mm
+
+Machine B: Σ = 9.5+11.0+10.2+8.8+10.5+10.0 = 60.0
+  X̄_B = 60.0/6 = 10.0 mm
+
+  Deviations: −0.5, 1.0, 0.2, −1.2, 0.5, 0.0
+  Squared: 0.25, 1.00, 0.04, 1.44, 0.25, 0.00 → Σ = 2.98
+  s²_B = 2.98/5 = 0.596   →   s_B = √0.596 ≈ 0.772 mm</div>
+          <span class="key-result">s_A ≈ 0.141 mm | s_B ≈ 0.772 mm | Both have X̄ = 10.0 mm</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(b) Which machine is more consistent?</div>
+          Both machines have the <em>same mean</em> (10.0 mm), but Machine A has a standard deviation of only 0.141 mm vs. Machine B's 0.772 mm — more than 5× larger. <span class="key-result">Machine A is far more consistent.</span> Despite producing identical average diameters, Machine B's bearings vary wildly, making them unsuitable for precision manufacturing.
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(c) Why n−1? Degrees of Freedom</div>
+          When we compute a sample standard deviation, we first estimate the population mean μ using the sample mean X̄. This estimation "uses up" one piece of information — once we fix X̄ from n data points, only (n−1) of the deviations <span class="formula">(Xᵢ − X̄)</span> are free to vary (the last one is determined by the constraint that they sum to zero). Hence we have only <b>n−1 degrees of freedom</b>.
+          <p style="margin-top:8px">Dividing by n instead of n−1 produces a <em>biased</em> estimator that systematically underestimates the population variance σ². Dividing by (n−1) corrects this bias, making s² an <em>unbiased estimator</em> of σ².</p>
+          <span class="key-result">n−1 ensures s² is an unbiased estimator of σ²</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(d) Least Squares Property of the Mean</div>
+          <div class="math-block">Σ(Xᵢ − 10.0)² = (0.1)²+(0)²+(−0.1)²+(0.2)²+(0)²+(−0.2)²
+                         = 0.01+0+0.01+0.04+0+0.04 = 0.10
+
+Σ(Xᵢ − X̄_A)² = same calculation since X̄_A = 10.0 = 0.10
+
+[In general: if target ≠ X̄, Σ(Xᵢ − target)² > Σ(Xᵢ − X̄)²]</div>
+          Here the target happens to equal the mean, so both sums are equal. This illustrates the <b>least squares property</b>: <em>the sample mean minimises the sum of squared deviations</em>. No other value, when subtracted from each data point and squared, produces a smaller sum. This is a defining optimality property of the mean.
+          <span class="key-result">Σ(Xᵢ − c)² is minimised when c = X̄</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(e) Adding 0.5 mm to all readings</div>
+          Adding a constant to every value shifts the mean but does not change the spread. Standard deviation measures how data points deviate <em>from the mean</em>; if all values shift by the same amount, each deviation <span class="formula">(Xᵢ + 0.5) − (X̄ + 0.5) = Xᵢ − X̄</span> is unchanged.
+          <span class="key-result">Standard deviations remain unchanged: s_A ≈ 0.141 mm, s_B ≈ 0.772 mm</span>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROBLEM 6 -->
+<!-- ============================================================ -->
+<div class="problem">
+  <div class="prob-header">
+    <span class="pnum">Problem 6</span>
+    <span class="ptopic">Coefficient of Variation · Cross-Domain Comparison</span>
+  </div>
+  <div class="prob-body">
+    <div class="prob-intro">
+      An investor is comparing the risk of three different assets. Historical monthly returns (%) are summarized as:
+    </div>
+    <table class="data-table">
+      <tr><th>Asset</th><th>Mean Monthly Return (%)</th><th>Std Dev (%)</th></tr>
+      <tr><td>Government Bond</td><td>0.40</td><td>0.10</td></tr>
+      <tr><td>Blue-Chip Stock</td><td>1.80</td><td>0.60</td></tr>
+      <tr><td>Crypto Token</td><td>5.00</td><td>18.00</td></tr>
+    </table>
+    <div class="parts">
+      <ol type="a">
+        <li>Compute the Coefficient of Variation (CV) for each asset. Show the formula and calculation.</li>
+        <li>Rank the three assets from least to most risky using CV. Does this ranking differ from the ranking by standard deviation alone? What does this reveal?</li>
+        <li>The Crypto Token has a much higher standard deviation than the Bond. A naïve analyst declares: "Crypto is obviously the worst investment because its standard deviation is 180× larger." What is wrong with this reasoning? Use CV to rebut.</li>
+        <li>A fourth asset has CV = 50%. If its mean return is 3%, what is its standard deviation?</li>
+        <li>In what scenario would CV be a misleading or inappropriate measure of relative variability?</li>
+      </ol>
+    </div>
+    <details class="solution">
+      <summary>▶ Reveal Full Solution</summary>
+      <div class="sol-body">
+        <div class="sol-part">
+          <div class="sol-label">(a) Computing CV = (s / X̄) × 100%</div>
+          <div class="math-block">Government Bond:  CV = (0.10 / 0.40) × 100 = 25.0%
+Blue-Chip Stock:  CV = (0.60 / 1.80) × 100 = 33.3%
+Crypto Token:     CV = (18.00 / 5.00) × 100 = 360.0%</div>
+          <span class="key-result">CV: Bond = 25% | Stock = 33.3% | Crypto = 360%</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(b) Risk ranking by CV vs. by std dev</div>
+          <div class="math-block">By std dev:  Bond (0.10) < Stock (0.60) < Crypto (18.00)
+By CV:       Bond (25%) < Stock (33.3%) < Crypto (360%)</div>
+          In this case both rankings agree. However, CV provides additional insight: the Crypto Token is not merely 18× riskier than the Bond in absolute terms — per unit of expected return, it carries 360/25 = <b>14.4× more relative risk</b>. The CV properly normalises risk per unit of reward.
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(c) Rebutting the naïve analyst</div>
+          The analyst compares standard deviations across assets with very different scales of return. Crypto's std dev of 18% is large, but its mean return is also 5% — vs. Bond's mean of only 0.40%. A fair comparison must normalise by the mean (CV). The Bond's CV = 25% means for every 1% of expected return, there is 0.25% of risk. Crypto's CV = 360% means for every 1% of expected return, there is 3.6% of risk. The Bond carries far less risk <em>per unit of expected return</em>. The analyst's comparison is like comparing the weight fluctuation of a mouse (±5g) to an elephant (±10kg) and declaring the elephant is "heavier in every way" — context matters.
+          <div class="note">CV = (risk per unit of return) × 100. Lower CV = more efficient risk-to-reward profile.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(d) Finding std dev from CV and mean</div>
+          <div class="math-block">CV = (s / X̄) × 100
+50 = (s / 3) × 100
+s = 50 × 3 / 100 = 1.5%</div>
+          <span class="key-result">Standard deviation = 1.5%</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(e) When is CV misleading?</div>
+          CV is problematic when:
+          <ul style="margin-left:20px; margin-top:6px">
+            <li><b>Mean ≈ 0:</b> If the mean return is close to zero or negative (e.g., an asset losing money on average), CV becomes meaningless or infinite — dividing by a near-zero denominator produces absurd numbers.</li>
+            <li><b>Data can take negative values:</b> CV assumes the mean is positive and meaningful as a denominator. For temperatures in Celsius (which can be negative), CV has no coherent interpretation.</li>
+            <li><b>Comparing variables of different sign conventions</b> (e.g., gains vs. losses).</li>
+          </ul>
+          <div class="warning-note">⚠️ CV = s/X̄ is dimensionless and powerful, but assumes a positive, meaningful mean. Always check this assumption first.</div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROBLEM 7 -->
+<!-- ============================================================ -->
+<div class="problem">
+  <div class="prob-header">
+    <span class="pnum">Problem 7</span>
+    <span class="ptopic">Skewness · Box Plot Interpretation · Distribution Shape</span>
+  </div>
+  <div class="prob-body">
+    <div class="prob-intro">
+      The time (in hours) taken by 12 software engineers to complete a coding challenge is:
+      <div class="math-block">1.5, 2.0, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 8.0, 24.0</div>
+    </div>
+    <div class="parts">
+      <ol type="a">
+        <li>Compute the mean and median. Based on their relationship, predict the direction of skewness.</li>
+        <li>Compute Q1, Q3, and IQR. Using the 1.5×IQR rule, check whether 24.0 hours is an outlier.</li>
+        <li>Construct the five-number summary. If you were to sketch a box plot, describe — without drawing — where the median line would sit within the box and which whisker would be longer.</li>
+        <li>The manager removes the engineer who took 24 hours from the dataset. Without full recomputation, predict (qualitatively) what happens to: (i) the mean, (ii) the median, (iii) the standard deviation, (iv) the skewness.</li>
+        <li>Give one real-world context each for a naturally right-skewed and a naturally left-skewed variable, explaining why the bound on one side forces the tail to extend on the other.</li>
+      </ol>
+    </div>
+    <details class="solution">
+      <summary>▶ Reveal Full Solution</summary>
+      <div class="sol-body">
+        <div class="sol-part">
+          <div class="sol-label">(a) Mean, Median, and Skewness Prediction</div>
+          <div class="math-block">Sum = 1.5+2+2+2.5+3+3.5+4+4.5+5+6+8+24 = 66.0
+Mean   = 66.0/12 = 5.50 hours
+Median = average of 6th and 7th values = (3.5+4.0)/2 = 3.75 hours</div>
+          Since <b>Mean (5.50) &gt; Median (3.75)</b>, the distribution is <span class="key-result">right-skewed (positively skewed)</span>. The 24-hour outlier pulls the mean rightward while barely affecting the median.
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(b) IQR and Outlier Check</div>
+          <div class="math-block">Lower 6 values: 1.5, 2, 2, 2.5, 3, 3.5  → Q1 = (2+2.5)/2 = 2.25 hrs
+Upper 6 values: 4, 4.5, 5, 6, 8, 24   → Q3 = (5+6)/2 = 5.5 hrs
+IQR = 5.5 − 2.25 = 3.25 hrs
+
+Upper fence = Q3 + 1.5×IQR = 5.5 + 4.875 = 10.375 hrs
+
+24.0 > 10.375 hrs  →  24.0 hours IS a suspected outlier ✓</div>
+          <span class="key-result">24.0 hours is confirmed as a suspected outlier.</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(c) Five-Number Summary and Box Plot Description</div>
+          <div class="math-block">Min | Q1 | Median | Q3 | Max
+1.5 | 2.25 | 3.75 | 5.5 | 24.0</div>
+          <b>Box plot description:</b> The box spans from 2.25 to 5.5 hours (IQR = 3.25 hrs). The median line at 3.75 hours sits <em>closer to Q1</em> than to Q3 (distance from Q1: 1.5 hrs; distance to Q3: 1.75 hrs), indicating slight asymmetry even within the box. The right whisker would extend to the fence at ~10.375 hrs (since the next-largest value is 8, which is inside the fence), while the left whisker extends to 1.5 hrs. The value 24.0 would be plotted as a separate dot (outlier). The right whisker is considerably longer.
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(d) Removing the 24-hour engineer — qualitative effects</div>
+          <ul style="margin-left:20px; margin-top:6px">
+            <li><b>(i) Mean:</b> Drops significantly. The outlier 24.0 contributed (24−5.5) = 18.5 hours above the mean. New mean = (66−24)/11 = 42/11 ≈ 3.82 hrs — a large decrease.</li>
+            <li><b>(ii) Median:</b> Shifts slightly. With 11 observations, the new median is the 6th value = 3.5 hrs (was 3.75). Small change — the median is robust.</li>
+            <li><b>(iii) Standard Deviation:</b> Decreases substantially. The 24-hour value was 18.5 hours above the mean; removing it dramatically reduces the sum of squared deviations.</li>
+            <li><b>(iv) Skewness:</b> Decreases (distribution becomes more symmetric). The right tail shrinks; mean and median move closer together.</li>
+          </ul>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(e) Real-world examples of skewed distributions</div>
+          <b>Right-skewed:</b> Income/wealth. The lower bound is ₹0 (you can't earn negative income), but there is no upper limit — a few billionaires extend the right tail to enormous values. Most people earn modest amounts, creating a long right tail.
+          <p style="margin-top:8px"><b>Left-skewed:</b> Test scores on a very easy exam. The upper bound is 100% — scores cannot exceed this. Most students score near the top (90–100%), while a few who struggle extend the left tail toward lower marks. The ceiling compresses the right side and forces the tail leftward.</p>
+          <div class="note">📌 The key insight: a hard boundary on one side forces the tail to extend toward the opposite side.</div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROBLEM 8 -->
+<!-- ============================================================ -->
+<div class="problem">
+  <div class="prob-header">
+    <span class="pnum">Problem 8</span>
+    <span class="ptopic">Percentiles · Quantiles · Application to Real Datasets</span>
+  </div>
+  <div class="prob-body">
+    <div class="prob-intro">
+      A national entrance exam was taken by 10,000 students. A student, Priya, scored 347 marks.
+    </div>
+    <div class="parts">
+      <ol type="a">
+        <li>If Priya is in the 82nd percentile, how many students scored <em>below</em> her? How many scored above? How many scored the same or higher?</li>
+        <li>Another student, Rohan, is in the 99th percentile with a score of 490. A third student, Sita, scored 350 (3 marks more than Priya) but is only in the 83rd percentile. What does the small percentile gap between Priya and Sita tell you about the density of the score distribution near 347–350?</li>
+        <li>Monsoon rainfall data is classified using P90, P95, and P99.99 thresholds for "heavy rainfall," "extreme rainfall," and "cloudburst events" respectively. In a region with 1000 historical daily rainfall readings, how many days had rainfall classified as at least "extreme" (≥ P95)?</li>
+        <li>A student scored at the 50th percentile. Is their score necessarily equal to the mean? Justify your answer using a skewed distribution example.</li>
+        <li>Deciles divide a dataset into 10 equal parts. What is the relationship between the 5th decile (D5), the 2nd quartile (Q2), and the 50th percentile (P50)? Are they always identical?</li>
+      </ol>
+    </div>
+    <details class="solution">
+      <summary>▶ Reveal Full Solution</summary>
+      <div class="sol-body">
+        <div class="sol-part">
+          <div class="sol-label">(a) Counts from percentile rank</div>
+          <div class="math-block">82nd percentile means 82% of students scored below Priya.
+
+Students below Priya   = 0.82 × 10,000 = 8,200 students
+Students above Priya   = 10,000 − 8,200 − (those at same score)
+                       ≈ 1,800 students (exactly if no ties at 347)
+Students at or above   ≈ 1,800 students</div>
+          <span class="key-result">~8,200 below | ~1,800 at or above</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(b) Density of the distribution near Priya's score</div>
+          Priya (347, P82) and Sita (350, P83) differ by only 1 percentile despite a 3-mark difference. This means only about 0.01 × 10,000 = <b>100 students</b> scored between 347 and 350. The distribution is <em>sparse</em> in this region. Contrast this with regions where many students cluster (e.g., a jump from P50 to P55 might cover just 2 marks in a dense middle region). Percentile rank changes fast where students are densely packed and slowly where they are sparse.
+          <div class="note">📌 Percentile rank is essentially the empirical CDF — it moves fastest where the distribution is most dense.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(c) Counting extreme rainfall days</div>
+          <div class="math-block">P95 threshold: 95% of days have rainfall BELOW this level.
+Days at or ABOVE P95 = (100 − 95)% × 1000 = 5% × 1000 = 50 days
+
+These 50 days include:
+  - "Extreme rainfall" (P95 to P99.99)
+  - "Cloudburst events" (above P99.99)</div>
+          <span class="key-result">At least 50 days had "at least extreme" rainfall (≥ P95).</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(d) 50th percentile ≠ mean in skewed distributions</div>
+          The 50th percentile (median) is the value at which half the data falls above and half below. The mean is the arithmetic average. <b>They coincide only in symmetric distributions.</b>
+          <p style="margin-top:8px">Example: Salaries: ₹20K, ₹25K, ₹30K, ₹35K, ₹500K (n=5). Median = ₹30K (50th percentile). Mean = ₹122K. These are drastically different. A student at the 50th percentile earned exactly ₹30K, not ₹122K.</p>
+          <span class="key-result">In right-skewed data: mean &gt; median. Scores at P50 ≠ mean.</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(e) D5 = Q2 = P50</div>
+          Yes — they are all the same value, by definition:
+          <div class="math-block">P50  = value below which 50% of data lies
+Q2   = value that splits data into two equal halves (= median)
+D5   = 5th of 10 equal parts → boundary between bottom 50% and top 50%
+
+∴ D5 = Q2 = P50 = Median — always identical.</div>
+          <span class="key-result">D5 = Q2 = P50 = Median — all three refer to the same quantity.</span>
+          <div class="note">Similarly: Q1 = P25 = D2.5 (2.5th decile). Q3 = P75 = D7.5.</div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROBLEM 9 -->
+<!-- ============================================================ -->
+<div class="problem">
+  <div class="prob-header">
+    <span class="pnum">Problem 9</span>
+    <span class="ptopic">Properties of Mean &amp; Median · Linear Transformations</span>
+  </div>
+  <div class="prob-body">
+    <div class="prob-intro">
+      A dataset of n = 5 observations has: mean X̄ = 40, median = 36, and standard deviation s = 8.
+    </div>
+    <div class="parts">
+      <ol type="a">
+        <li>Every observation is increased by 15. State the new mean, median, and standard deviation. No computation is needed — derive from transformation properties.</li>
+        <li>Every observation is multiplied by 3. State the new mean, median, and standard deviation.</li>
+        <li>The transformation Y = 2X − 10 is applied to every observation. Find the new mean, median, variance (s²), and CV. (Original variance s² = 64.)</li>
+        <li>The median of the transformed data in (c) equals 2×36 − 10 = 62. Verify that this is consistent with the general rule for linear transformations of the median.</li>
+        <li>A statistician applies the transformation Z = (X − X̄)/s to all observations (standardisation). What are the mean, standard deviation, and variance of Z? Why is this transformation important?</li>
+      </ol>
+    </div>
+    <details class="solution">
+      <summary>▶ Reveal Full Solution</summary>
+      <div class="sol-body">
+        <div class="sol-part">
+          <div class="sol-label">(a) Adding 15 to every observation</div>
+          Adding a constant c shifts the location measures by c but doesn't affect spread.
+          <div class="math-block">New mean    = 40 + 15 = 55
+New median  = 36 + 15 = 51
+New std dev = 8 (unchanged — spread is unaffected by shift)</div>
+          <span class="key-result">Mean = 55 | Median = 51 | s = 8</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(b) Multiplying every observation by 3</div>
+          Multiplying by k scales both location and spread by |k|.
+          <div class="math-block">New mean    = 3 × 40 = 120
+New median  = 3 × 36 = 108
+New std dev = 3 × 8  = 24  (s scales with |k|)
+New variance = 9 × 64 = 576  (variance scales with k²)</div>
+          <span class="key-result">Mean = 120 | Median = 108 | s = 24 | s² = 576</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(c) Transformation Y = 2X − 10</div>
+          For Y = aX + b: new mean = aX̄ + b, new std dev = |a|×s, new variance = a²×s².
+          <div class="math-block">New mean    = 2×40 − 10 = 70
+New median  = 2×36 − 10 = 62
+New std dev = 2×8 = 16
+New variance = 4×64 = 256
+New CV      = (16/70)×100 = 22.9%
+
+Original CV = (8/40)×100 = 20.0%</div>
+          <span class="key-result">Mean=70 | Median=62 | s=16 | s²=256 | CV≈22.9%</span>
+          <div class="note">Note: CV changes because the shift (−10) affects the mean but not the std dev. CV is not invariant to location shifts.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(d) Verification of linear transformation rule for median</div>
+          The general rule: if Y = aX + b, then <span class="formula">Median_Y = a × Median_X + b</span>. This holds because:
+          <ul style="margin-left:20px; margin-top:6px">
+            <li>Multiplying by a (positive) preserves the order of observations</li>
+            <li>Adding b shifts all values equally</li>
+            <li>The middle value of the transformed data is the transformation of the middle value of the original data</li>
+          </ul>
+          Therefore: Median_Y = 2×36 − 10 = 62. ✓ Consistent with the rule.
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(e) Standardisation: Z = (X − X̄)/s</div>
+          This is the linear transformation Y = (1/s)X − (X̄/s), i.e., a = 1/s, b = −X̄/s.
+          <div class="math-block">Mean of Z   = (1/s)×X̄ + (−X̄/s) = X̄/s − X̄/s = 0
+Std dev of Z = |1/s|×s = 1
+Variance of Z = 1² = 1</div>
+          <span class="key-result">Mean of Z = 0 | Std Dev of Z = 1 | Variance = 1</span>
+          <p style="margin-top:8px"><b>Importance:</b> Standardisation converts any variable into a dimensionless z-score, enabling comparison across variables measured in different units and scales. It is the foundation of z-tests, normal tables, and principal component analysis. All z-scores share the same scale, making cross-variable and cross-study comparisons rigorous.</p>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROBLEM 10 -->
+<!-- ============================================================ -->
+<div class="problem">
+  <div class="prob-header">
+    <span class="pnum">Problem 10</span>
+    <span class="ptopic">Synthesis · Complete Descriptive Analysis · Inference from Summary Statistics</span>
+  </div>
+  <div class="prob-body">
+    <div class="prob-intro">
+      Two researchers study response times (in seconds) for users of a website. They collect samples and report only summary statistics (no raw data):
+    </div>
+    <table class="data-table">
+      <tr><th>Statistic</th><th>Server A</th><th>Server B</th></tr>
+      <tr><td>n</td><td>100</td><td>100</td></tr>
+      <tr><td>Mean</td><td>3.2 s</td><td>3.2 s</td></tr>
+      <tr><td>Median</td><td>3.1 s</td><td>2.1 s</td></tr>
+      <tr><td>Mode</td><td>3.0 s</td><td>1.5 s</td></tr>
+      <tr><td>Std Dev</td><td>0.4 s</td><td>2.8 s</td></tr>
+      <tr><td>Min</td><td>2.0 s</td><td>0.5 s</td></tr>
+      <tr><td>Max</td><td>4.5 s</td><td>18.0 s</td></tr>
+      <tr><td>Q1</td><td>2.9 s</td><td>1.2 s</td></tr>
+      <tr><td>Q3</td><td>3.5 s</td><td>4.0 s</td></tr>
+    </table>
+    <div class="parts">
+      <ol type="a">
+        <li>For each server, determine the skewness direction using both (i) the mean-vs-median criterion and (ii) the box plot asymmetry (Q2 position within the box and whisker lengths). Do both methods agree?</li>
+        <li>Compute the IQR and CV for each server. What do these tell you about reliability?</li>
+        <li>Using the 1.5×IQR rule, check whether the maximum values (4.5s and 18.0s) are outliers for their respective servers.</li>
+        <li>The engineering team must choose one server for a real-time application where user experience requires <em>consistently fast</em> response times. Which server should they choose and why? Construct a comprehensive argument using at least four statistical measures.</li>
+        <li>A manager argues: "Both servers have a mean of 3.2s, so they perform identically." Construct a formal statistical refutation of this claim, identifying every piece of evidence in the summary statistics that contradicts it.</li>
+      </ol>
+    </div>
+    <details class="solution">
+      <summary>▶ Reveal Full Solution</summary>
+      <div class="sol-body">
+        <div class="sol-part">
+          <div class="sol-label">(a) Skewness determination</div>
+          <b>Server A:</b>
+          <ul style="margin-left:20px; margin-top:4px">
+            <li>Mean (3.2) ≈ Median (3.1) → nearly symmetric, slight right skew</li>
+            <li>Q2−Q1 = 3.1−2.9 = 0.2 s; Q3−Q2 = 3.5−3.1 = 0.4 s; Upper whisker: 4.5−3.5 = 1.0 s; Lower whisker: 2.9−2.0 = 0.9 s → mild right skew</li>
+          </ul>
+          <b>Server B:</b>
+          <ul style="margin-left:20px; margin-top:4px">
+            <li>Mean (3.2) &gt;&gt; Median (2.1) → strong right skew</li>
+            <li>Q2−Q1 = 2.1−1.2 = 0.9 s; Q3−Q2 = 4.0−2.1 = 1.9 s (upper much larger); Upper whisker: 18.0−4.0 = 14.0 s; Lower whisker: 1.2−0.5 = 0.7 s → extreme right skew</li>
+          </ul>
+          <span class="key-result">Both methods agree: A ≈ symmetric; B is heavily right-skewed.</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(b) IQR and CV</div>
+          <div class="math-block">Server A:  IQR = 3.5 − 2.9 = 0.6 s
+           CV  = (0.4/3.2) × 100 = 12.5%
+
+Server B:  IQR = 4.0 − 1.2 = 2.8 s
+           CV  = (2.8/3.2) × 100 = 87.5%</div>
+          Server A's IQR is 4.7× smaller (much tighter middle 50%), and its CV is 7× lower. Both confirm Server A is dramatically more consistent per unit of mean response time.
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(c) Outlier check via 1.5×IQR rule</div>
+          <div class="math-block">Server A: Upper fence = Q3 + 1.5×IQR = 3.5 + 0.9 = 4.4 s
+  Max = 4.5 s > 4.4 s  →  4.5 s IS a suspected outlier (barely)
+
+Server B: Upper fence = Q3 + 1.5×IQR = 4.0 + 4.2 = 8.2 s
+  Max = 18.0 s > 8.2 s  →  18.0 s IS a suspected outlier (severely)
+  Extreme fence = 4.0 + 3×2.8 = 12.4 s → 18.0 > 12.4 → EXTREME outlier</div>
+          <span class="key-result">Server A: 1 mild outlier | Server B: 1 extreme outlier (18.0s)</span>
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(d) Engineering recommendation</div>
+          <b>Choose Server A</b>, based on every relevant dimension:
+          <ol style="margin-left:20px; margin-top:6px">
+            <li><b>Std Dev:</b> A = 0.4s vs. B = 2.8s. Server B's variability is 7× larger.</li>
+            <li><b>IQR:</b> A = 0.6s vs. B = 2.8s. Even the middle 50% of B's responses are highly variable.</li>
+            <li><b>Maximum:</b> A's worst case is 4.5s. B's worst case is 18.0s — 4× worse. For real-time apps, worst-case latency matters enormously.</li>
+            <li><b>Skewness:</b> B's strong right skew means frequent spikes (the mean is pulled to 3.2s by rare 18s responses). A is symmetric — predictable.</li>
+            <li><b>CV:</b> A = 12.5% (excellent consistency) vs. B = 87.5% (highly erratic per unit of mean).</li>
+          </ol>
+          Server B sometimes responds faster (mode = 1.5s) but is wildly inconsistent. A real-time application requires <em>predictable</em> performance, not occasionally fast performance. Server A wins comprehensively.
+        </div>
+        <div class="sol-part">
+          <div class="sol-label">(e) Formal refutation of the manager's claim</div>
+          The manager's claim relies solely on the mean — a single statistic that collapses all distributional information into one number. Here is every piece of evidence against his claim:
+          <ol style="margin-left:20px; margin-top:6px">
+            <li><b>Median:</b> A = 3.1s, B = 2.1s. The typical (middle) response is 1 second faster on B, yet B's mean equals A's due to extreme tail events. The servers are not equivalent for the typical user.</li>
+            <li><b>Standard deviation:</b> 0.4s vs. 2.8s — a factor of 7 difference in spread.</li>
+            <li><b>Maximum:</b> 4.5s vs. 18.0s — Server B occasionally fails catastrophically.</li>
+            <li><b>Skewness:</b> A is symmetric; B is right-skewed. Identical means can coexist with radically different shapes.</li>
+            <li><b>IQR:</b> 0.6s vs. 2.8s — the middle 50% of users experience vastly different service on each server.</li>
+            <li><b>Outliers:</b> B has an extreme outlier at 18s inflating its mean to match A's. Remove outliers and B's mean would be &lt; A's.</li>
+          </ol>
+          <div class="warning-note">⚠️ The mean is not a sufficient description of any distribution. Two distributions with identical means can differ in median, spread, shape, outliers, and skewness — making them statistically and practically incomparable based on mean alone.</div>
+          <span class="key-result">The manager's claim is statistically unfounded on 6 independent dimensions.</span>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<hr class="divider" style="margin-top:40px">
+<p style="text-align:center; color:#888; font-size:0.85rem; font-style:italic;">
+  IC252 · Introduction to Statistics · Think Unlimited · Problem Set prepared in Olympiad Style(made by Reman Dey(hehe) with Claude sonnet 4.6 llm(locally hoisted))
+</p>
+
+</body>
+</html>
