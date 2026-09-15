@@ -1,6 +1,7 @@
-# Physics / Mathematics Problem Archive
+# Problem Archive
 
 A **100% static, GitHub Pages–compatible** library of standalone HTML question papers.
+<img width="1590" height="942" alt="image" src="https://github.com/user-attachments/assets/9d767459-1c67-4947-8a2d-5e8e45d8ab01" />
 
 No backend. No database. No build step. No frameworks. No npm install.
 Just `HTML + CSS + vanilla JS`, with MathJax loaded from CDN inside papers only.
