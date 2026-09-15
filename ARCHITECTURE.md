@@ -93,8 +93,8 @@ editor, no PDF pipeline, no client-side routing.
 3. Loads + executes assets/js/archive.js
        │
 4. archive.js:
-     buildFilters()  → creates 6 buttons (All, Physics, Mathematics,
-                       Computer Science, Machine Learning, Other)
+      buildFilters()  → creates 7 buttons (All, Physics, Mathematics,
+                        Computer Science, Machine Learning, Electronics, Other)
      render()        → filters papers by (category × query)
                      → builds <li class="paper-entry"> per match
                        (number, title, classification, facts,
@@ -163,14 +163,14 @@ Plain IIFE, `"use strict"`, zero dependencies (~173 lines). State:
 - `activeCategory` (default `"All"`), `query` (lowercased input).
 
 Constants: `FILTERS = ["All", "Physics", "Mathematics", "Computer Science",
-"Machine Learning", "Other"]`.
+"Machine Learning", "Electronics", "Other"]`.
 
 Functions:
 
 | Function | Behaviour |
 |---|---|
 | `normalise(s)` | `String(s ?? "").toLowerCase()` — all matching is case-insensitive. |
-| `paperMatchesCategory(p, cat)` | `All` → true. `Other` → true iff `category + " " + level` contains none of the four known tokens. Otherwise substring test for the category token. |
+| `paperMatchesCategory(p, cat)` | `All` → true. `Other` → true iff `category + " " + level` contains none of the five known tokens. Otherwise substring test for the category token. |
 | `paperMatchesQuery(p, q)` | Splits query on whitespace; **every** token must appear somewhere in `title + category + level + description + difficulty`. Empty query matches all. |
 | `factsLine(p)` | Joins non-empty `problems + " problems"`, `difficulty`, `year` with `·`. |
 | `classificationLine(p)` | Joins non-empty `category`, `level` with `·`. |

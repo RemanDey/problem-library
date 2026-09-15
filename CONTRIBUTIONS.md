@@ -174,7 +174,7 @@ Derived from `papers/example_paper.html` — when in doubt, copy it.
 - Descriptions: 1–2 sentences, plain text (no HTML — rendered via
   `textContent`), no trailing hype.
 - Categories: prefer existing buckets (`Physics`, `Mathematics`,
-  `Computer Science`, `Machine Learning`, `Other`, or combinations like
+  `Computer Science`, `Machine Learning`, `Electronics`, `Other`, or combinations like
   `Mathematics / Machine Learning`). New buckets require an `archive.js`
   filter change — mention it in your PR.
 - Difficulty: reuse the vocabulary already in the array

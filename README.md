@@ -42,7 +42,7 @@ static server. Deploy by pushing to GitHub and enabling Pages.
 - **Searchable catalogue** — tokenised AND-search across title, category,
   level, description, and difficulty (`assets/js/archive.js`).
 - **Subject filters** — All, Physics, Mathematics, Computer Science,
-  Machine Learning, Other. Matching is substring-based on
+  Machine Learning, Electronics, Other. Matching is substring-based on
   `category + level`, so `Mathematics / Machine Learning` appears under both
   Mathematics and Machine Learning.
 - **Auto-numbered entries** — `01`, `02`, … generated at render time; no
@@ -210,10 +210,10 @@ Each object in the `papers` array:
 `assets/js/archive.js` → `paperMatchesCategory()`:
 
 - `All` matches everything.
-- `Physics`, `Mathematics`, `Computer Science`, `Machine Learning` match if
+- `Physics`, `Mathematics`, `Computer Science`, `Machine Learning`, `Electronics` match if
   the lowercased `category + " " + level` contains that token. So
   `category: "Mathematics / Machine Learning"` joins **both** filters.
-- `Other` matches papers containing **none** of the four known tokens —
+- `Other` matches papers containing **none** of the five known tokens —
   e.g. `category: "Other"` or anything bespoke.
 
 To add a new filter bucket, edit the `FILTERS` array in `archive.js` and

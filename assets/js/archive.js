@@ -30,7 +30,7 @@
   var activeCategory = "All";
   var query = "";
 
-  var FILTERS = ["All", "Physics", "Mathematics", "Computer Science", "Machine Learning", "Other"];
+  var FILTERS = ["All", "Physics", "Mathematics", "Computer Science", "Machine Learning", "Electronics", "Other"];
 
   function normalise(s) {
     return String(s == null ? "" : s).toLowerCase();
@@ -40,7 +40,7 @@
     if (cat === "All") return true;
     var hay = normalise(p.category) + " " + normalise(p.level);
     if (cat === "Other") {
-      var known = ["physics", "mathematics", "computer science", "machine learning"];
+      var known = ["physics", "mathematics", "computer science", "machine learning", "electronics"];
       return !known.some(function (k) { return hay.indexOf(k) !== -1; });
     }
     return hay.indexOf(normalise(cat)) !== -1;
