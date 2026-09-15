@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microcontroller Olympiad — Problem Set</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1117;
+    --surface2: #111820;
+    --border: #1a2535;
+    --border-bright: #1e3a5f;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --accent3: #39ff14;
+    --text: #c8d8e8;
+    --text-dim: #5a7a9a;
+    --text-bright: #e8f4ff;
+    --gold: #ffd700;
+    --red: #ff4757;
+    --mono: 'Share Tech Mono', monospace;
+    --heading: 'Rajdhani', sans-serif;
+    --body: 'Rajdhani', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* CIRCUIT GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(0,100,180,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(0,212,255,0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(0,212,255,0.05) 0%, transparent 100%);
+    text-align: center;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: 'EMBEDDED SYSTEMS // COMPETITIVE PROBLEM SET // OLYMPIAD LEVEL';
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    opacity: 0.7;
+  }
+
+  .header-title {
+    font-family: var(--heading);
+    font-size: clamp(32px, 5vw, 58px);
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 2px;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .header-title span {
+    color: var(--accent);
+    display: block;
+    font-size: 0.55em;
+    font-weight: 300;
+    letter-spacing: 6px;
+    margin-top: 8px;
+  }
+
+  .header-subtitle {
+    font-family: var(--mono);
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-top: 20px;
+    letter-spacing: 1px;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+  }
+
+  .meta-chip {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid var(--border-bright);
+    padding: 6px 14px;
+    letter-spacing: 2px;
+    background: rgba(0,212,255,0.04);
+  }
+
+  /* NAVIGATION / PROGRESS */
+  .progress-bar-container {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8,12,16,0.95);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    backdrop-filter: blur(10px);
+  }
+
+  .progress-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  .solved-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent3);
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  /* MAIN CONTENT */
+  main {
+    position: relative;
+    z-index: 10;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 50px 30px 80px;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 60px 0 30px;
+  }
+
+  .section-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    opacity: 0.7;
+    white-space: nowrap;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border-bright), transparent);
+  }
+
+  .section-title {
+    font-family: var(--heading);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* QUESTION CARDS */
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+    position: relative;
+    transition: border-color 0.3s ease;
+    overflow: hidden;
+  }
+
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .question-card:hover::before { opacity: 1; }
+  .question-card:hover { border-color: var(--border-bright); }
+
+  .question-card.solved {
+    border-color: rgba(57,255,20,0.2);
+  }
+  .question-card.solved::before {
+    background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+    opacity: 1;
+  }
+
+  /* QUESTION HEADER */
+  .question-header {
+    padding: 24px 28px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .q-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    flex-shrink: 0;
+    margin-top: 4px;
+    opacity: 0.8;
+  }
+
+  .q-content { flex: 1; }
+
+  .q-title {
+    font-family: var(--heading);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .q-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    letter-spacing: 1px;
+    border: 1px solid;
+  }
+
+  .tag-protocol { color: #00d4ff; border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.05); }
+  .tag-arch { color: #ff6b35; border-color: rgba(255,107,53,0.3); background: rgba(255,107,53,0.05); }
+  .tag-hw { color: #a855f7; border-color: rgba(168,85,247,0.3); background: rgba(168,85,247,0.05); }
+  .tag-system { color: #ffd700; border-color: rgba(255,215,0,0.3); background: rgba(255,215,0,0.05); }
+  .tag-synthesis { color: #39ff14; border-color: rgba(57,255,20,0.3); background: rgba(57,255,20,0.05); }
+  .tag-hard { color: #ff4757; border-color: rgba(255,71,87,0.3); background: rgba(255,71,87,0.05); }
+
+  /* QUESTION BODY */
+  .question-body {
+    padding: 0 28px 8px 68px;
+  }
+
+  .scenario-box {
+    background: rgba(0,212,255,0.04);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .scenario-box.orange { border-left-color: var(--accent2); background: rgba(255,107,53,0.04); }
+  .scenario-box.green { border-left-color: var(--accent3); background: rgba(57,255,20,0.04); }
+  .scenario-box.gold { border-left-color: var(--gold); background: rgba(255,215,0,0.04); }
+
+  .sub-question {
+    margin-bottom: 16px;
+    padding-left: 0;
+  }
+
+  .sub-label {
+    font-family: var(--mono);
+    color: var(--accent2);
+    font-size: 13px;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+
+  .sub-text {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  .sub-text em {
+    color: var(--accent);
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .sub-text strong {
+    color: var(--text-bright);
+    font-weight: 600;
+  }
+
+  .hint-text {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    border: 1px dashed var(--border-bright);
+    padding: 8px 14px;
+    margin-top: 8px;
+    display: inline-block;
+  }
+
+  /* SOLUTION TOGGLE BUTTON */
+  .solution-toggle-wrapper {
+    padding: 16px 28px 20px 68px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .solution-toggle {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--border-bright);
+    color: var(--text-dim);
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .solution-toggle::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: translateX(-101%);
+    transition: transform 0.25s ease;
+    z-index: 0;
+    opacity: 0.08;
+  }
+
+  .solution-toggle:hover::before { transform: translateX(0); }
+  .solution-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .solution-toggle.revealed {
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+
+  .toggle-icon {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+    z-index: 1;
+    position: relative;
+  }
+
+  .toggle-icon.open { transform: rotate(90deg); }
+
+  .toggle-text { z-index: 1; position: relative; }
+
+  /* SOLUTION PANEL */
+  .solution-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+    background: var(--surface2);
+    border-top: 1px solid transparent;
+  }
+
+  .solution-panel.open {
+    max-height: 8000px;
+    border-top-color: var(--border);
+  }
+
+  .solution-inner {
+    padding: 28px 28px 28px 68px;
+  }
+
+  .solution-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .solution-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(57,255,20,0.3), transparent);
+  }
+
+  .sol-part {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sol-part:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .sol-part-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .sol-text {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.75;
+  }
+
+  .sol-text strong { color: var(--text-bright); font-weight: 600; }
+  .sol-text em { color: var(--accent); font-style: normal; }
+
+  .sol-highlight {
+    background: rgba(0,212,255,0.06);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    line-height: 1.6;
+  }
+
+  .sol-highlight.green {
+    background: rgba(57,255,20,0.06);
+    border-left-color: var(--accent3);
+    color: var(--accent3);
+  }
+
+  .sol-highlight.orange {
+    background: rgba(255,107,53,0.06);
+    border-left-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  .sol-highlight.gold {
+    background: rgba(255,215,0,0.06);
+    border-left-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .aha-moment {
+    background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(255,107,53,0.05));
+    border: 1px solid rgba(255,215,0,0.2);
+    padding: 16px 20px;
+    margin-top: 16px;
+    position: relative;
+  }
+
+  .aha-moment::before {
+    content: '★ AHA MOMENT';
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    background: var(--surface2);
+    padding: 0 8px;
+  }
+
+  .aha-moment p {
+    font-size: 14px;
+    color: var(--gold);
+    line-height: 1.65;
+  }
+
+  /* DATA TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .data-table th {
+    background: rgba(0,212,255,0.08);
+    color: var(--accent);
+    padding: 10px 14px;
+    text-align: left;
+    letter-spacing: 2px;
+    border: 1px solid var(--border-bright);
+    font-size: 11px;
+  }
+
+  .data-table td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+
+  .data-table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.015);
+  }
+
+  /* CODE INLINE */
+  code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: rgba(0,212,255,0.08);
+    color: var(--accent);
+    padding: 2px 6px;
+    border: 1px solid rgba(0,212,255,0.15);
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  /* BONUS STYLING */
+  .bonus-card {
+    background: linear-gradient(135deg, rgba(255,215,0,0.04), rgba(255,107,53,0.03));
+    border: 1px solid rgba(255,215,0,0.2);
+  }
+
+  .bonus-card .question-header { border-bottom: 1px solid rgba(255,215,0,0.1); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 0; }
+
+  /* ANIMATIONS */
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-card {
+    animation: fadeSlideIn 0.4s ease both;
+  }
+
+  .question-card:nth-child(1) { animation-delay: 0.05s; }
+  .question-card:nth-child(2) { animation-delay: 0.10s; }
+  .question-card:nth-child(3) { animation-delay: 0.15s; }
+  .question-card:nth-child(4) { animation-delay: 0.20s; }
+  .question-card:nth-child(5) { animation-delay: 0.25s; }
+
+  @media (max-width: 600px) {
+    main { padding: 30px 16px 60px; }
+    .question-body { padding: 0 16px 8px 16px; }
+    .solution-toggle-wrapper { padding: 16px 16px 20px 16px; }
+    .solution-inner { padding: 20px 16px; }
+    header { padding: 40px 20px 30px; }
+    .q-number { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="header-title">
+    Microcontrollers
+    <span>Olympiad Problem Set</span>
+  </h1>
+  <p class="header-subtitle">Based on Lecture 1–4 // Jinhui Wang Competitive Physics Style</p>
+  <div class="header-meta">
+    <span class="meta-chip">11 PROBLEMS</span>
+    <span class="meta-chip">5 SECTIONS</span>
+    <span class="meta-chip">ADVANCED LEVEL</span>
+    <span class="meta-chip">SOLUTIONS INCLUDED</span>
+  </div>
+</header>
+
+<div class="progress-bar-container">
+  <span class="progress-label">PROGRESS</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="solved-count" id="solvedCount">0 / 11 REVEALED</span>
+</div>
+
+<main>
+
+  <!-- ============================================================ -->
+  <!-- SECTION I -->
+  <!-- ============================================================ -->
+  <div class="section-header">
+    <span class="section-number">SECTION I</span>
+    <span class="section-line"></span>
+    <span class="section-title">Conceptual Foundations</span>
+  </div>
+
+  <!-- Q1 -->
+  <div class="question-card" id="card-1">
+    <div class="question-header">
+      <span class="q-number">Q.01</span>
+      <div class="q-content">
+        <div class="q-title">The Volatile Paradox</div>
+        <div class="q-tags">
+          <span class="tag tag-hw">MEMORY</span>
+          <span class="tag tag-arch">FLASH vs EEPROM</span>
+          <span class="tag tag-hard">HARD</span>
+        </div>
+      </div>
+    </div>
+    <div class="question-body">
+      <div class="scenario-box">
+        A microcontroller is running a data-logging program. It reads sensor values into RAM every 100ms and periodically writes summaries to Flash. During a test, the power is cut abruptly. The engineer discovers that the last 47 sensor readings are lost, but all previous summaries are intact — <em>except</em> the most recent one, which is corrupted rather than simply missing.
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(a)</span>
+        <span class="sub-text">Explain precisely <strong>why</strong> the last 47 readings vanished, invoking the physical nature of RAM at the electron level of abstraction available in this course.</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(b)</span>
+        <span class="sub-text">Why might the most recent Flash summary be <strong>corrupted</strong> rather than simply absent? What does this reveal about the nature of Flash's block-wise erasure mechanism?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(c)</span>
+        <span class="sub-text">If EEPROM were used instead of Flash for summaries, would corruption still be possible? Justify using the byte-wise vs block-wise erasure distinction.</span>
+      </div>
+    </div>
+    <div class="solution-toggle-wrapper">
+      <button class="solution-toggle" onclick="toggleSolution('sol-1', this, 'card-1')">
+        <span class="toggle-icon">▶</span>
+        <span class="toggle-text">REVEAL SOLUTION</span>
+      </button>
+    </div>
+    <div class="solution-panel" id="sol-1">
+      <div class="solution-inner">
+        <div class="solution-label">Complete Solution</div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (a) — Why RAM data vanished</div>
+          <div class="sol-text">
+            RAM (Random Access Memory) is <strong>volatile</strong>: it stores data by maintaining electrical charge states in capacitors (DRAM) or by transistor latch states (SRAM). These states require continuous power to sustain. When power is cut, capacitors discharge and transistor flip-flops lose their bistable configuration. There is no chemical or structural change — just the collapse of an active electrical state. The 47 readings existed as voltage differences on microscopic capacitors; with no power, those voltages equalized to zero. The data was never "written" anywhere permanent.
+          </div>
+          <div class="sol-highlight">Key insight: RAM stores 1s and 0s as "is there charge here?" — not as any physical change to the material. It is fundamentally ephemeral.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (b) — Why Flash was corrupted, not simply absent</div>
+          <div class="sol-text">
+            Flash memory erases in <strong>blocks</strong> (large chunks of data). A write to Flash involves two steps: (1) erase the entire block, then (2) write the new data. If power is cut <em>between these two steps</em> — after the block was erased but before the new data was fully written — the result is a block that has been cleared but not refilled. Some cells may be in partially programmed states, yielding garbage data. This explains corruption rather than absence: the old data was destroyed by the erase phase, and the new data was never fully committed.
+          </div>
+          <div class="sol-highlight orange">Block-wise erasure is atomic at the block level but NOT atomic at the write level. The window between erase and write is a vulnerability zone.</div>
+          <div class="aha-moment"><p>This is why critical embedded systems use "wear-levelling" and "journaling" techniques — they ensure a backup copy always exists before the old one is erased, making writes truly atomic from the system's perspective.</p></div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (c) — EEPROM vs Flash: Is corruption still possible?</div>
+          <div class="sol-text">
+            EEPROM is <strong>byte-wise erasable</strong> — individual bytes can be erased and rewritten independently. This dramatically reduces the corruption window. To update a single byte, you only erase and rewrite that one byte, not an entire block. However, corruption is still <em>theoretically possible</em>: if power is cut mid-byte-write, that single byte may be in an indeterminate state. The advantage is that corruption is localised to one byte rather than potentially an entire block of data. For small configuration data (as the lecture notes describe), this makes EEPROM significantly more robust for frequent, small updates.
+          </div>
+          <div class="sol-highlight green">EEPROM doesn't eliminate corruption risk — it minimises its blast radius. One corrupted byte is catastrophically better than one corrupted block.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question-card" id="card-2">
+    <div class="question-header">
+      <span class="q-number">Q.02</span>
+      <div class="q-content">
+        <div class="q-title">The Clock Stretching Trap</div>
+        <div class="q-tags">
+          <span class="tag tag-protocol">I2C</span>
+          <span class="tag tag-protocol">PROTOCOL</span>
+          <span class="tag tag-hard">HARD</span>
+        </div>
+      </div>
+    </div>
+    <div class="question-body">
+      <div class="scenario-box orange">
+        In an I2C network, a master device attempts to send data to a slow slave sensor at 400 kHz (Fast Mode). The slave repeatedly invokes clock stretching, holding SCL low for extended periods.
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(a)</span>
+        <span class="sub-text">From first principles of the I2C protocol, explain <em>how</em> a slave device — which has no authority to generate the clock — can nevertheless control its timing. What physical mechanism allows this?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(b)</span>
+        <span class="sub-text">A student argues: <em>"If the slave holds SCL low indefinitely, the master is permanently blocked. This is a fundamental protocol flaw."</em> Construct a rigorous defence of why this is actually a <strong>feature</strong>, not a bug, citing what would happen alternatively if the master simply continued clocking.</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(c)</span>
+        <span class="sub-text">Now consider: a second master on the same bus also wishes to transmit simultaneously. Walk through the collision detection and arbitration process step by step, identifying the exact moment and mechanism by which one master "wins."</span>
+      </div>
+    </div>
+    <div class="solution-toggle-wrapper">
+      <button class="solution-toggle" onclick="toggleSolution('sol-2', this, 'card-2')">
+        <span class="toggle-icon">▶</span>
+        <span class="toggle-text">REVEAL SOLUTION</span>
+      </button>
+    </div>
+    <div class="solution-panel" id="sol-2">
+      <div class="solution-inner">
+        <div class="solution-label">Complete Solution</div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (a) — Physical mechanism of clock stretching</div>
+          <div class="sol-text">
+            I2C uses an <strong>open-drain (wired-AND) bus topology</strong>. Both SCL and SDA lines are pulled HIGH by resistors (Rp), but any device on the bus can pull them LOW by activating its open-drain transistor. The line is HIGH only when <em>no device</em> is pulling it low. A slave cannot generate a rising edge (it cannot push the line high), but it CAN hold SCL low by keeping its transistor active. The master checks that SCL actually went high before proceeding to the next clock phase — if it finds SCL still low (held by the slave), it simply waits. The slave controls timing not by generating a clock, but by <em>vetoing the release</em> of the clock line.
+          </div>
+          <div class="sol-highlight">Open-drain = you can only pull down, never push up. Control through suppression, not assertion.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (b) — Defence of clock stretching as a feature</div>
+          <div class="sol-text">
+            If the master continued clocking regardless, it would shift new bits onto SDA while the slave has not yet read the current bit. The slave's internal buffer would overflow — it would receive garbled or misaligned data. The master would believe transmission succeeded while the slave received nothing useful. This would be a silent failure — far worse than a temporary stall. Clock stretching ensures the I2C bus is <strong>self-throttling</strong>: the slowest component in the transaction sets the pace. The system degrades gracefully to the capability of the weakest device, rather than catastrophically mis-transmitting data.
+          </div>
+          <div class="aha-moment"><p>Clock stretching is essentially a hardware-level "flow control" mechanism — analogous to TCP's window size in networking. The slow receiver signals "wait" rather than dropping packets silently.</p></div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (c) — Multi-master arbitration</div>
+          <div class="sol-text">
+            Both masters detect the bus is idle (SDA and SCL high) and simultaneously issue a START condition. Both begin transmitting their destination addresses bit by bit. During transmission, each master simultaneously <strong>monitors the SDA line</strong>. Because of the wired-AND property: if Master A writes a '1' (releases SDA) but Master B writes a '0' (pulls SDA low), the bus reads '0'. Master A observes: "I sent a 1, but the bus is 0 — someone else is here." Master A immediately stops transmitting and becomes a slave-receiver. Master B, whose transmitted bit <em>matches</em> what it reads on the bus, notices no discrepancy and continues. Arbitration is lost the instant a master transmits HIGH but reads LOW. The master transmitting the lower address (more leading zeros) statistically wins. No data is corrupted because the winning master's bits are exactly what appear on the bus.
+          </div>
+          <div class="sol-highlight green">Arbitration is lossless — the "loser" simply defers, and the winning transmission completes correctly. Neither master needs to retry from scratch.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question-card" id="card-3">
+    <div class="question-header">
+      <span class="q-number">Q.03</span>
+      <div class="q-content">
+        <div class="q-title">The Baud Rate Boundary</div>
+        <div class="q-tags">
+          <span class="tag tag-protocol">UART</span>
+          <span class="tag tag-protocol">PROTOCOL</span>
+          <span class="tag tag-hard">QUANTITATIVE</span>
+        </div>
+      </div>
+    </div>
+    <div class="question-body">
+      <div class="scenario-box green">
+        Two UART devices communicate. Device A transmits at exactly 9600 bps. Device B's oscillator runs at 9600 + Δ bps due to manufacturing tolerance.
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(a)</span>
+        <span class="sub-text">UART allows a maximum clock mismatch of ~10%. Derive <em>from the packet structure</em> (start bit, 8 data bits, parity, stop bit = 11 bits total) <strong>why</strong> the tolerance is approximately 10% and not some other value. Your derivation must reference the sampling mechanism.</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(b)</span>
+        <span class="sub-text">A packet is sent: <code>0b10110010</code> with even parity. Write out the complete bit sequence on the wire including all framing bits, with the correct parity bit calculated. <strong>Remember: LSB is transmitted first.</strong></span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(c)</span>
+        <span class="sub-text">The receiving UART samples each bit at the <em>centre</em> of its expected duration. If baud rate mismatch causes cumulative drift, at which bit position does the first sampling error most likely occur? Show your reasoning numerically.</span>
+      </div>
+    </div>
+    <div class="solution-toggle-wrapper">
+      <button class="solution-toggle" onclick="toggleSolution('sol-3', this, 'card-3')">
+        <span class="toggle-icon">▶</span>
+        <span class="toggle-text">REVEAL SOLUTION</span>
+      </button>
+    </div>
+    <div class="solution-panel" id="sol-3">
+      <div class="solution-inner">
+        <div class="solution-label">Complete Solution</div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (a) — Deriving the ~10% tolerance</div>
+          <div class="sol-text">
+            The receiver re-synchronises on the <strong>falling edge of the START bit</strong> (high-to-low transition). After that, it samples each subsequent bit at the midpoint of its expected duration. For a packet of 11 bits total, the last data bit (bit 10 after the start bit) is sampled at time: <strong>T_sample = 10.5 × T_bit</strong> (0.5 bit after the start edge for bit 1, plus 10 more bits).
+            <br><br>
+            For a sampling error to occur, the cumulative drift must shift the sample point by more than ±0.5 × T_bit (so it falls outside the correct bit window). With drift rate δ per bit, after 10.5 bits, total drift = 10.5δ. For safe sampling: <strong>10.5δ &lt; 0.5 T_bit</strong>, so δ &lt; 1/21 ≈ 4.76% per bit. Over the full packet, total acceptable mismatch ≈ 1/10.5 ≈ <strong>9.5% ≈ 10%</strong>.
+          </div>
+          <div class="sol-highlight">The 10% figure is not arbitrary — it is geometrically derived from the ratio of half-a-bit-period to the number of bits until the last sample.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (b) — Complete bit sequence on wire</div>
+          <div class="sol-text">
+            Data: <code>0b10110010</code> = binary 10110010.<br>
+            LSB first transmission order: <code>0, 1, 0, 0, 1, 1, 0, 1</code> (bit0 to bit7).<br>
+            Count of 1s in data: positions bit1, bit4, bit5, bit7 → four 1s total.<br>
+            Even parity: total 1s must be even. Currently 4 ones → even. <strong>Parity bit = 0.</strong>
+          </div>
+          <div class="sol-highlight green">
+            WIRE SEQUENCE (left = first transmitted):<br>
+            [START=0] [0][1][0][0][1][1][0][1] [PARITY=0] [STOP=1]
+          </div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (c) — First bit error location</div>
+          <div class="sol-text">
+            With a 10% baud rate mismatch, drift accumulates at 0.1 T_bit per bit period. The receiver samples at the <em>centre</em> of each expected bit window. A sampling error occurs when cumulative drift exceeds 0.5 T_bit. After n bits: drift = 0.1n × T_bit. Setting 0.1n = 0.5 → <strong>n = 5</strong>. This means by the 5th bit after the start edge (the 5th data bit), drift has accumulated to half a bit period, placing the sample point at the boundary between two bits. The <strong>5th data bit</strong> is the first position where missampling becomes likely. In practice, with 10% being the defined limit, errors begin to appear reliably at or after bit 5.
+          </div>
+          <div class="aha-moment"><p>This is why engineering standards say "within 10%" rather than "exactly 10%" — there's no hard cliff, just a probability that rises as drift accumulates through the packet.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION II -->
+  <!-- ============================================================ -->
+  <div class="section-header">
+    <span class="section-number">SECTION II</span>
+    <span class="section-line"></span>
+    <span class="section-title">Architecture & Classification</span>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question-card" id="card-4">
+    <div class="question-header">
+      <span class="q-number">Q.04</span>
+      <div class="q-content">
+        <div class="q-title">The Von Neumann Bottleneck, Quantified</div>
+        <div class="q-tags">
+          <span class="tag tag-arch">ARCHITECTURE</span>
+          <span class="tag tag-arch">HARVARD vs VON NEUMANN</span>
+        </div>
+      </div>
+    </div>
+    <div class="question-body">
+      <div class="scenario-box">
+        A Harvard architecture MCU and a Von Neumann MCU both run at the same clock frequency f. The Von Neumann MCU requires 2 clock cycles per instruction; the Harvard MCU requires 1.
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(a)</span>
+        <span class="sub-text">An engineer claims the Harvard MCU is "twice as fast." Under what conditions is this claim <em>exactly</em> true, and under what realistic conditions does this advantage diminish or disappear?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(b)</span>
+        <span class="sub-text">The Von Neumann bottleneck is described as limited <em>throughput</em> between CPU and memory. Explain why adding more RAM to a Von Neumann system does <strong>not</strong> solve the bottleneck, while widening the bus partially does.</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(c)</span>
+        <span class="sub-text">Modern systems use a "Modified Harvard Architecture" (as in the ATMega328P). What single modification reconciles the Harvard speed advantage with Von Neumann programming flexibility? What trade-off is introduced?</span>
+      </div>
+    </div>
+    <div class="solution-toggle-wrapper">
+      <button class="solution-toggle" onclick="toggleSolution('sol-4', this, 'card-4')">
+        <span class="toggle-icon">▶</span>
+        <span class="toggle-text">REVEAL SOLUTION</span>
+      </button>
+    </div>
+    <div class="solution-panel" id="sol-4">
+      <div class="solution-inner">
+        <div class="solution-label">Complete Solution</div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (a) — When "twice as fast" is true, and when it isn't</div>
+          <div class="sol-text">
+            The claim is exactly true when the workload is <strong>purely instruction-bound</strong>: every cycle is spent fetching and executing instructions, with no other delays. In reality, both architectures face the same peripheral I/O speeds, the same ADC conversion times, and the same external communication rates (UART, I2C, SPI). A program that spends 90% of its time waiting for a sensor reading gets negligible benefit from the 2× instruction speed on the remaining 10%. The advantage also shrinks with cache effects, branch mispredictions, and memory wait states that affect both architectures similarly.
+          </div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (b) — Why more RAM doesn't fix the bottleneck</div>
+          <div class="sol-text">
+            The bottleneck is the <strong>bandwidth of the shared bus</strong> — the rate at which bits can travel between memory and CPU per unit time. Adding more RAM increases <em>capacity</em> (how much can be stored) but not <em>bandwidth</em> (how fast data moves). The road is still one lane wide; you've just added more parking. Widening the bus (e.g., from 8-bit to 32-bit data bus) means 4× more data per clock cycle can transfer, directly addressing the bandwidth constraint. This is why bus width classification of MCUs is meaningful: it determines throughput, not storage.
+          </div>
+          <div class="sol-highlight orange">RAM size = garage size. Bus width = number of lanes on the road. Congestion is a road problem, not a garage problem.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (c) — Modified Harvard Architecture</div>
+          <div class="sol-text">
+            The modification is allowing the CPU to <strong>occasionally access program memory (Flash) as data</strong> — via special instructions like <code>LPM</code> (Load Program Memory) in AVR. Pure Harvard strictly separates the two buses; Modified Harvard adds a controlled pathway between them. This allows constants and lookup tables to be stored in Flash (saving precious RAM) without sacrificing the usual separation. The trade-off: this access path is typically <em>slower</em> and requires special instructions, so the programmer must explicitly manage which data goes where — it's not seamless like Von Neumann.
+          </div>
+          <div class="aha-moment"><p>"Modified Harvard" is the architectural equivalent of having separate highways for trucks and cars, but a single on-ramp at one specific point. Mostly separated, occasionally merged — the best practical compromise.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question-card" id="card-5">
+    <div class="question-header">
+      <span class="q-number">Q.05</span>
+      <div class="q-content">
+        <div class="q-title">The Register Set Riddle</div>
+        <div class="q-tags">
+          <span class="tag tag-arch">RISC vs CISC</span>
+          <span class="tag tag-arch">ARCHITECTURE</span>
+          <span class="tag tag-hard">HARD</span>
+        </div>
+      </div>
+    </div>
+    <div class="question-body">
+      <div class="sub-question">
+        <span class="sub-label">(a)</span>
+        <span class="sub-text">The RISC vs CISC table states RISC needs <em>multiple</em> register sets. This seems counterintuitive — more registers sounds more expensive. Explain <em>why</em> RISC needs multiple register sets by reasoning from what RISC does NOT have.</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(b)</span>
+        <span class="sub-text">A CISC processor executes <code>MULTIPLY R1, [memory_address]</code> in a single instruction. A RISC processor needs 3+ instructions for the same task. Yet the lecture data shows Apple's RISC chips outperforming Intel's CISC chips. <strong>Fully resolve this apparent contradiction.</strong></span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(c)</span>
+        <span class="sub-text">From the Intel vs Apple performance graph, Apple's trajectory has a <em>steeper slope</em> over time. Propose a physics/engineering reason rooted in transistor behaviour and chip design why RISC architectures scale better as transistors shrink.</span>
+      </div>
+    </div>
+    <div class="solution-toggle-wrapper">
+      <button class="solution-toggle" onclick="toggleSolution('sol-5', this, 'card-5')">
+        <span class="toggle-icon">▶</span>
+        <span class="toggle-text">REVEAL SOLUTION</span>
+      </button>
+    </div>
+    <div class="solution-panel" id="sol-5">
+      <div class="solution-inner">
+        <div class="solution-label">Complete Solution</div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (a) — Why RISC needs multiple register sets</div>
+          <div class="sol-text">
+            CISC has complex multi-step instructions that can implicitly save and restore register states (the hardware handles context). RISC instructions are simple and <strong>each instruction only does one thing</strong>. When a function call or interrupt occurs, the programmer/compiler must explicitly save all registers that might be overwritten. To make this efficient and avoid constant memory saves/restores, RISC uses multiple <em>register windows</em> or register banks — one set for the current function, another for a called function, allowing context switches without touching memory at all. The cost in silicon (more registers) is paid back in speed (no stack operations for function calls).
+          </div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (b) — Resolving the RISC/CISC paradox</div>
+          <div class="sol-text">
+            The confusion arises from conflating <em>instructions per program</em> with <em>time per program</em>. RISC needs more instructions, but each instruction executes in <strong>one clock cycle</strong> (fixed, simple format). CISC uses fewer instructions, but a single complex instruction may take 5–20 cycles. Furthermore: (1) RISC's simple, uniform instruction format makes <strong>pipelining</strong> trivial — you can overlap fetch/decode/execute stages cleanly. CISC's variable-length instructions make pipelining complex. (2) Modern compilers optimise RISC code extremely well. (3) RISC spends transistors on more execution units; CISC spends them on a complex decoder. More parallel execution units directly translates to throughput.
+          </div>
+          <div class="sol-highlight green">The performance metric is not instructions/second but <em>work done per second</em>. RISC wins by doing simpler things faster and more in parallel.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (c) — Why RISC scales better with transistor shrinkage</div>
+          <div class="sol-text">
+            As transistors shrink, two physics effects dominate: (1) <strong>Power density increases</strong> — smaller transistors switching faster generate more heat per unit area. Complex CISC decoders are large, irregular logic blocks that are hard to power-gate and inefficient at smaller nodes. RISC's regular, repetitive structure (many identical execution units, uniform pipeline stages) allows better power gating, clock gating, and thermal management. (2) <strong>Wire delay becomes dominant</strong> — at small nodes, signals traveling across a large, irregular CISC decoder take longer relative to the gate delay. RISC's localised, regular structure keeps signal paths short. Additionally, the transistor budget freed from complex decoding can go into more cores or larger caches, both of which scale well.
+          </div>
+          <div class="aha-moment"><p>Intel's CISC chips actually decode x86 instructions into micro-ops internally (which are RISC-like) — an acknowledgment that RISC principles win at execution. They just maintain the CISC instruction set for software compatibility.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION III -->
+  <!-- ============================================================ -->
+  <div class="section-header">
+    <span class="section-number">SECTION III</span>
+    <span class="section-line"></span>
+    <span class="section-title">Communication Protocols Deep Dive</span>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question-card" id="card-6">
+    <div class="question-header">
+      <span class="q-number">Q.06</span>
+      <div class="q-content">
+        <div class="q-title">SPI vs I2C — The Wire Count Trade-off</div>
+        <div class="q-tags">
+          <span class="tag tag-protocol">SPI</span>
+          <span class="tag tag-protocol">I2C</span>
+          <span class="tag tag-hard">QUANTITATIVE</span>
+        </div>
+      </div>
+    </div>
+    <div class="question-body">
+      <div class="scenario-box orange">
+        An embedded system designer must connect 8 identical temperature sensors to a single microcontroller.
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(a)</span>
+        <span class="sub-text">Calculate the total number of wires required using <strong>I2C</strong> versus <strong>SPI</strong>. State all assumptions clearly.</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(b)</span>
+        <span class="sub-text">With I2C 7-bit addressing, 128 addresses are theoretically available. But the designer finds only <strong>112</strong> addresses usable in practice. What accounts for the missing 16?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(c)</span>
+        <span class="sub-text">For SPI with 8 slaves, the designer proposes using a 3-to-8 decoder to reduce CS lines from 8 to 3. Can the master still address slaves individually? What limitation does this introduce?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(d)</span>
+        <span class="sub-text">SPI is described as "full-duplex." Construct a concrete scenario where this full-duplex capability provides a <em>measurable</em> speed advantage over I2C's half-duplex nature.</span>
+      </div>
+    </div>
+    <div class="solution-toggle-wrapper">
+      <button class="solution-toggle" onclick="toggleSolution('sol-6', this, 'card-6')">
+        <span class="toggle-icon">▶</span>
+        <span class="toggle-text">REVEAL SOLUTION</span>
+      </button>
+    </div>
+    <div class="solution-panel" id="sol-6">
+      <div class="solution-inner">
+        <div class="solution-label">Complete Solution</div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (a) — Wire count comparison</div>
+          <div class="sol-text">
+            <strong>I2C:</strong> Requires only SDA + SCL = <strong>2 wires total</strong>, regardless of number of slaves. All 8 sensors share these two lines. (Plus a common GND; but wires here means signal lines.)<br><br>
+            <strong>SPI:</strong> Requires MOSI + MISO + SCLK + 1 CS per slave = 3 + 8 = <strong>11 wires total</strong> for 8 slaves. Each slave needs its own dedicated Chip Select line for individual addressing.
+          </div>
+          <table class="data-table">
+            <tr><th>Protocol</th><th>Signal Lines</th><th>8 Slaves Total</th></tr>
+            <tr><td>I2C</td><td>SDA + SCL</td><td>2 wires</td></tr>
+            <tr><td>SPI</td><td>MOSI + MISO + SCLK + 8×CS</td><td>11 wires</td></tr>
+          </table>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (b) — The missing 16 I2C addresses</div>
+          <div class="sol-text">
+            The I2C specification reserves certain addresses for special purposes. Addresses <code>0000 000x</code> (0x00) and <code>0000 001x</code> through <code>0000 011x</code> are reserved — including the <strong>General Call address</strong> (0x00, broadcasts to all slaves) and several startup/reserved addresses. Similarly, addresses <code>1111 xxx</code> (0x78–0x7F) are reserved for 10-bit address extension mode. This gives: 8 reserved at the top (1111 0XX and 1111 1XX) + 8 reserved at the bottom (0000 0XX and 0000 1XX) = <strong>16 reserved addresses</strong>, leaving 128 − 16 = 112 usable.
+          </div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (c) — 3-to-8 decoder for CS lines</div>
+          <div class="sol-text">
+            Yes, the master can still address all 8 slaves individually — the 3 input bits to the decoder select exactly one of 8 output lines. However, the critical limitation is: <strong>only one slave can be selected at a time</strong>, and selecting is sequential (the decoder must change state to switch slaves). With dedicated CS lines, the master could theoretically assert multiple CS lines simultaneously (for broadcast), or de-assert one while asserting another without propagation delay. With the decoder, there is always a transition period where no slave or a wrong slave is briefly selected. For systems requiring simultaneous multi-slave communication or very fast CS toggling, the decoder introduces glitch risk.
+          </div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (d) — Full-duplex advantage scenario</div>
+          <div class="sol-text">
+            Consider a <strong>SPI DAC (Digital-to-Analog Converter) with readback</strong>: the master sends a new output value to the DAC (via MOSI) while simultaneously reading back the DAC's previous output value for verification (via MISO) — all in one clock cycle sequence. In I2C (half-duplex), this would require two separate transactions: first a write, then a read, each with START/address/ACK overhead. SPI completes the write+readback in the time I2C spends just on the write. The speedup is approximately 2× for read-modify-write cycles on sensor/actuator pairs.
+          </div>
+          <div class="aha-moment"><p>Full-duplex is most valuable not when you need raw speed, but when the <em>read and write operations are logically coupled</em> — you send a command and simultaneously receive the result of the previous command.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="question-card" id="card-7">
+    <div class="question-header">
+      <span class="q-number">Q.07</span>
+      <div class="q-content">
+        <div class="q-title">The Parity Bit's Hidden Weakness</div>
+        <div class="q-tags">
+          <span class="tag tag-protocol">UART</span>
+          <span class="tag tag-hard">QUANTITATIVE</span>
+          <span class="tag tag-hard">HARD</span>
+        </div>
+      </div>
+    </div>
+    <div class="question-body">
+      <div class="sub-question">
+        <span class="sub-label">(a)</span>
+        <span class="sub-text">Demonstrate with a specific example that parity checking <strong>cannot</strong> detect a 2-bit error. What is the general rule for which error patterns evade parity detection?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(b)</span>
+        <span class="sub-text">The parity bit adds 1 bit to every ~10-bit packet. Calculate the communication overhead percentage. What happens to effective data throughput if a system switches from 8-bit data frames to 5-bit data frames at the same baud rate? Is 5-bit mode more or less <em>efficient</em>?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(c)</span>
+        <span class="sub-text">A more sophisticated system uses CRC (Cyclic Redundancy Check) instead of parity. Without knowing CRC details, reason from first principles: what property must a better error-detection scheme have that parity lacks? Express this as a mathematical/logical statement.</span>
+      </div>
+    </div>
+    <div class="solution-toggle-wrapper">
+      <button class="solution-toggle" onclick="toggleSolution('sol-7', this, 'card-7')">
+        <span class="toggle-icon">▶</span>
+        <span class="toggle-text">REVEAL SOLUTION</span>
+      </button>
+    </div>
+    <div class="solution-panel" id="sol-7">
+      <div class="solution-inner">
+        <div class="solution-label">Complete Solution</div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (a) — Parity's blind spot</div>
+          <div class="sol-text">
+            Send <code>10110010</code> — four 1s, even parity bit = 0. Now two bits flip: say bits 0 and 1 change: <code>01010010</code> — still four 1s (we swapped a 1 for 0 and a 0 for a 1), so parity is still even. The receiver calculates parity, finds it correct, and accepts the corrupted data with no error detected.<br><br>
+            General rule: <strong>parity detects all odd numbers of bit errors (1, 3, 5…) and fails to detect all even numbers of bit errors (2, 4, 6…)</strong>. This is because parity is a single XOR across all bits — flipping any even number of bits leaves the XOR sum unchanged.
+          </div>
+          <div class="sol-highlight orange">Parity is a 1-bit checksum. Any error pattern with even Hamming weight is invisible to it.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (b) — Overhead calculation</div>
+          <div class="sol-text">
+            <strong>8-bit frame:</strong> 1 start + 8 data + 1 parity + 1 stop = 11 bits total. Data bits = 8. Overhead = 3/11 = <strong>27.3%</strong>. Efficiency = 8/11 = <strong>72.7%</strong>.<br><br>
+            <strong>5-bit frame:</strong> 1 start + 5 data + 1 parity + 1 stop = 8 bits total. Data bits = 5. Efficiency = 5/8 = <strong>62.5%</strong>.<br><br>
+            5-bit mode is <em>less</em> efficient — the fixed overhead (start + parity + stop = 3 bits) is amortized over fewer data bits, so it represents a larger fraction of total transmission time. This is a general principle: framing overhead has diminishing cost as data payload increases.
+          </div>
+          <div class="sol-highlight">Larger data frames are more efficient — the same 3 bits of overhead carry more useful data. This is why modern protocols use large packet sizes.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (c) — What CRC has that parity lacks</div>
+          <div class="sol-text">
+            Parity captures only one property of the data: whether the total number of 1s is odd or even. It maps the entire 8-bit space (256 values) to a single bit (0 or 1). This means 128 different data values share each parity bit — any error that maps between values in the same parity class is undetectable.<br><br>
+            A better scheme needs: <strong>for any two distinct data patterns D₁ and D₂, the probability that their checksums are equal must be negligibly small</strong> (approaching 1/2ⁿ for an n-bit checksum). Formally: the checksum function C must have the property that C(D₁ XOR D₂) ≠ 0 for all common error patterns E = D₁ XOR D₂. CRC achieves this by treating data as polynomials and using polynomial division — errors that cause identical remainders are astronomically rare, not inevitable as with parity.
+          </div>
+          <div class="aha-moment"><p>Parity asks "how many 1s?" CRC asks "what is the remainder when treated as a polynomial?" The latter encodes far more structural information about the data, making collisions (two different bit patterns with the same checksum) exponentially rarer.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION IV -->
+  <!-- ============================================================ -->
+  <div class="section-header">
+    <span class="section-number">SECTION IV</span>
+    <span class="section-line"></span>
+    <span class="section-title">Hardware vs Software, Interrupts & PWM</span>
+  </div>
+
+  <!-- Q8 -->
+  <div class="question-card" id="card-8">
+    <div class="question-header">
+      <span class="q-number">Q.08</span>
+      <div class="q-content">
+        <div class="q-title">The Interrupt Latency Problem</div>
+        <div class="q-tags">
+          <span class="tag tag-hw">INTERRUPTS</span>
+          <span class="tag tag-arch">REAL-TIME</span>
+          <span class="tag tag-hard">HARD</span>
+        </div>
+      </div>
+    </div>
+    <div class="question-body">
+      <div class="scenario-box green">
+        A NodeMCU ESP8266 is running a motor control loop executing every 1ms (1 kHz). A hardware interrupt is triggered by an external sensor.
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(a)</span>
+        <span class="sub-text">The interrupt is described as "asynchronous." Explain precisely what this means in terms of the relationship between the interrupt signal and the CPU clock — and why this is fundamentally different from a software interrupt.</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(b)</span>
+        <span class="sub-text">The CPU cannot service an interrupt until the <em>current instruction completes</em>. For a <strong>RISC</strong> MCU (1-cycle instructions) vs a <strong>CISC</strong> MCU (1–20 cycle instructions), compare worst-case interrupt latencies. Which is better for real-time control, and why?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(c)</span>
+        <span class="sub-text">A student writes an ISR that takes 800μs to execute, while the main motor loop runs every 1ms. Describe precisely the failure mode that occurs, and propose the minimum architectural fix.</span>
+      </div>
+    </div>
+    <div class="solution-toggle-wrapper">
+      <button class="solution-toggle" onclick="toggleSolution('sol-8', this, 'card-8')">
+        <span class="toggle-icon">▶</span>
+        <span class="toggle-text">REVEAL SOLUTION</span>
+      </button>
+    </div>
+    <div class="solution-panel" id="sol-8">
+      <div class="solution-inner">
+        <div class="solution-label">Complete Solution</div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (a) — Asynchronous vs synchronous interrupts</div>
+          <div class="sol-text">
+            A <strong>hardware interrupt is asynchronous</strong>: it can arrive at any point in the CPU clock cycle, completely independent of the instruction pipeline. The interrupt signal is generated by external hardware (a GPIO state change, a timer overflow, etc.) which has no knowledge of or relationship to the CPU's internal clock. A <strong>software interrupt</strong> (like a timer-triggered ISR scheduled by software) is <em>synchronous</em> — it fires at a predictable, deterministic point relative to the program flow, because software explicitly sets the condition. Hardware interrupts require the CPU to synchronise the external signal onto its clock domain (using flip-flops), whereas software interrupts are already in the clock domain.
+          </div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (b) — RISC vs CISC interrupt latency</div>
+          <div class="sol-text">
+            <strong>RISC (1-cycle instructions):</strong> Worst case — the interrupt arrives just as a new instruction begins. The CPU completes that instruction (1 cycle) then services the interrupt. Maximum additional latency: <strong>1 clock cycle</strong>. At 80 MHz (ESP8266), that's 12.5 ns.<br><br>
+            <strong>CISC (1–20 cycle instructions):</strong> Worst case — the interrupt arrives just as a 20-cycle instruction begins. The CPU must complete it before responding. Maximum additional latency: <strong>20 clock cycles</strong>. The worst-case latency is 20× higher, and critically, it is <em>non-deterministic</em> — you can't know in advance how long the current instruction will take.<br><br>
+            RISC is categorically better for real-time control because: (1) lower maximum latency, and (2) <em>bounded and deterministic</em> latency, which is essential for guaranteeing response time in control systems.
+          </div>
+          <div class="sol-highlight green">For real-time systems, determinism matters more than raw speed. A slow but predictable response is schedulable; a fast but unpredictable one is not.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (c) — ISR overrun failure mode and fix</div>
+          <div class="sol-text">
+            The failure is <strong>interrupt overrun / deadline miss</strong>. The ISR takes 800μs; the motor loop must run every 1000μs. Each time the ISR fires, it consumes 800μs, leaving only 200μs for the main loop. If interrupts fire more than once per millisecond (or even once, depending on scheduling), the motor loop never gets its full execution time. Over multiple cycles, the motor loop may miss multiple iterations entirely, causing jerky or uncontrolled motor behaviour. In the worst case, a second interrupt fires <em>while the ISR is running</em> (if interrupts are not disabled), causing nested interrupts and stack overflow.<br><br>
+            <strong>Minimum fix:</strong> The ISR should only set a <em>flag variable</em> (e.g., <code>volatile bool sensorTriggered = true</code>) and return immediately — execution time drops to microseconds. The heavy processing is deferred to the main loop, which checks the flag each cycle. This pattern is called "deferred processing" or "bottom half" handling.
+          </div>
+          <div class="aha-moment"><p>A golden rule of embedded systems: ISRs must be fast. "Fast" means microseconds, not milliseconds. The ISR's job is to record that something happened — not to process it.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="question-card" id="card-9">
+    <div class="question-header">
+      <span class="q-number">Q.09</span>
+      <div class="q-content">
+        <div class="q-title">PWM and the Illusion of Analog</div>
+        <div class="q-tags">
+          <span class="tag tag-hw">PWM</span>
+          <span class="tag tag-hw">HARDWARE</span>
+          <span class="tag tag-hard">QUANTITATIVE</span>
+        </div>
+      </div>
+    </div>
+    <div class="question-body">
+      <div class="sub-question">
+        <span class="sub-label">(a)</span>
+        <span class="sub-text">PWM creates an "illusion" of analog output from a digital pin. Explain the physical mechanism by which a human eye perceives 50% duty cycle as medium brightness. What is the minimum frequency required, and why?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(b)</span>
+        <span class="sub-text">Software PWM is "prone to glitches." Identify the <em>root cause</em>: what event can disrupt a software PWM signal that <strong>cannot</strong> disrupt hardware PWM?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(c)</span>
+        <span class="sub-text">The ESP8266 runs at 80 MHz. A hardware PWM module uses a 16-bit prescaler to divide the clock. Calculate the <strong>minimum</strong> achievable PWM frequency and the <strong>maximum</strong> achievable PWM frequency. What determines the resolution (number of distinguishable brightness levels)?</span>
+      </div>
+    </div>
+    <div class="solution-toggle-wrapper">
+      <button class="solution-toggle" onclick="toggleSolution('sol-9', this, 'card-9')">
+        <span class="toggle-icon">▶</span>
+        <span class="toggle-text">REVEAL SOLUTION</span>
+      </button>
+    </div>
+    <div class="solution-panel" id="sol-9">
+      <div class="solution-inner">
+        <div class="solution-label">Complete Solution</div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (a) — Physical mechanism of perceived brightness</div>
+          <div class="sol-text">
+            The human eye's photoreceptors have a temporal integration time of approximately <strong>50–100ms</strong> (corresponding to the ~20 Hz flicker fusion threshold). When an LED flashes faster than this, the visual system cannot distinguish individual on/off events and instead perceives the <em>time-averaged intensity</em>. A 50% duty cycle LED at sufficient frequency delivers half the photons per unit time as a continuously-on LED — perceived as half brightness. The minimum frequency for flicker-free perception is <strong>~50–60 Hz</strong> (PAL/NTSC frame rates were chosen for this reason). In practice, 1 kHz+ is used for PWM to ensure no flicker under any viewing conditions (including peripheral vision, which is more sensitive to flicker).
+          </div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (b) — Root cause of software PWM glitches</div>
+          <div class="sol-text">
+            Software PWM is generated by the CPU toggling a GPIO pin in software at calculated time intervals. Any <strong>hardware interrupt</strong> that fires while the CPU is managing the PWM timing will delay the toggle. The CPU must pause the PWM timing loop, execute the ISR, then return. This creates an unpredictable jitter in the PWM period — the pin stays HIGH or LOW longer than intended, creating a glitch. Hardware PWM uses a <em>dedicated hardware timer and comparator</em> that operates completely independently of the CPU. Even if the CPU is fully occupied with an ISR, the hardware timer continues counting and toggles the pin at the exact programmed moment. No software path can disturb it.
+          </div>
+          <div class="sol-highlight orange">Software PWM: any interrupt = potential glitch. Hardware PWM: CPU-independent, glitch-free by construction.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (c) — PWM frequency range and resolution</div>
+          <div class="sol-text">
+            A 16-bit prescaler divides the 80 MHz clock by values from 1 to 65,536.<br><br>
+            The PWM period = prescaler × (number of counter steps). Assuming a separate N-bit counter for duty cycle:<br><br>
+            <strong>Maximum PWM frequency</strong> (prescaler = 1, minimum period): f_max = 80,000,000 / (1 × counter_period). For a 1-bit resolution counter (just on/off), f_max = 80 MHz / 2 = <strong>40 MHz</strong>. For useful 8-bit resolution: f_max = 80,000,000 / 256 ≈ <strong>312.5 kHz</strong>.<br><br>
+            <strong>Minimum PWM frequency</strong> (prescaler = 65,536, 8-bit counter): f_min = 80,000,000 / (65,536 × 256) ≈ <strong>4.77 Hz</strong>.<br><br>
+            <strong>Resolution</strong> is determined by how many distinct duty cycle steps the counter provides: an 8-bit counter → 256 levels (0–255). A 10-bit counter → 1024 levels. Higher resolution requires a longer period (lower maximum frequency). There is a fundamental trade-off: <em>resolution × frequency = constant</em> for a given clock speed.
+          </div>
+          <div class="aha-moment"><p>You cannot have both high frequency AND high resolution with a fixed clock speed. A 10-bit 80 MHz PWM tops out at 80MHz/1024 ≈ 78 kHz. To exceed this, you must increase the CPU clock — which is why high-end motor controllers run at 200+ MHz.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION V -->
+  <!-- ============================================================ -->
+  <div class="section-header">
+    <span class="section-number">SECTION V</span>
+    <span class="section-line"></span>
+    <span class="section-title">System-Level Synthesis</span>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question-card" id="card-10">
+    <div class="question-header">
+      <span class="q-number">Q.10</span>
+      <div class="q-content">
+        <div class="q-title">The Grand Design Challenge</div>
+        <div class="q-tags">
+          <span class="tag tag-synthesis">SYNTHESIS</span>
+          <span class="tag tag-system">SYSTEM DESIGN</span>
+          <span class="tag tag-hard">HARDEST</span>
+        </div>
+      </div>
+    </div>
+    <div class="question-body">
+      <div class="scenario-box gold">
+        You are designing an embedded weather station that must: read temperature via I2C (address 0x48), read wind speed via SPI anemometer, transmit data via UART to a computer at 115200 baud, alert via LED PWM when temperature exceeds threshold, wake from deep sleep every 60 seconds, and run on battery (low power critical).
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(a)</span>
+        <span class="sub-text">Assign specific GPIO pins to each function and justify each choice, explicitly noting which pins <em>cannot</em> be used and why.</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(b)</span>
+        <span class="sub-text">The deep sleep wake mechanism requires GPIO16 connected to RST. Explain the electrical logic: why does sending LOW to RST <em>wake</em> the device rather than keeping it asleep?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(c)</span>
+        <span class="sub-text">The system must transmit data over UART while simultaneously the I2C sensor is mid-conversion. Is this possible without data corruption? Justify using the architectural properties of each protocol.</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(d)</span>
+        <span class="sub-text">A critic argues a Raspberry Pi would be "better." Construct the strongest possible argument <em>against</em> using a Raspberry Pi for this application, using at least four distinct technical properties.</span>
+      </div>
+    </div>
+    <div class="solution-toggle-wrapper">
+      <button class="solution-toggle" onclick="toggleSolution('sol-10', this, 'card-10')">
+        <span class="toggle-icon">▶</span>
+        <span class="toggle-text">REVEAL SOLUTION</span>
+      </button>
+    </div>
+    <div class="solution-panel" id="sol-10">
+      <div class="solution-inner">
+        <div class="solution-label">Complete Solution</div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (a) — GPIO pin assignment</div>
+          <div class="sol-text">
+            <strong>Pins that CANNOT be used:</strong> GPIO 6–8 and GPIO 11 (SDCLK, SDD0, SDD1, SDCMD) are wired to internal Flash — using them will corrupt firmware. GPIO 0 is connected to the Flash boot button — pulling it low at boot enters programming mode; avoid for normal I/O.
+          </div>
+          <table class="data-table">
+            <tr><th>Function</th><th>Pin</th><th>Justification</th></tr>
+            <tr><td>I2C SDA (temperature)</td><td>GPIO4</td><td>Designated I2C SDA pin</td></tr>
+            <tr><td>I2C SCL (temperature)</td><td>GPIO5</td><td>Designated I2C SCL pin</td></tr>
+            <tr><td>SPI MOSI (wind)</td><td>GPIO13 (HMOSI)</td><td>SPI MOSI, avoids flash pins</td></tr>
+            <tr><td>SPI MISO (wind)</td><td>GPIO12 (HMISO)</td><td>SPI MISO</td></tr>
+            <tr><td>SPI SCLK (wind)</td><td>GPIO14 (HSCLK)</td><td>SPI Clock</td></tr>
+            <tr><td>SPI CS (wind)</td><td>GPIO15 (HCS)</td><td>SPI Chip Select</td></tr>
+            <tr><td>UART TX (to computer)</td><td>GPIO1 (TXD0)</td><td>Primary UART transmit</td></tr>
+            <tr><td>UART RX</td><td>GPIO3 (RXD0)</td><td>Primary UART receive</td></tr>
+            <tr><td>LED PWM (alert)</td><td>GPIO2</td><td>Supports software PWM, free pin</td></tr>
+            <tr><td>Deep sleep wake</td><td>GPIO16 → RST</td><td>Only GPIO16 can wake from deep sleep</td></tr>
+          </table>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (b) — Why LOW to RST wakes the device</div>
+          <div class="sol-text">
+            RST (Reset) is an <strong>active-low</strong> signal. It is held HIGH by a pull-up resistor during normal operation. When RST is pulled LOW, it triggers a reset of the CPU — the processor restarts from the beginning of its boot sequence, re-initializing all peripherals. During deep sleep, the CPU is powered down; GPIO16 is one of the few pins that remains active. When the internal timer expires, GPIO16 outputs a LOW pulse. This LOW on RST causes a hardware reset — which is the mechanism by which the chip "wakes up" (it actually restarts). The device perceives this not as waking from sleep but as a cold reset, and the user code checks a flag in RTC memory to know whether it's a fresh boot or a sleep-wake cycle.
+          </div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (c) — Concurrent UART + I2C operation</div>
+          <div class="sol-text">
+            Yes, simultaneous UART transmission and I2C conversion <strong>is possible without data corruption</strong>, for the following architectural reasons:<br><br>
+            1. <strong>Physical independence</strong>: UART uses GPIO1/3; I2C uses GPIO4/5. They are entirely separate pins and separate hardware peripheral modules.<br>
+            2. <strong>Independent hardware controllers</strong>: Both UART and I2C have dedicated hardware shift registers and state machines. Once a UART byte is loaded, it transmits autonomously. The I2C peripheral independently manages the clock and data lines.<br>
+            3. <strong>No shared bus</strong>: Unlike two I2C devices that share SDA/SCL, UART and I2C share no signal lines.<br><br>
+            The only concern is CPU interrupt load — if both peripherals generate interrupts simultaneously, interrupt latency for one may increase. Using hardware peripherals (not bit-banged software) mitigates this significantly.
+          </div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (d) — Argument against Raspberry Pi for weather station</div>
+          <div class="sol-text">
+            <strong>1. Power consumption:</strong> Raspberry Pi 5 draws ~5W under load; ESP8266 draws ~80mW active and ~20μA in deep sleep. For a battery-powered device, the Pi would drain a typical battery in hours; the ESP8266 can last months with deep sleep cycling.<br><br>
+            <strong>2. Boot time:</strong> Raspberry Pi requires ~20–30 seconds to boot its Linux OS. The ESP8266 wakes from deep sleep in ~2ms. For a system waking every 60 seconds, the Pi would spend 30–50% of its awake time just booting.<br><br>
+            <strong>3. No OS required / self-sufficient:</strong> This is a simple sensor-read + transmit task. A Raspberry Pi's full Linux OS, filesystem, and multi-process environment are all overhead that provides zero value for this workload. The ESP8266 is purpose-built for exactly this use case.<br><br>
+            <strong>4. Reliability / failure modes:</strong> A Linux SD card can corrupt on unexpected power loss (exactly what happens during battery discharge). The ESP8266 has no moving storage — it boots from Flash on every reset, making it robust to power interruptions.<br><br>
+            <strong>5. Cost and size:</strong> Raspberry Pi 5 costs ~$60+ and requires external power supply; ESP8266 NodeMCU costs ~$3 and runs directly from battery.
+          </div>
+          <div class="aha-moment"><p>The right tool for the job: a Raspberry Pi is a pocket computer. An ESP8266 is a sensor node. Bringing a mainframe to read a thermometer is engineering malpractice.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BONUS -->
+  <!-- ============================================================ -->
+  <div class="section-header">
+    <span class="section-number">BONUS</span>
+    <span class="section-line"></span>
+    <span class="section-title">The Aha Question</span>
+  </div>
+
+  <!-- Q11 -->
+  <div class="question-card bonus-card" id="card-11">
+    <div class="question-header">
+      <span class="q-number">Q.11</span>
+      <div class="q-content">
+        <div class="q-title">The Bus Width Paradox</div>
+        <div class="q-tags">
+          <span class="tag tag-system">BONUS</span>
+          <span class="tag tag-arch">BUS WIDTH</span>
+          <span class="tag tag-synthesis">SYNTHESIS</span>
+          <span class="tag tag-hard">AHA MOMENT</span>
+        </div>
+      </div>
+    </div>
+    <div class="question-body">
+      <div class="scenario-box gold">
+        A 32-bit microcontroller and an 8-bit microcontroller both need to perform the same computation tasks.
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(a)</span>
+        <span class="sub-text">The 32-bit MCU must load 8-bit values into 32-bit registers to add them. Has any computational advantage been gained for this specific operation? What has been <em>wasted</em>?</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(b)</span>
+        <span class="sub-text">Now the task changes: add two <strong>32-bit</strong> numbers on the 8-bit MCU. How many operations are required? Show the step-by-step breakdown.</span>
+      </div>
+      <div class="sub-question">
+        <span class="sub-label">(c)</span>
+        <span class="sub-text">In what real embedded application might an <strong>8-bit microcontroller</strong> be the objectively superior choice over a 32-bit one, even when cost is equal? Your answer must invoke at least two technical properties beyond simply "it's cheaper."</span>
+      </div>
+    </div>
+    <div class="solution-toggle-wrapper">
+      <button class="solution-toggle" onclick="toggleSolution('sol-11', this, 'card-11')">
+        <span class="toggle-icon">▶</span>
+        <span class="toggle-text">REVEAL SOLUTION</span>
+      </button>
+    </div>
+    <div class="solution-panel" id="sol-11">
+      <div class="solution-inner">
+        <div class="solution-label">Complete Solution</div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (a) — 8-bit operation on 32-bit MCU</div>
+          <div class="sol-text">
+            For adding two 8-bit numbers, the 32-bit MCU gains <strong>no computational advantage</strong>. The result still fits in 8 bits (or at most 9 bits with carry). The computation completes in exactly 1 instruction cycle on both. What is <em>wasted</em>: (1) 24 of 32 register bits hold meaningless zeros, (2) the full 32-bit memory bus is used to transfer 8 bits of meaningful data — 75% bus bandwidth is wasted, (3) the instruction decoder, ALU, and register file consume full 32-bit operating power for 8-bit work. This is why low-power sensor nodes often use 8-bit MCUs even today — working with naturally 8-bit sensor data (temperatures, ADC readings) wastes nothing.
+          </div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (b) — 32-bit addition on 8-bit MCU</div>
+          <div class="sol-text">
+            The 8-bit MCU must decompose the 32-bit addition into 8-bit chunks, propagating the carry bit:<br><br>
+            Step 1: ADD the lowest bytes (bits 0–7) of both numbers. Store result byte 0. Record carry.<br>
+            Step 2: ADC (Add with Carry) the next bytes (bits 8–15). Store result byte 1. Record carry.<br>
+            Step 3: ADC the next bytes (bits 16–23). Store result byte 2. Record carry.<br>
+            Step 4: ADC the highest bytes (bits 24–31). Store result byte 3.<br><br>
+            Total: <strong>4 instructions</strong> (1 ADD + 3 ADC) plus additional LOAD/STORE instructions to move bytes from memory to registers. Realistically 10–12 instructions total for a full 32-bit add on an 8-bit MCU.
+          </div>
+          <div class="sol-highlight">The carry flag is the bridge between bytes. Multi-precision arithmetic works by chaining 8-bit operations through the carry bit — the same principle used in grade school long addition.</div>
+        </div>
+        <div class="sol-part">
+          <div class="sol-part-label">Part (c) — When 8-bit is objectively superior</div>
+          <div class="sol-text">
+            <strong>Application: Simple keyboard matrix scanner or basic appliance controller (e.g., washing machine button panel)</strong><br><br>
+            <strong>Technical superiority argument 1 — Power consumption:</strong> 8-bit MCUs operate with simpler internal logic and fewer transistors switching per cycle. At the same clock frequency, an 8-bit MCU dissipates dramatically less power. For a device running on two AA batteries for years (TV remote control, smoke alarm), an 8-bit MCU in sleep mode drawing 1μA versus a 32-bit MCU drawing 10μA represents a 10× battery life difference — objectively superior regardless of price.<br><br>
+            <strong>Technical superiority argument 2 — Code simplicity and determinism:</strong> A 32-bit MCU with complex peripherals, DMA channels, multiple interrupt priorities, and cache introduces complex timing non-determinism. An 8-bit MCU with straightforward, simple peripherals is easier to reason about for safety-critical or time-critical simple loops. In industrial PLCs and automotive body control modules, 8-bit MCUs are still preferred precisely because their behaviour is completely predictable and certifiable.<br><br>
+            The 8-bit MCU excels where data is naturally 8-bit, power is constrained, and simplicity/predictability is valued over raw computational power.
+          </div>
+          <div class="aha-moment"><p>The ultimate insight: "better" in engineering always means "better for the constraints of this specific problem." A 32-bit MCU is not unconditionally superior to an 8-bit one — it is superior for computationally intensive tasks and inferior for ultra-low-power, simple, long-running applications. Every specification lives on a trade-off surface.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>MICROCONTROLLERS OLYMPIAD — PROBLEM SET // Made and Compiled by Reman Dey(with the help of claude sonnet-4.6</p>
+  <p style="margin-top:8px; color: rgba(90,122,154,0.5);">Reveal solutions only after genuine attempt. The struggle is the learning.</p>
+</footer>
+
+<script>
+  let revealedCount = 0;
+  const totalQuestions = 11;
+
+  function toggleSolution(solutionId, button, cardId) {
+    const panel = document.getElementById(solutionId);
+    const icon = button.querySelector('.toggle-icon');
+    const text = button.querySelector('.toggle-text');
+    const card = document.getElementById(cardId);
+    const isOpen = panel.classList.contains('open');
+
+    if (!isOpen) {
+      panel.classList.add('open');
+      button.classList.add('revealed');
+      icon.classList.add('open');
+      text.textContent = 'HIDE SOLUTION';
+      if (!card.classList.contains('solved')) {
+        card.classList.add('solved');
+        revealedCount++;
+        updateProgress();
+      }
+    } else {
+      panel.classList.remove('open');
+      button.classList.remove('revealed');
+      icon.classList.remove('open');
+      text.textContent = 'REVEAL SOLUTION';
+    }
+  }
+
+  function updateProgress() {
+    const fill = document.getElementById('progressFill');
+    const count = document.getElementById('solvedCount');
+    const pct = (revealedCount / totalQuestions) * 100;
+    fill.style.width = pct + '%';
+    count.textContent = revealedCount + ' / ' + totalQuestions + ' REVEALED';
+  }
+</script>
+
+</body>
+</html>
