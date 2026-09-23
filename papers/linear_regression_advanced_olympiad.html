@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olympiad in Statistical Learning & Machine Learning Theory</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- MathJax 3 Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#111827',
+                            950: '#030712',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        .glow-cyan {
+            box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.15);
+        }
+        .glow-emerald {
+            box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.15);
+        }
+        .glow-purple {
+            box-shadow: 0 0 25px -5px rgba(168, 85, 247, 0.15);
+        }
+        .glow-amber {
+            box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.15);
+        }
+
+        .math-block {
+            overflow-x: auto;
+            padding: 0.75rem;
+            background-color: rgba(15, 23, 42, 0.6);
+            border-radius: 0.5rem;
+            border: 1px solid rgba(51, 65, 85, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen antialiased selection:bg-cyan-500 selection:text-slate-950">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-mono font-bold text-slate-950 text-lg shadow-lg shadow-cyan-500/20">
+                    $\mathbb{E}$
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold bg-gradient-to-r from-slate-100 via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                        STATISTICAL LEARNING OLYMPIAD
+                    </h1>
+                    <p class="text-xs text-cyan-400 font-mono">MLE • MAP • Regularization • Matrix Theory</p>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-4 text-xs font-mono">
+                <span class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400">
+                    <span class="text-emerald-400">4</span> Hardcore Proofs
+                </span>
+                <span class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400">
+                    MathJax 3 Enabled
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- Hero Banner Section -->
+        <section class="relative rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 p-6 sm:p-10 overflow-hidden">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-0 left-1/3 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="relative z-10 max-w-3xl space-y-4">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-800/50 text-cyan-400 text-xs font-mono">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <span>Advanced Mathematical Rigor</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
+                    Linear Models, Matrix Operators & Non-Gaussian Estimation
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+                    A collection of Olympiad-caliber problems bridging pure mathematical derivations with real-world physical intuitions in robotics, aerospace state estimation, and machine learning theory.
+                </p>
+            </div>
+
+            <!-- Filter Pills -->
+            <div class="mt-8 pt-6 border-t border-slate-800/80 flex flex-wrap items-center gap-2" id="filter-bar">
+                <span class="text-xs font-mono text-slate-500 uppercase tracking-wider mr-2">Topics:</span>
+                <button onclick="filterTopic('all')" class="filter-btn active px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 bg-cyan-500 text-slate-950 font-semibold shadow-md shadow-cyan-500/20" data-topic="all">
+                    All Topics (4)
+                </button>
+                <button onclick="filterTopic('mle')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white" data-topic="mle">
+                    MLE & Heavy Tails
+                </button>
+                <button onclick="filterTopic('map')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white" data-topic="map">
+                    MAP & Woodbury Duals
+                </button>
+                <button onclick="filterTopic('gls')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white" data-topic="gls">
+                    GLS & Whitening
+                </button>
+                <button onclick="filterTopic('bias-variance')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white" data-topic="bias-variance">
+                    Bias-Variance Paradox
+                </button>
+            </div>
+        </section>
+
+        <!-- PROBLEM 1 CARD -->
+        <article class="problem-card rounded-xl bg-slate-900 border border-slate-800 p-6 sm:p-8 space-y-6 glow-cyan transition-all duration-300" data-category="mle">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+                <div class="flex items-center space-x-3">
+                    <span class="px-2.5 py-1 rounded bg-cyan-950/80 border border-cyan-800/60 text-cyan-400 font-mono text-xs font-bold">
+                        PROBLEM 01
+                    </span>
+                    <span class="text-xs font-mono text-slate-400">Category: Maximum Likelihood & Non-Gaussian Distributions</span>
+                </div>
+                <div class="flex items-center space-x-1 text-amber-400 text-xs font-mono">
+                    <span>Difficulty:</span>
+                    <span class="font-bold"> Olympiad Tier I</span>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold text-slate-100">
+                    Heavy-Tailed Laplace Noise, $L_1$ Optimization & The Median Property
+                </h3>
+                <p class="text-slate-400 text-sm mt-1">
+                    Proving why Laplace noise yields Robust Median Regression rather than Ordinary Least Squares Mean Regression.
+                </p>
+            </div>
+
+            <!-- Problem Statement Box -->
+            <div class="p-5 rounded-lg bg-slate-950 border border-slate-800/80 space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p class="font-semibold text-cyan-400 font-mono text-xs uppercase tracking-wider">Premise & Physics Scenario:</p>
+                <p>
+                    You are calibrating a magnetic encoder on a robotic tank chassis operating on high-vibration terrain. Standard Least Squares assumes measurement noise $\epsilon_i = y_i - \mathbf{w}^T \mathbf{x}_i$ follows an i.i.d. Gaussian distribution $\mathcal{N}(0, \sigma^2)$. However, physical shocks introduce extreme, heavy-tailed outliers. Empirical analysis confirms the noise actually follows a <strong>Laplace Distribution</strong> with scale parameter $b > 0$:
+                </p>
+                <div class="math-block text-center font-mono my-2">
+                    $$p(\epsilon_i) = \frac{1}{2b} \exp\left( -\frac{|\epsilon_i|}{b} \right)$$
+                </div>
+                
+                <p class="font-semibold text-cyan-400 font-mono text-xs uppercase tracking-wider pt-2">Questions to Solve:</p>
+                <ol class="list-decimal list-inside space-y-2 text-slate-300 pl-2">
+                    <li>
+                        <strong>Derivation of MLE Objective:</strong> Prove that the Maximum Likelihood Estimate $\hat{\mathbf{w}}_{\text{MLE}}$ under Laplace noise reduces to minimizing the sum of absolute errors ($L_1$ Loss / Least Absolute Deviations).
+                    </li>
+                    <li>
+                        <strong>The 1D Median Theorem:</strong> For the scalar intercept-only model $y_i = w + \epsilon_i$ (where $x_i = 1$), prove rigorously using subgradients that $\hat{w}_{\text{MLE}} = \text{Median}(y_1, y_2, \dots, y_N)$, whereas Gaussian noise yields $\hat{w}_{\text{MLE}} = \text{Mean}(y)$.
+                    </li>
+                    <li>
+                        <strong>Influence Function & Robustness:</strong> Calculate the influence function (derivative of the loss gradient with respect to an arbitrary outlier magnitude $y_{\text{outlier}} \to \infty$) for both $L_1$ and $L_2$ losses, demonstrating why $L_1$ is completely immune to outlier magnitude blowups.
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Toggle Button -->
+            <button onclick="toggleSolution('sol-1', this)" class="w-full py-3 px-4 rounded-lg bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-cyan-400 font-mono text-xs font-semibold flex items-center justify-center space-x-2 transition-all">
+                <span>Show Solution & Rigorous Proof</span>
+                <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+
+            <!-- Solution Container (Hidden by default) -->
+            <div id="sol-1" class="hidden space-y-6 pt-2">
+                <div class="p-6 rounded-xl bg-slate-950/80 border border-cyan-900/40 space-y-6 text-sm text-slate-300">
+                    
+                    <!-- Step 1 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-cyan-400 font-mono text-sm border-b border-slate-800 pb-1">
+                            Part 1: Derivation of the Laplace MLE Objective
+                        </h4>
+                        <p>Given observations $D = \{(\mathbf{x}_i, y_i)\}_{i=1}^N$, the likelihood function $L(\mathbf{w})$ under independent Laplace noise is:</p>
+                        <div class="math-block">
+                            $$L(\mathbf{w}) = \prod_{i=1}^N p(y_i \mid \mathbf{x}_i, \mathbf{w}) = \prod_{i=1}^N \frac{1}{2b} \exp\left( -\frac{|y_i - \mathbf{w}^T \mathbf{x}_i|}{b} \right)$$
+                        </div>
+                        <p>Taking the negative log-likelihood (NLL):</p>
+                        <div class="math-block">
+                            $$\mathcal{NLL}(\mathbf{w}) = -\ln L(\mathbf{w}) = -\sum_{i=1}^N \left( \ln\left(\frac{1}{2b}\right) - \frac{|y_i - \mathbf{w}^T \mathbf{x}_i|}{b} \right) = N \ln(2b) + \frac{1}{b} \sum_{i=1}^N |y_i - \mathbf{w}^T \mathbf{x}_i|$$
+                        </div>
+                        <p>Since $N$, $b > 0$, and $\ln(2b)$ are constant with respect to $\mathbf{w}$, minimizing $\mathcal{NLL}(\mathbf{w})$ is strictly equivalent to:</p>
+                        <div class="math-block">
+                            $$\hat{\mathbf{w}}_{\text{MLE}} = \arg\min_{\mathbf{w}} \sum_{i=1}^N |y_i - \mathbf{w}^T \mathbf{x}_i| = \arg\min_{\mathbf{w}} \|\mathbf{y} - X\mathbf{w}\|_1 \quad \blacksquare$$
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-cyan-400 font-mono text-sm border-b border-slate-800 pb-1">
+                            Part 2: The 1D Median Theorem via Subgradient Calculus
+                        </h4>
+                        <p>Consider $y_i = w + \epsilon_i$. Objective function: $S(w) = \sum_{i=1}^N |y_i - w|$. Since $|y_i - w|$ is non-differentiable at $w = y_i$, we utilize the <strong>subdifferential operator</strong> $\partial S(w)$:</p>
+                        <div class="math-block">
+                            $$\partial |y_i - w| = \begin{cases} \{-1\} & \text{if } w > y_i \\ \{+1\} & \text{if } w < y_i \\ [-1, 1] & \text{if } w = y_i \end{cases} = -\text{sgn}(y_i - w)$$
+                        </div>
+                        <p>At optimality, $0 \in \partial S(w^*)$, which demands:</p>
+                        <div class="math-block">
+                            $$0 \in \sum_{i=1}^N \partial |y_i - w^*| \implies \sum_{i: y_i > w^*} (+1) + \sum_{i: y_i < w^*} (-1) + \sum_{i: y_i = w^*} [-1, 1] \ni 0$$
+                        </div>
+                        <p>Let $N_{>}$ be the count of points above $w^*$, and $N_{<}$ be the count below $w^*$. For $0$ to belong to this subgradient interval, we must have:</p>
+                        <div class="math-block">
+                            $$|N_{>} - N_{<}| \le N_{=}$$
+                        </div>
+                        <p>
+                            This condition is satisfied if and only if $w^*$ splits the dataset into equal upper and lower halves. Thus, $w^* = \text{Median}(y_1, y_2, \dots, y_N)$.
+                        </p>
+                        <p class="text-slate-400 text-xs">
+                            <em>Comparison with Gaussian noise:</em> For Gaussian noise, $\mathcal{NLL}(w) = \frac{1}{2\sigma^2}\sum (y_i - w)^2$. Differentiating yields $\sum -2(y_i - w) = 0 \implies w^* = \frac{1}{N}\sum y_i = \text{Mean}(y)$.
+                        </p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-cyan-400 font-mono text-sm border-b border-slate-800 pb-1">
+                            Part 3: Influence Function & Outlier Boundedness
+                        </h4>
+                        <p>The influence function measures the perturbation exerted on the optimality gradient by an arbitrary single sample value $y_k$:</p>
+                        <ul class="list-disc list-inside space-y-1 text-xs font-mono">
+                            <li><strong>$L_2$ Loss Gradient Term:</strong> $\frac{\partial}{\partial w} \frac{1}{2}(y_k - w)^2 = -(y_k - w)$. As $y_k \to \infty$, the influence grows <em>unboundedly</em> $\mathcal{O}(y_k)$.</li>
+                            <li><strong>$L_1$ Loss Subgradient Term:</strong> $\partial_w |y_k - w| = -\text{sgn}(y_k - w)$. As $y_k \to \infty$, the derivative is strictly bounded: $\text{sgn}(\infty) = +1$.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Aha Callout -->
+                    <div class="p-4 rounded-lg bg-emerald-950/40 border-l-4 border-emerald-500 text-emerald-200 text-xs space-y-1">
+                        <span class="font-bold font-mono text-emerald-400 uppercase tracking-wider block">💡 Aha! Mathematical Moment:</span>
+                        <p>
+                            L1 regularization/loss is not just a heuristic "trick" to handle noise; it is the <strong>exact, optimal statistical Bayes/MLE estimator</strong> of a world where noise follows a heavy-tailed Laplace distribution! The absolute value function ignores <em>how far</em> an outlier is, only recording <em>which side</em> of the median it sits on.
+                        </p>
+                    </div>
+
+                    <!-- Physical Intuition Callout -->
+                    <div class="p-4 rounded-lg bg-purple-950/40 border-l-4 border-purple-500 text-purple-200 text-xs space-y-1">
+                        <span class="font-bold font-mono text-purple-400 uppercase tracking-wider block">⚙️ Physical & Engineering Intuition:</span>
+                        <p>
+                            In tank drive odometry or aerospace tracking, a single sensor glitch (e.g. temporary I2C bus corrupting a speed reading to $9999\text{ rad/s}$) will completely pull an $L_2$ Ordinary Least Squares trajectory off course because $9999^2 \approx 10^8$. An $L_1$ Laplace filter treats $9999$ identically to $10.1$—it simply notes "this reading is greater than the current estimate," leaving the median trajectory unchanged!
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </article>
+
+        <!-- PROBLEM 2 CARD -->
+        <article class="problem-card rounded-xl bg-slate-900 border border-slate-800 p-6 sm:p-8 space-y-6 glow-emerald transition-all duration-300" data-category="map">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+                <div class="flex items-center space-x-3">
+                    <span class="px-2.5 py-1 rounded bg-emerald-950/80 border border-emerald-800/60 text-emerald-400 font-mono text-xs font-bold">
+                        PROBLEM 02
+                    </span>
+                    <span class="text-xs font-mono text-slate-400">Category: MAP, Ridge Regularization & Woodbury Matrix Identity</span>
+                </div>
+                <div class="flex items-center space-x-1 text-amber-400 text-xs font-mono">
+                    <span>Difficulty:</span>
+                    <span class="font-bold"> Olympiad Tier II</span>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold text-slate-100">
+                    MAP Estimation, Hyperparameter Ratios & The Primal-Dual Woodbury Equivalence
+                </h3>
+                <p class="text-slate-400 text-sm mt-1">
+                    Connecting Bayesian Gaussian priors to Ridge Regression, revealing the physical meaning of $\lambda$, and proving dual matrix inversion speedup.
+                </p>
+            </div>
+
+            <!-- Problem Statement Box -->
+            <div class="p-5 rounded-lg bg-slate-950 border border-slate-800/80 space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p class="font-semibold text-emerald-400 font-mono text-xs uppercase tracking-wider">Premise & Physics Scenario:</p>
+                <p>
+                    You are modeling the aerodynamic drag coefficient of a custom fixed-wing drone using $D = 1,000$ high-dimensional computational fluid dynamics (CFD) features $\mathbf{x} \in \mathbb{R}^D$. However, wind tunnel test flights are extremely costly, providing only $N = 30$ real-world flight data points ($N \ll D$).
+                </p>
+                <p>
+                    To prevent massive overfitting, you place a zero-mean isotropic Gaussian prior on the parameter weights: $\mathbf{w} \sim \mathcal{N}(\mathbf{0}, \tau^2 I_D)$. The physical flight measurement noise is also Gaussian: $\epsilon \sim \mathcal{N}(0, \sigma^2)$.
+                </p>
+                
+                <p class="font-semibold text-emerald-400 font-mono text-xs uppercase tracking-wider pt-2">Questions to Solve:</p>
+                <ol class="list-decimal list-inside space-y-2 text-slate-300 pl-2">
+                    <li>
+                        <strong>MAP Derivation:</strong> Derive the Maximum A Posteriori estimator $\hat{\mathbf{w}}_{\text{MAP}} = \arg\max_{\mathbf{w}} p(\mathbf{w} \mid X, \mathbf{y})$. Prove it is identical to Ridge Regression with penalty parameter $\lambda = \frac{\sigma^2}{\tau^2}$.
+                    </li>
+                    <li>
+                        <strong>The Woodbury Dual Identity:</strong> Prove rigorously using pure matrix algebra that the Primal solution $\hat{\mathbf{w}} = (X^T X + \lambda I_D)^{-1} X^T \mathbf{y}$ is identically equal to the Dual formulation:
+                        $$\hat{\mathbf{w}} = X^T (X X^T + \lambda I_N)^{-1} \mathbf{y}$$
+                    </li>
+                    <li>
+                        <strong>Computational Complexity Paradox:</strong> Compare the floating-point operation count (FLOPs) of computing the Primal inversion versus the Dual inversion when $D = 10,000$ and $N = 30$.
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Toggle Button -->
+            <button onclick="toggleSolution('sol-2', this)" class="w-full py-3 px-4 rounded-lg bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-emerald-400 font-mono text-xs font-semibold flex items-center justify-center space-x-2 transition-all">
+                <span>Show Solution & Rigorous Proof</span>
+                <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+
+            <!-- Solution Container (Hidden by default) -->
+            <div id="sol-2" class="hidden space-y-6 pt-2">
+                <div class="p-6 rounded-xl bg-slate-950/80 border border-emerald-900/40 space-y-6 text-sm text-slate-300">
+                    
+                    <!-- Part 1 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-emerald-400 font-mono text-sm border-b border-slate-800 pb-1">
+                            Part 1: MAP Derivation & Physical Meaning of $\lambda$
+                        </h4>
+                        <p>By Bayes' Rule, the posterior distribution over weights is:</p>
+                        <div class="math-block">
+                            $$p(\mathbf{w} \mid X, \mathbf{y}) \propto p(\mathbf{y} \mid X, \mathbf{w}) \cdot p(\mathbf{w}) = \mathcal{N}(\mathbf{y}; X\mathbf{w}, \sigma^2 I_N) \cdot \mathcal{N}(\mathbf{w}; \mathbf{0}, \tau^2 I_D)$$
+                        </div>
+                        <p>Taking the logarithm of the posterior:</p>
+                        <div class="math-block">
+                            $$\ln p(\mathbf{w} \mid X, \mathbf{y}) = -\frac{1}{2\sigma^2} \|\mathbf{y} - X\mathbf{w}\|_2^2 - \frac{1}{2\tau^2} \|\mathbf{w}\|_2^2 - C$$
+                        </div>
+                        <p>Maximizing the log-posterior is equivalent to minimizing its negative, multiplied by $2\sigma^2$:</p>
+                        <div class="math-block">
+                            $$\hat{\mathbf{w}}_{\text{MAP}} = \arg\min_{\mathbf{w}} \left( \|\mathbf{y} - X\mathbf{w}\|_2^2 + \frac{\sigma^2}{\tau^2} \|\mathbf{w}\|_2^2 \right)$$
+                        </div>
+                        <p>Setting the gradient to zero:</p>
+                        <div class="math-block">
+                            $$-2 X^T (\mathbf{y} - X\mathbf{w}) + 2 \left(\frac{\sigma^2}{\tau^2}\right) \mathbf{w} = 0 \implies (X^T X + \lambda I_D) \mathbf{w} = X^T \mathbf{y}$$
+                        </div>
+                        <div class="math-block">
+                            $$\hat{\mathbf{w}}_{\text{MAP}} = (X^T X + \lambda I_D)^{-1} X^T \mathbf{y} \quad \text{where } \lambda = \frac{\sigma^2}{\tau^2} \quad \blacksquare$$
+                        </div>
+                    </div>
+
+                    <!-- Part 2 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-emerald-400 font-mono text-sm border-b border-slate-800 pb-1">
+                            Part 2: Algebraic Proof of Primal-Dual Equivalence
+                        </h4>
+                        <p>We wish to establish the identity: $(X^T X + \lambda I_D)^{-1} X^T = X^T (X X^T + \lambda I_N)^{-1}$.</p>
+                        <p><em>Proof Strategy:</em> Multiply both sides from the left by $(X^T X + \lambda I_D)$ and from the right by $(X X^T + \lambda I_N)$:</p>
+                        <div class="math-block">
+                            $$\text{Left Side} = (X^T X + \lambda I_D) \left[ (X^T X + \lambda I_D)^{-1} X^T \right] (X X^T + \lambda I_N) = X^T (X X^T + \lambda I_N) = X^T X X^T + \lambda X^T$$
+                        </div>
+                        <div class="math-block">
+                            $$\text{Right Side} = (X^T X + \lambda I_D) \left[ X^T (X X^T + \lambda I_N)^{-1} \right] (X X^T + \lambda I_N) = (X^T X + \lambda I_D) X^T = X^T X X^T + \lambda X^T$$
+                        </div>
+                        <p>Since $\text{Left Side} \equiv \text{Right Side}$, right-multiplying by $(X X^T + \lambda I_N)^{-1}$ and left-multiplying by $(X^T X + \lambda I_D)^{-1}$ completes the proof $\blacksquare$.</p>
+                    </div>
+
+                    <!-- Part 3 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-emerald-400 font-mono text-sm border-b border-slate-800 pb-1">
+                            Part 3: Computational Complexity Comparison
+                        </h4>
+                        <p>Matrix inversion for an $K \times K$ matrix scales as $\mathcal{O}(K^3)$ via Gauss-Jordan or Cholesky decomposition:</p>
+                        <ul class="list-disc list-inside space-y-1 font-mono text-xs">
+                            <li><strong>Primal Inversion $(X^T X + \lambda I_D)^{-1}$:</strong> Inverts a $(10,000 \times 10,000)$ matrix $\implies \mathcal{O}(10,000^3) = 10^{12}$ operations ($\approx 1 \text{ Trillion FLOPs}$).</li>
+                            <li><strong>Dual Inversion $(X X^T + \lambda I_N)^{-1}$:</strong> Inverts a $(30 \times 30)$ matrix $\implies \mathcal{O}(30^3) = 27,000$ operations!</li>
+                        </ul>
+                        <p class="text-xs text-slate-400">
+                            The Dual formulation reduces compute time by over <strong>37 million times</strong>!
+                        </p>
+                    </div>
+
+                    <!-- Aha Callout -->
+                    <div class="p-4 rounded-lg bg-emerald-950/40 border-l-4 border-emerald-500 text-emerald-200 text-xs space-y-1">
+                        <span class="font-bold font-mono text-emerald-400 uppercase tracking-wider block">💡 Aha! Mathematical Moment:</span>
+                        <p>
+                            Ridge penalty $\lambda$ is not an arbitrary hyperparameter tuned by guessing—it is strictly the ratio of <strong>Measurement Noise Variance ($\sigma^2$) to Prior Belief Uncertainty ($\tau^2$)</strong>. If your sensors are terrible ($\sigma^2 \to \infty$), $\lambda \to \infty$, forcing the model to ignore data and trust the prior ($\hat{\mathbf{w}} \to \mathbf{0}$).
+                        </p>
+                    </div>
+
+                    <!-- Physical Intuition Callout -->
+                    <div class="p-4 rounded-lg bg-purple-950/40 border-l-4 border-purple-500 text-purple-200 text-xs space-y-1">
+                        <span class="font-bold font-mono text-purple-400 uppercase tracking-wider block">⚙️ Physical & Engineering Intuition:</span>
+                        <p>
+                            The Dual formulation $X^T(XX^T + \lambda I)^{-1}\mathbf{y}$ is the foundational backbone of <strong>Kernel Methods and Gaussian Process Regression</strong>. It proves that predictions in arbitrary infinite-dimensional feature spaces depend solely on the inner products between flight samples ($XX^T$, the Gram matrix), completely bypassing feature space calculations!
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </article>
+
+        <!-- PROBLEM 3 CARD -->
+        <article class="problem-card rounded-xl bg-slate-900 border border-slate-800 p-6 sm:p-8 space-y-6 glow-purple transition-all duration-300" data-category="gls">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+                <div class="flex items-center space-x-3">
+                    <span class="px-2.5 py-1 rounded bg-purple-950/80 border border-purple-800/60 text-purple-400 font-mono text-xs font-bold">
+                        PROBLEM 03
+                    </span>
+                    <span class="text-xs font-mono text-slate-400">Category: Generalized Least Squares & Cholesky Whitening</span>
+                </div>
+                <div class="flex items-center space-x-1 text-amber-400 text-xs font-mono">
+                    <span>Difficulty:</span>
+                    <span class="font-bold"> Olympiad Tier II</span>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold text-slate-100">
+                    Correlated Multi-Axis Sensor Noise & The Cholesky Whitening Transformation
+                </h3>
+                <p class="text-slate-400 text-sm mt-1">
+                    Unifying non-isotropic noise structures via Cholesky space-warping to transform Generalized Least Squares back to Standard OLS.
+                </p>
+            </div>
+
+            <!-- Problem Statement Box -->
+            <div class="p-5 rounded-lg bg-slate-950 border border-slate-800/80 space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p class="font-semibold text-purple-400 font-mono text-xs uppercase tracking-wider">Premise & Physics Scenario:</p>
+                <p>
+                    An autonomous quadrotor estimates its 3D positional drift $\mathbf{y}_i \in \mathbb{R}^3$ relative to motor commands $X_i$. Because of structural frame coupling, motor vibrations create cross-axis noise correlations (e.g., sudden roll acceleration mechanically induces pitch sensor noise). 
+                </p>
+                <p>
+                    The noise vector is multi-variate zero-mean Gaussian $\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \Sigma)$, where $\Sigma \in \mathbb{R}^{N \times N}$ is a known non-diagonal, symmetric positive-definite covariance matrix.
+                </p>
+                
+                <p class="font-semibold text-purple-400 font-mono text-xs uppercase tracking-wider pt-2">Questions to Solve:</p>
+                <ol class="list-decimal list-inside space-y-2 text-slate-300 pl-2">
+                    <li>
+                        <strong>GLS Derivation:</strong> Minimize the Mahalanobis error metric $(\mathbf{y} - X\mathbf{w})^T \Sigma^{-1} (\mathbf{y} - X\mathbf{w})$ to derive the Generalized Least Squares (GLS) estimator:
+                        $$\hat{\mathbf{w}}_{\text{GLS}} = (X^T \Sigma^{-1} X)^{-1} X^T \Sigma^{-1} \mathbf{y}$$
+                    </li>
+                    <li>
+                        <strong>Cholesky Whitening Filter:</strong> Using Cholesky decomposition $\Sigma = L L^T$ (where $L$ is lower triangular), define the transformed variables $\mathbf{y}^* = L^{-1} \mathbf{y}$ and $X^* = L^{-1} X$. Prove that the noise in this warped space $\boldsymbol{\epsilon}^* = L^{-1} \boldsymbol{\epsilon}$ is perfectly spherical/isotropic ($\text{Cov}(\boldsymbol{\epsilon}^*) = I_N$).
+                    </li>
+                    <li>
+                        <strong>Equivalence Proof:</strong> Prove that running Standard OLS on the whitened variables $(\mathbf{y}^*, X^*)$ yields the exact GLS solution.
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Toggle Button -->
+            <button onclick="toggleSolution('sol-3', this)" class="w-full py-3 px-4 rounded-lg bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-purple-400 font-mono text-xs font-semibold flex items-center justify-center space-x-2 transition-all">
+                <span>Show Solution & Rigorous Proof</span>
+                <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+
+            <!-- Solution Container (Hidden by default) -->
+            <div id="sol-3" class="hidden space-y-6 pt-2">
+                <div class="p-6 rounded-xl bg-slate-950/80 border border-purple-900/40 space-y-6 text-sm text-slate-300">
+                    
+                    <!-- Part 1 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-purple-400 font-mono text-sm border-b border-slate-800 pb-1">
+                            Part 1: Derivation of Generalized Least Squares
+                        </h4>
+                        <p>Under correlated Gaussian noise $\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \Sigma)$, the probability density is:</p>
+                        <div class="math-block">
+                            $$p(\mathbf{y} \mid X, \mathbf{w}) = \frac{1}{(2\pi)^{N/2} |\Sigma|^{1/2}} \exp\left( -\frac{1}{2} (\mathbf{y} - X\mathbf{w})^T \Sigma^{-1} (\mathbf{y} - X\mathbf{w}) \right)$$
+                        </div>
+                        <p>Minimizing the NLL corresponds to minimizing the Mahalanobis distance $J(\mathbf{w}) = (\mathbf{y} - X\mathbf{w})^T \Sigma^{-1} (\mathbf{y} - X\mathbf{w})$:</p>
+                        <div class="math-block">
+                            $$J(\mathbf{w}) = \mathbf{y}^T \Sigma^{-1} \mathbf{y} - 2 \mathbf{w}^T X^T \Sigma^{-1} \mathbf{y} + \mathbf{w}^T X^T \Sigma^{-1} X \mathbf{w}$$
+                        </div>
+                        <p>Taking the gradient with respect to $\mathbf{w}$ and setting to zero:</p>
+                        <div class="math-block">
+                            $$\nabla_{\mathbf{w}} J(\mathbf{w}) = -2 X^T \Sigma^{-1} \mathbf{y} + 2 X^T \Sigma^{-1} X \mathbf{w} = 0$$
+                        </div>
+                        <div class="math-block">
+                            $$\hat{\mathbf{w}}_{\text{GLS}} = (X^T \Sigma^{-1} X)^{-1} X^T \Sigma^{-1} \mathbf{y} \quad \blacksquare$$
+                        </div>
+                    </div>
+
+                    <!-- Part 2 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-purple-400 font-mono text-sm border-b border-slate-800 pb-1">
+                            Part 2: Proof of Noise Whitening via Cholesky Factor $L^{-1}$
+                        </h4>
+                        <p>Since $\Sigma$ is symmetric positive-definite, Cholesky factorization guarantees $\Sigma = L L^T$, where $L$ is invertible. Note that $\Sigma^{-1} = (L L^T)^{-1} = (L^T)^{-1} L^{-1} = L^{-T} L^{-1}$.</p>
+                        <p>Let $\boldsymbol{\epsilon}^* = L^{-1} \boldsymbol{\epsilon}$. We compute its covariance matrix:</p>
+                        <div class="math-block">
+                            $$\text{Cov}(\boldsymbol{\epsilon}^*) = \mathbb{E}\left[ \boldsymbol{\epsilon}^* (\boldsymbol{\epsilon}^*)^T \right] = \mathbb{E}\left[ (L^{-1} \boldsymbol{\epsilon}) (L^{-1} \boldsymbol{\epsilon})^T \right] = L^{-1} \mathbb{E}[\boldsymbol{\epsilon} \boldsymbol{\epsilon}^T] L^{-T}$$
+                        </div>
+                        <p>Since $\mathbb{E}[\boldsymbol{\epsilon} \boldsymbol{\epsilon}^T] = \Sigma = L L^T$:</p>
+                        <div class="math-block">
+                            $$\text{Cov}(\boldsymbol{\epsilon}^*) = L^{-1} (L L^T) L^{-T} = (L^{-1} L) (L^T L^{-T}) = I_N \cdot I_N = I_N \quad \blacksquare$$
+                        </div>
+                    </div>
+
+                    <!-- Part 3 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-purple-400 font-mono text-sm border-b border-slate-800 pb-1">
+                            Part 3: OLS Equivalence in Whitened Space
+                        </h4>
+                        <p>Substitute transformed targets $\mathbf{y}^* = L^{-1}\mathbf{y}$ and inputs $X^* = L^{-1}X$ into standard Ordinary Least Squares formula $\hat{\mathbf{w}} = ((X^*)^T X^*)^{-1} (X^*)^T \mathbf{y}^*$:</p>
+                        <div class="math-block">
+                            $$(X^*)^T X^* = (L^{-1} X)^T (L^{-1} X) = X^T L^{-T} L^{-1} X = X^T \Sigma^{-1} X$$
+                        </div>
+                        <div class="math-block">
+                            $$(X^*)^T \mathbf{y}^* = (L^{-1} X)^T (L^{-1} \mathbf{y}) = X^T L^{-T} L^{-1} \mathbf{y} = X^T \Sigma^{-1} \mathbf{y}$$
+                        </div>
+                        <p>Thus, $\hat{\mathbf{w}}_{\text{OLS}}^* = (X^T \Sigma^{-1} X)^{-1} X^T \Sigma^{-1} \mathbf{y} \equiv \hat{\mathbf{w}}_{\text{GLS}} \quad \blacksquare$.</p>
+                    </div>
+
+                    <!-- Aha Callout -->
+                    <div class="p-4 rounded-lg bg-emerald-950/40 border-l-4 border-emerald-500 text-emerald-200 text-xs space-y-1">
+                        <span class="font-bold font-mono text-emerald-400 uppercase tracking-wider block">💡 Aha! Mathematical Moment:</span>
+                        <p>
+                            GLS is not a new algorithm—it is simply Standard OLS executed inside a geometrically warped linear space! The matrix $L^{-1}$ acts as a spatial whitening filter that stretches, squashes, and rotates non-spherical Mahalanobis error ellipsoids back into perfect isotropic unit spheres.
+                        </p>
+                    </div>
+
+                    <!-- Physical Intuition Callout -->
+                    <div class="p-4 rounded-lg bg-purple-950/40 border-l-4 border-purple-500 text-purple-200 text-xs space-y-1">
+                        <span class="font-bold font-mono text-purple-400 uppercase tracking-wider block">⚙️ Physical & Engineering Intuition:</span>
+                        <p>
+                            In IMU state estimation and Kalman filtering, measurement signals are rarely uncorrelated. By pre-multiplying raw telemetry vectors by the inverse Cholesky factor $L^{-1}$, embedded flight controllers dynamically "uncouple" multi-axis sensor cross-talk before processing linear dynamics equations!
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </article>
+
+        <!-- PROBLEM 4 CARD -->
+        <article class="problem-card rounded-xl bg-slate-900 border border-slate-800 p-6 sm:p-8 space-y-6 glow-amber transition-all duration-300" data-category="bias-variance">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+                <div class="flex items-center space-x-3">
+                    <span class="px-2.5 py-1 rounded bg-amber-950/80 border border-amber-800/60 text-amber-400 font-mono text-xs font-bold">
+                        PROBLEM 04
+                    </span>
+                    <span class="text-xs font-mono text-slate-400">Category: Spectral Bias-Variance Paradox & Inadmissibility of OLS</span>
+                </div>
+                <div class="flex items-center space-x-1 text-amber-400 text-xs font-mono">
+                    <span>Difficulty:</span>
+                    <span class="font-bold"> Olympiad Tier III (Stein-Level)</span>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold text-slate-100">
+                    The Bias-Variance Paradox: Rigorous Proof of the Inadmissibility of Unbiased Estimators
+                </h3>
+                <p class="text-slate-400 text-sm mt-1">
+                    Using spectral decomposition to prove that for EVERY dataset, an optimal Ridge penalty strictly beats Ordinary Least Squares in Mean Squared Error.
+                </p>
+            </div>
+
+            <!-- Problem Statement Box -->
+            <div class="p-5 rounded-lg bg-slate-950 border border-slate-800/80 space-y-3 text-slate-300 text-sm leading-relaxed">
+                <p class="font-semibold text-amber-400 font-mono text-xs uppercase tracking-wider">Premise & Mathematical Paradox:</p>
+                <p>
+                    The classical <strong>Gauss-Markov Theorem</strong> states that the Ordinary Least Squares estimator $\hat{\mathbf{w}}_{\text{OLS}}$ is BLUE (Best Linear Unbiased Estimator)—meaning it possesses the lowest variance among all <em>unbiased</em> linear estimators.
+                </p>
+                <p>
+                    However, in total Mean Squared Error $\text{MSE}(\hat{\mathbf{w}}) = \mathbb{E}\left[ \|\hat{\mathbf{w}} - \mathbf{w}^*\|_2^2 \right] = \text{Variance}(\hat{\mathbf{w}}) + \|\text{Bias}(\hat{\mathbf{w}})\|_2^2$, unbiasedness is actually a mathematical straightjacket!
+                </p>
+                
+                <p class="font-semibold text-amber-400 font-mono text-xs uppercase tracking-wider pt-2">Questions to Solve:</p>
+                <ol class="list-decimal list-inside space-y-2 text-slate-300 pl-2">
+                    <li>
+                        <strong>Spectral Eigen-Decomposition:</strong> Let $X^T X = V \Lambda V^T$ be the orthonormal eigendecomposition of $X^T X$, where $\Lambda = \text{diag}(\mu_1, \mu_2, \dots, \mu_D)$ with eigenvalues $\mu_j > 0$. Express total MSE for Ridge Regression $\hat{\mathbf{w}}(\lambda) = (X^T X + \lambda I_D)^{-1} X^T \mathbf{y}$ explicitly in terms of eigenvalues $\mu_j$ and rotated true weight coordinates $\alpha_j = (V^T \mathbf{w}^*)_j$.
+                    </li>
+                    <li>
+                        <strong>Exact Variance & Bias Decomposition:</strong> Derive the closed-form functions for Variance $(\lambda)$ and $\text{Bias}^2(\lambda)$.
+                    </li>
+                    <li>
+                        <strong>Stein-Type Existence Proof:</strong> Compute the exact derivative $\left. \frac{d}{d\lambda} \text{MSE}(\lambda) \right|_{\lambda = 0^+}$ evaluated at $\lambda = 0$ (OLS). Prove that this derivative is <strong>strictly negative</strong> for any problem instance, guaranteeing that there ALWAYS exists a positive regularization parameter $\lambda^* > 0$ such that:
+                        $$\text{MSE}(\hat{\mathbf{w}}_{\text{Ridge}}(\lambda^*)) < \text{MSE}(\hat{\mathbf{w}}_{\text{OLS}})$$
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Toggle Button -->
+            <button onclick="toggleSolution('sol-4', this)" class="w-full py-3 px-4 rounded-lg bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-amber-400 font-mono text-xs font-semibold flex items-center justify-center space-x-2 transition-all">
+                <span>Show Solution & Rigorous Proof</span>
+                <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+
+            <!-- Solution Container (Hidden by default) -->
+            <div id="sol-4" class="hidden space-y-6 pt-2">
+                <div class="p-6 rounded-xl bg-slate-950/80 border border-amber-900/40 space-y-6 text-sm text-slate-300">
+                    
+                    <!-- Part 1 & 2 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-amber-400 font-mono text-sm border-b border-slate-800 pb-1">
+                            Part 1 & 2: Spectral Eigenbasis MSE Decomposition
+                        </h4>
+                        <p>Write $\hat{\mathbf{w}}(\lambda) = (X^T X + \lambda I)^{-1} X^T (X \mathbf{w}^* + \boldsymbol{\epsilon})$. Taking expectation:</p>
+                        <div class="math-block">
+                            $$\mathbb{E}[\hat{\mathbf{w}}(\lambda)] = (X^T X + \lambda I)^{-1} X^T X \mathbf{w}^*$$
+                        </div>
+                        <p>Using $X^T X = V \Lambda V^T$, we rewrite $(X^T X + \lambda I)^{-1} X^T X = V (\Lambda + \lambda I)^{-1} \Lambda V^T$.</p>
+                        
+                        <p class="font-semibold text-slate-200 text-xs mt-3">1. Squared Bias Term Calculation:</p>
+                        <div class="math-block">
+                            $$\text{Bias}(\lambda) = \mathbb{E}[\hat{\mathbf{w}}(\lambda)] - \mathbf{w}^* = V \left[ (\Lambda + \lambda I)^{-1} \Lambda - I \right] V^T \mathbf{w}^* = V \left[ -\lambda (\Lambda + \lambda I)^{-1} \right] \boldsymbol{\alpha}$$
+                        </div>
+                        <p>Since $V$ is an orthogonal matrix ($V^T V = I$), taking $L_2$ norm squared gives:</p>
+                        <div class="math-block">
+                            $$\|\text{Bias}(\lambda)\|_2^2 = \sum_{j=1}^D \frac{\lambda^2 \alpha_j^2}{(\mu_j + \lambda)^2}$$
+                        </div>
+
+                        <p class="font-semibold text-slate-200 text-xs mt-3">2. Variance Term Calculation:</p>
+                        <div class="math-block">
+                            $$\text{Cov}(\hat{\mathbf{w}}(\lambda)) = \sigma^2 (X^T X + \lambda I)^{-1} X^T X (X^T X + \lambda I)^{-1} = \sigma^2 V (\Lambda + \lambda I)^{-1} \Lambda (\Lambda + \lambda I)^{-1} V^T$$
+                        </div>
+                        <div class="math-block">
+                            $$\text{Variance}(\lambda) = \text{Tr}(\text{Cov}) = \sigma^2 \sum_{j=1}^D \frac{\mu_j}{(\mu_j + \lambda)^2}$$
+                        </div>
+
+                        <p class="font-semibold text-slate-200 text-xs mt-3">Combined Total MSE Function:</p>
+                        <div class="math-block">
+                            $$\text{MSE}(\lambda) = \sum_{j=1}^D \frac{\sigma^2 \mu_j + \lambda^2 \alpha_j^2}{(\mu_j + \lambda)^2}$$
+                        </div>
+                    </div>
+
+                    <!-- Part 3 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-amber-400 font-mono text-sm border-b border-slate-800 pb-1">
+                            Part 3: Differentiating at $\lambda = 0$ (Stein's Existence Proof)
+                        </h4>
+                        <p>We differentiate each term in the sum with respect to $\lambda$ using quotient rule:</p>
+                        <div class="math-block">
+                            $$\frac{d}{d\lambda} \left[ \frac{\sigma^2 \mu_j + \lambda^2 \alpha_j^2}{(\mu_j + \lambda)^2} \right] = \frac{2\lambda \alpha_j^2 (\mu_j + \lambda)^2 - 2(\mu_j + \lambda)(\sigma^2 \mu_j + \lambda^2 \alpha_j^2)}{(\mu_j + \lambda)^4}$$
+                        </div>
+                        <p>Evaluating this derivative at $\lambda = 0^+$:</p>
+                        <div class="math-block">
+                            $$\left. \frac{d}{d\lambda} \text{MSE}_j(\lambda) \right|_{\lambda = 0^+} = \frac{0 - 2\mu_j (\sigma^2 \mu_j)}{\mu_j^4} = -\frac{2\sigma^2 \mu_j^2}{\mu_j^4} = -\frac{2\sigma^2}{\mu_j^2}$$
+                        </div>
+                        <p>Summing over all $D$ dimensions:</p>
+                        <div class="math-block">
+                            $$\left. \frac{d}{d\lambda} \text{MSE}(\lambda) \right|_{\lambda = 0^+} = -2\sigma^2 \sum_{j=1}^D \frac{1}{\mu_j^2} < 0 \quad (\text{Strictly Negative!})$$
+                        </div>
+                        <p>
+                            Because the slope of the MSE curve at $\lambda = 0$ is <strong>strictly negative</strong>, moving $\lambda$ slightly away from $0$ into positive territory ($\lambda > 0$) strictly decreases total error. Thus, Ordinary Least Squares ($\lambda = 0$) is <strong>inadmissible</strong> in total MSE $\blacksquare$.
+                        </p>
+                    </div>
+
+                    <!-- Aha Callout -->
+                    <div class="p-4 rounded-lg bg-emerald-950/40 border-l-4 border-emerald-500 text-emerald-200 text-xs space-y-1">
+                        <span class="font-bold font-mono text-emerald-400 uppercase tracking-wider block">💡 Aha! Mathematical Moment:</span>
+                        <p>
+                            At $\lambda = 0$, the rate of change of Bias$^2$ is <strong>EXACTLY ZERO</strong> ($\frac{d}{d\lambda}\text{Bias}^2(0) = 0$), while the rate of change of Variance is <strong>STRICTLY NEGATIVE</strong> ($\frac{d}{d\lambda}\text{Var}(0) < 0$). In words: You get variance reduction <em>for free</em> at first without paying any first-order bias penalty!
+                        </p>
+                    </div>
+
+                    <!-- Physical Intuition Callout -->
+                    <div class="p-4 rounded-lg bg-purple-950/40 border-l-4 border-purple-500 text-purple-200 text-xs space-y-1">
+                        <span class="font-bold font-mono text-purple-400 uppercase tracking-wider block">⚙️ Physical & Engineering Intuition:</span>
+                        <p>
+                            This theorem explains why zero-bias constraints in engineering (e.g. insisting on 100% unbiased sensor calibration) are inherently flawed. Accepting a minuscule $0.1\%$ systematic bias can drop estimation variance by $50\%$, leading to far more precise overall flight guidance and robotic control!
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-8 mt-12 text-center text-slate-500 text-xs font-mono">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p class="text-slate-400">Statistical Learning & Machine Learning Theory Olympiad Edition</p>
+            <p>Designed with MathJax 3, Tailwind CSS & Pure Mathematical Rigor.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        
+        // Solution toggle handler with MathJax re-render trigger
+        function toggleSolution(id, btn) {
+            const container = document.getElementById(id);
+            const isHidden = container.classList.contains('hidden');
+            const svg = btn.querySelector('svg');
+
+            if (isHidden) {
+                container.classList.remove('hidden');
+                btn.querySelector('span').textContent = 'Hide Solution & Proof';
+                svg.classList.add('rotate-180');
+                
+                // Re-trigger MathJax typesetting for newly revealed container
+                if (window.MathJax) {
+                    MathJax.typesetPromise([container]).catch(err => console.log('MathJax error:', err));
+                }
+            } else {
+                container.classList.add('hidden');
+                btn.querySelector('span').textContent = 'Show Solution & Rigorous Proof';
+                svg.classList.remove('rotate-180');
+            }
+        }
+
+        // Topic Filtering Logic
+        function filterTopic(topic) {
+            const cards = document.querySelectorAll('.problem-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            // Update active button state
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-topic') === topic) {
+                    btn.className = 'filter-btn active px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 bg-cyan-500 text-slate-950 font-semibold shadow-md shadow-cyan-500/20';
+                } else {
+                    btn.className = 'filter-btn px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white';
+                }
+            });
+
+            // Filter cards
+            cards.forEach(card => {
+                const category = card.getAttribute('data-category');
+                if (topic === 'all' || category === topic) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
